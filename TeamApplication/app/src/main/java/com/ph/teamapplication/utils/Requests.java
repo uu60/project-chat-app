@@ -35,19 +35,32 @@ public class Requests {
         }
     }
 
-    public static String get(String url) {
+    public static Resp get(String url) {
         return http(M.GET, url, dummy);
     }
 
-    public static String post(String url) {
+    public static Resp get(String url, Map<String, String> requestParamsMap) {
+        if (requestParamsMap == null || requestParamsMap.isEmpty()) {
+            return get(url);
+        }
+        StringBuilder builder = new StringBuilder(url);
+        builder.append("?");
+        requestParamsMap.forEach((key, value) -> builder.append(key).append("=").append(value).append("&"));
+        // 去除最后一个&
+        builder.deleteCharAt(builder.length() - 1);
+        url = builder.toString();
+        return http(M.GET, url, dummy);
+    }
+
+    public static Resp post(String url) {
         return post(url, dummy);
     }
 
-    public static String post(String url, Map<String, String> requestBodyMap) {
+    public static Resp post(String url, Map<String, String> requestBodyMap) {
         return http(M.POST, url, requestBodyMap);
     }
 
-    private static String http(M m, String url, Map<String, String> requestBodyMap) {
+    private static Resp http(M m, String url, Map<String, String> requestBodyMap) {
         try {
             Request.Builder reqBuilder = new Request.Builder().url(url);
             FormBody.Builder bodyBuilder = new FormBody.Builder();
@@ -69,7 +82,8 @@ public class Requests {
             }
             Request request = reqBuilder.build();
             Response response = client.newCall(request).execute();
-            return response.body().string();
+            String respStr = response.body().string();
+            return Instances.gson.fromJson(respStr, Resp.class);
         } catch (Throwable e) {
             Log.e("http", e.toString());
         }
