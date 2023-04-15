@@ -1,8 +1,7 @@
 package com.ph.teamappbackend.mapper;
 
 import com.ph.teamappbackend.pojo.entity.User;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 /**
  * @author octopus
