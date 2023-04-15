@@ -3,10 +3,13 @@ package com.ph.teamapplication.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Looper;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.ph.teamapplication.R;
-import com.ph.teamapplication.utils.ThreadPoolHolder;
+import com.ph.teamapplication.utils.Requests;
+import com.ph.teamapplication.utils.Instances;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -20,9 +23,12 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn_login);
 
         btnLogin.setOnClickListener(view -> {
-            ThreadPoolHolder.pool.execute(() -> {
+            Instances.pool.execute(() -> {
                 try {
-
+                    String response = Requests.post("http://192.168.1.102:8080/hello");
+                    Looper.prepare();
+                    Toast.makeText(this, response, Toast.LENGTH_SHORT).show();
+                    Looper.loop();
                 } catch (Throwable e) {
                     throw new RuntimeException(e);
                 }
