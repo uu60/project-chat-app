@@ -1,9 +1,10 @@
-package com.ph.springbootteamappbackend;
+package com.ph.teamappbackend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 public class SpringBootTeamAppBackendApplication {
 
     public static void main(String[] args) {
