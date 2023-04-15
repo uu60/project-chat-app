@@ -19,7 +19,7 @@ public class AuthorizationService {
 
     public String validateAndGetToken(LoginTo to) {
         User user = userMapper.selectOneByUsername(to.getUsername());
-        if (!to.getPassword().equals(user.getPassword())) {
+        if (user == null || !to.getPassword().equals(user.getPassword())) {
             return null;
         }
         return JwtUtils.getToken(user);

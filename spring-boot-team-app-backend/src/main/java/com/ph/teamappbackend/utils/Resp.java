@@ -3,13 +3,15 @@ package com.ph.teamappbackend.utils;
 import lombok.Data;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * @author octopus
  * @date 2023/4/15 20:14
  */
-@Setter
+@Data
 public class Resp {
-    private Integer code;
+    private Integer code = 0;
     private String msg;
     private Object data;
 
