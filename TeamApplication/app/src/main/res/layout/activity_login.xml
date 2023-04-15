@@ -12,13 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="#F5F5F5">
-        <Button
-                android:text="Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_login"
-                tools:layout_editor_absoluteY="170dp"
-                tools:layout_editor_absoluteX="158dp" />
+
         <!--Logo-->
         <ImageView
             android:id="@+id/LogoImage"
