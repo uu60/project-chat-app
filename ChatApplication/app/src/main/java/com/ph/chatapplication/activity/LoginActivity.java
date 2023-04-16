@@ -37,11 +37,29 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // check token before login
         preference = getSharedPreferences("token", MODE_PRIVATE);
         AtomicReference<String> token = new AtomicReference<>(reload());
         if (token.get() != null){
-            doRegister();
+            String msg = "alive";
+            Log.d("token", msg);
+
+            Map<String, String> params = new HashMap<>();
+            String name = "";
+            String pwd = "";
+            params.put("username", name);
+            params.put("password", pwd);
+
+            Map<String, String> head = new HashMap<>();
+            head.put("JWT-Token", token.get());
+            Instances.pool.execute(() ->{
+                        Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact", params, head);
+                    });
+
         }
+
+
         setContentView(R.layout.activity_login);
         btnLogin = findViewById(R.id.btn_login);
         btnReg = findViewById(R.id.btn_reg);
