@@ -1,9 +1,10 @@
 package com.ph.chatapplication.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -29,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnReg;
     private EditText etUsername;
     private EditText etPwd;
+    private Handler handler;
 
     private SharedPreferences preference;
 
@@ -47,81 +49,74 @@ public class LoginActivity extends AppCompatActivity {
             String password = etPwd.getText().toString();
 
             if (StringUtils.isEmpty(username) || username.length() < 5) {
-                showDialogAndFocus("Username must longer than 4 characters.", etUsername);
+                sendToHandler("Username must longer than 4 characters.");
                 return;
             }
 
             if (StringUtils.isEmpty(password) || password.length() < 8) {
-                showDialogAndFocus("Password must longer than 7 characters.", etPwd);
+                sendToHandler("Password must longer than 7 characters.");
                 return;
             }
-            // front end
-
-            // Token
-
-
             // param set
             Map<String, String> params = new HashMap<>();
             params.put("username", username);
             params.put("password", password);
+            handler = new Handler((message) -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Notice");
+                builder.setMessage((String) message.obj);
+
+                builder.setPositiveButton("OK",
+                        (dialog, which) -> {
+//                            if (focus != null) {
+//                                focus.requestFocus();
+//                                InputMethodManager imm =
+//                                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                                imm.showSoftInput(focus, 0);
+//                            }
+                        });
+                //根据构建器创建一个对话框对象
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                return true;
+            });
             Instances.pool.execute(() -> {
-                try {
-                    Resp resp = Requests.post(Requests.SERVER_URL_PORT + "/login", params);
+                Resp resp = Requests.post(Requests.SERVER_URL_PORT + "/login", params);
 
-                    if (resp == null || resp.getCode() == null) {
-                        String s = "null";
-                        Log.d("connect", s);
-                        showDialogAndFocus("connect fail", null);
-                    } else if (resp.getCode() == ErrorCodeConst.SUCCESS) {
-                        String s = "success";
-                        Log.d("login", s);
-                        //showDialogAndFocus("success enter", null);
-                        String token = (String)resp.getData();
+                if (resp == null || resp.getCode() == null) {
+                    String s = "null";
+                    Log.d("connect", s);
+                    sendToHandler("connect fail");
+                } else if (resp.getCode() == ErrorCodeConst.SUCCESS) {
+                    String s = "success";
+                    Log.d("login", s);
+                    String token = (String) resp.getData();
 
-                        preference = getSharedPreferences(username, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = preference.edit();
-                        editor.putString("token", token);
-                        editor.commit();
-
-                    } else if (resp.getCode() == ErrorCodeConst.JWT_TOKEN_INVALID) {
-                        String s = "fail";
-                        Log.d("login", s);
-                        showDialogAndFocus("wrong username or password", null);
-                    }
-
-                } catch (Throwable t) {
-                    System.out.println();
+                    preference = getSharedPreferences(username, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preference.edit();
+                    editor.putString("token", token);
+                    editor.commit();
+                } else if (resp.getCode() == ErrorCodeConst.LOGIN_FAILED) {
+                    String s = "fail";
+                    Log.d("login", s);
+                    sendToHandler("wrong username or password");
                 }
             });
         });
 
     }
+
     private void reload() {
         String token = preference.getString("token", null);
-        Log.d("token",token);
+        Log.d("token", token);
         if (token != null) {
-            Log.d("token",token);
+            Log.d("token", token);
         }
     }
-    private void showDialogAndFocus(String msg, View focus) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Notice");
-        builder.setMessage(msg);
 
-        builder.setPositiveButton("OK",
-                (dialog, which) -> {
-                    if (focus != null){
-                        focus.requestFocus();
-                        InputMethodManager imm =
-                                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(focus, 0);
-                    }
-
-                });
-
-        //根据构建器创建一个对话框对象
-        AlertDialog dialog = builder.create();
-        //显示
-        dialog.show();
+    private void sendToHandler(String msg) {
+        Message message = new Message();
+        message.obj = msg;
+        handler.sendMessage(message);
     }
 }
