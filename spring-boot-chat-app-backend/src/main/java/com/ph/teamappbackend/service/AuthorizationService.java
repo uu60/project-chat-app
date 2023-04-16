@@ -4,7 +4,9 @@ import com.ph.teamappbackend.mapper.UserMapper;
 import com.ph.teamappbackend.pojo.entity.User;
 import com.ph.teamappbackend.pojo.vo.UserTo;
 import com.ph.teamappbackend.utils.JwtUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -17,11 +19,13 @@ public class AuthorizationService {
 
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public String validateAndGetToken(UserTo to) {
         checkUsernameAndPasswordWithException(to.getUsername(), to.getPassword());
         User user = userMapper.selectOneByUsername(to.getUsername());
-        if (user == null || !to.getPassword().equals(user.getPassword())) {
+        if (user == null || !bCryptPasswordEncoder.matches(to.getPassword(), user.getPassword())) {
             throw new RuntimeException("Wrong username or password.");
         }
         return JwtUtils.getToken(user);
@@ -32,6 +36,14 @@ public class AuthorizationService {
         User user = userMapper.selectOneByUsername(to.getUsername());
         if (user != null) {
             throw new RuntimeException("Username already exists.");
+        }
+        String encryptPassword = bCryptPasswordEncoder.encode(to.getPassword());
+        user = new User();
+        user.setUsername(to.getUsername());
+        user.setPassword(encryptPassword);
+        int insert = userMapper.insert(user);
+        if (insert == 0) {
+            throw new RuntimeException("Server error.");
         }
     }
 

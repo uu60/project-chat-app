@@ -26,14 +26,20 @@ public class AuthorizationController {
             String jwt = authorizationService.validateAndGetToken(to);
             return Resp.ok().setData(jwt);
         } catch (Exception e) {
+            e.printStackTrace();
             return Resp.error(ErrorCodeConst.LOGIN_FAILED, e.getMessage());
         }
     }
 
     @PostMapping("/register")
     public Resp register(@RequestBody UserTo to) {
-        authorizationService.register(to);
-        return Resp.ok();
+        try {
+            authorizationService.register(to);
+            return Resp.ok();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Resp.error(ErrorCodeConst.REGISTER_FAILED, e.getMessage());
+        }
     }
 
 }
