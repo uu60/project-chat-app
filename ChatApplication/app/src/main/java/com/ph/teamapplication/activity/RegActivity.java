@@ -1,9 +1,7 @@
 package com.ph.teamapplication.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-
 import com.ph.teamapplication.R;
 
 public class RegActivity extends AppCompatActivity {
