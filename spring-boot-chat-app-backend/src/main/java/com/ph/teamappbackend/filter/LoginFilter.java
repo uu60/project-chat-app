@@ -7,7 +7,6 @@ import com.ph.teamappbackend.utils.JwtUtils;
 import com.ph.teamappbackend.utils.Resp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -37,24 +36,18 @@ public class LoginFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        String jwt = request.getHeader("JWT-Token");
-        boolean isTokenOk = false;
-        if (StringUtils.hasText(jwt)) {
-            try {
-                DECODED_JWT_THREADLOCAL.set(JwtUtils.verify(jwt));
-                isTokenOk = true;
-                filterChain.doFilter(request, response);
-                DECODED_JWT_THREADLOCAL.remove();
-            } catch (Exception ignored) {
-                // invalid token
-            }
-        } else if (UNCHECK_URI_LIST.contains(request.getRequestURI())) {
+        if (UNCHECK_URI_LIST.contains(request.getRequestURI())) {
             filterChain.doFilter(request, response);
             return;
         }
-        if (!isTokenOk) {
+        String jwt = request.getHeader("JWT-Token");
+        try {
+            DECODED_JWT_THREADLOCAL.set(JwtUtils.verify(jwt));
+            filterChain.doFilter(request, response);
+            DECODED_JWT_THREADLOCAL.remove();
+        } catch (Exception e) {
             response.getOutputStream().write(gson.toJson(Resp.error(ErrorCodeConst.JWT_TOKEN_INVALID,
-                    "jwt token invalid")).getBytes());
+                    e.getMessage())).getBytes());
         }
     }
 }
