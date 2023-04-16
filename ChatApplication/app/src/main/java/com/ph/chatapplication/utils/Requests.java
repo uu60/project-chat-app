@@ -17,7 +17,7 @@ import okhttp3.Response;
 public class Requests {
     private static final OkHttpClient client = new OkHttpClient();
     private static final Map<String, String> dummy = new HashMap<>();
-    public static final String SERVER_URL_PORT = "http://192.168.1.102";
+    public static final String SERVER_URL_PORT = "http://192.168.1.102:8080";
 
     static {
         dummy.put("", "");
