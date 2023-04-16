@@ -94,8 +94,7 @@ public class RegActivity extends AppCompatActivity {
             if (resp.getCode() == ErrorCodeConst.REGISTER_FAILED){
                 String s = "failed";
                 Log.d("Register", s);
-                sendToHandler("connect fail");
-                finish();
+                sendToHandler("connect fail or username exited");
                 //Toast.makeText(RegActivity.this, "Register Failed", Toast.LENGTH_LONG);
             } else if (resp.getCode() == ErrorCodeConst.SUCCESS) {
                 String s = "success";
