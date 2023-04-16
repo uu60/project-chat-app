@@ -1,6 +1,7 @@
 package com.ph.chatapplication.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,68 +43,86 @@ public class LoginActivity extends AppCompatActivity {
         btnReg = findViewById(R.id.btn_reg);
         etUsername = findViewById(R.id.et_username);
         etPwd = findViewById(R.id.et_pwd);
+        initHandler();
 
         btnLogin.setOnClickListener(v -> {
+            doLogin();
+        });
 
-            String username = etUsername.getText().toString();
-            String password = etPwd.getText().toString();
+        btnReg.setOnClickListener(v -> {
+            doRegister();
+        });
 
-            if (StringUtils.isEmpty(username) || username.length() < 5) {
-                sendToHandler("Username must longer than 4 characters.");
-                return;
+    }
+
+    private void doRegister() {
+        Intent intent = new Intent(this, RegActivity.class);
+        startActivity(intent);
+    }
+
+    private void doLogin() {
+        String username = etUsername.getText().toString();
+        String password = etPwd.getText().toString();
+
+        if (StringUtils.isEmpty(username) || username.length() < 5) {
+            sendToHandler("Username must longer than 4 characters.");
+            return;
+        }
+
+        if (StringUtils.isEmpty(password) || password.length() < 8) {
+            sendToHandler("Password must longer than 7 characters.");
+            return;
+        }
+        // param set
+        Map<String, String> params = new HashMap<>();
+        params.put("username", username);
+        params.put("password", password);
+        Instances.pool.execute(() -> {
+            Resp resp = Requests.post(Requests.SERVER_URL_PORT + "/login", params);
+
+            if (resp == null || resp.getCode() == null) {
+                String s = "null";
+                Log.d("connect", s);
+                sendToHandler("connect fail");
+            } else if (resp.getCode() == ErrorCodeConst.SUCCESS) {
+                String s = "success";
+                Log.d("login", s);
+                String token = (String) resp.getData();
+
+                preference = getSharedPreferences(username, MODE_PRIVATE);
+                SharedPreferences.Editor editor = preference.edit();
+                editor.putString("token", token);
+                editor.apply();
+                // TODO: 跳转到联系人列表
+
+            } else if (resp.getCode() == ErrorCodeConst.LOGIN_FAILED) {
+                String s = "fail";
+                Log.d("login", s);
+                sendToHandler("wrong username or password");
             }
+        });
+    }
 
-            if (StringUtils.isEmpty(password) || password.length() < 8) {
-                sendToHandler("Password must longer than 7 characters.");
-                return;
-            }
-            // param set
-            Map<String, String> params = new HashMap<>();
-            params.put("username", username);
-            params.put("password", password);
-            handler = new Handler((message) -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Notice");
-                builder.setMessage((String) message.obj);
+    private void initHandler() {
+        handler = new Handler((message) -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Notice");
+            builder.setMessage((String) message.obj);
 
-                builder.setPositiveButton("OK",
-                        (dialog, which) -> {
+            builder.setPositiveButton("OK",
+                    (dialog, which) -> {
 //                            if (focus != null) {
 //                                focus.requestFocus();
 //                                InputMethodManager imm =
 //                                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 //                                imm.showSoftInput(focus, 0);
 //                            }
-                        });
-                //根据构建器创建一个对话框对象
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                return true;
-            });
-            Instances.pool.execute(() -> {
-                Resp resp = Requests.post(Requests.SERVER_URL_PORT + "/login", params);
-
-                if (resp == null || resp.getCode() == null) {
-                    String s = "null";
-                    Log.d("connect", s);
-                    sendToHandler("connect fail");
-                } else if (resp.getCode() == ErrorCodeConst.SUCCESS) {
-                    String s = "success";
-                    Log.d("login", s);
-                    String token = (String) resp.getData();
-
-                    preference = getSharedPreferences(username, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preference.edit();
-                    editor.putString("token", token);
-                    editor.commit();
-                } else if (resp.getCode() == ErrorCodeConst.LOGIN_FAILED) {
-                    String s = "fail";
-                    Log.d("login", s);
-                    sendToHandler("wrong username or password");
-                }
-            });
+                    });
+            //根据构建器创建一个对话框对象
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            return true;
         });
-
     }
 
     private void reload() {
