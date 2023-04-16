@@ -1,32 +1,23 @@
 package com.ph.chatapplication.activity;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ph.chatapplication.R;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.zip.Inflater;
 
 public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
-    List<Msg> mMsgList;
 
     //把显示的数据源传进来
-    public MsgAdapter(List<Msg> msgList) {
+    public MsgAdapter(List<Object> msgList) {
         super();
-        mMsgList = msgList;
     }
 
     //创建ViewHolder实例
@@ -39,27 +30,27 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
     //对RecyclerView子项数据进行赋值
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Msg msg = mMsgList.get(position);
-        holder.time.setText((CharSequence)msg.getTime());
-        if(msg.getType() == Msg.TYPE_RECEIVED){  //接收端
-            holder.his_head.setImageResource(msg.getImageId());
-            holder.leftLayout.setVisibility(View.VISIBLE);  //左可见
-            holder.rightLayout.setVisibility(View.GONE);    //右不可见
-            holder.hisName.setText(msg.getName());
-            holder.leftMsg.setText(msg.getContent());       //左边显示消息
-        }else if(msg.getType() == Msg.TYPE_SENT){
-            holder.my_head.setImageResource(msg.getImageId());
-            holder.rightLayout.setVisibility(View.VISIBLE);
-            holder.leftLayout.setVisibility(View.GONE);
-            holder.name.setText(msg.getName());
-            holder.rightMsg.setText(msg.getContent());
-        }
+//        Msg msg = mMsgList.get(position);
+//        holder.time.setText((CharSequence)msg.getTime());
+//        if(msg.getType() == Msg.TYPE_RECEIVED){  //接收端
+//            holder.his_head.setImageResource(msg.getImageId());
+//            holder.leftLayout.setVisibility(View.VISIBLE);  //左可见
+//            holder.rightLayout.setVisibility(View.GONE);    //右不可见
+//            holder.hisName.setText(msg.getName());
+//            holder.leftMsg.setText(msg.getContent());       //左边显示消息
+//        }else if(msg.getType() == Msg.TYPE_SENT){
+//            holder.my_head.setImageResource(msg.getImageId());
+//            holder.rightLayout.setVisibility(View.VISIBLE);
+//            holder.leftLayout.setVisibility(View.GONE);
+//            holder.name.setText(msg.getName());
+//            holder.rightMsg.setText(msg.getContent());
+//        }
     }
 
     //告诉RecycleView一共多少子项，返回数据源长度
     @Override
     public int getItemCount() {
-        return mMsgList.size();
+        return 1;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
