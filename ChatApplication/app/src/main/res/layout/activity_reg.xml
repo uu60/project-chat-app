@@ -13,17 +13,18 @@
             android:orientation="vertical"
             android:background="#F5F5F5">
 
-        <ImageButton
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/ic_back"
-                android:layout_margin="2pt"
-                android:padding="5dp"
-                android:background="#f5f5f5"
-                android:scaleType="centerCrop" />
-
 
         <!--Logo-->
+        <ImageButton
+            android:id="@+id/btBack"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="2pt"
+            android:background="#f5f5f5"
+            android:padding="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_back" />
+
         <ImageView
                 android:id="@+id/LogoImage"
                 android:layout_width="match_parent"
