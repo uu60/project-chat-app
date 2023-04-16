@@ -1,4 +1,4 @@
-package com.ph.teamapplication.constant;
+package com.ph.chatapplication.constant;
 
 /**
  * @author octopus

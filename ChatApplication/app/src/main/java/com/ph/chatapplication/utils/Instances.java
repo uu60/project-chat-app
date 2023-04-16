@@ -1,4 +1,4 @@
-package com.ph.teamapplication.utils;
+package com.ph.chatapplication.utils;
 
 import com.google.gson.Gson;
 

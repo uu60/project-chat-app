@@ -1,4 +1,4 @@
-package com.ph.teamapplication.activity;
+package com.ph.chatapplication.activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,8 +11,8 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ph.teamapplication.R;
-import com.ph.teamapplication.utils.StringUtils;
+import com.ph.chatapplication.R;
+import com.ph.chatapplication.utils.StringUtils;
 
 public class LoginActivity extends AppCompatActivity {
 

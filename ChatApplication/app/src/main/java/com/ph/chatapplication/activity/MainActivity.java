@@ -1,10 +1,10 @@
-package com.ph.teamapplication.activity;
+package com.ph.chatapplication.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.ph.teamapplication.R;
+import com.ph.chatapplication.R;
 
 public class MainActivity extends AppCompatActivity {
 
