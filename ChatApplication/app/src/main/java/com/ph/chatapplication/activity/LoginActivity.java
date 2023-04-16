@@ -30,6 +30,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etUsername;
     private EditText etPwd;
 
+    private SharedPreferences preference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,9 +76,16 @@ public class LoginActivity extends AppCompatActivity {
                         String s = "success";
                         Log.d("login", s);
                         showDialogAndFocus("success enter", null);
+                        Log.d("value",resp.getMsg());
+//                        preference = getSharedPreferences(username, MODE_PRIVATE);
+//                        SharedPreferences.Editor editor = preference.edit();
+//                        editor.putString("token", token);
+//                        editor.commit();
+
                     } else if (resp.getCode() == ErrorCodeConst.JWT_TOKEN_INVALID) {
                         String s = "fail";
                         Log.d("login", s);
+                        Log.d("value",resp.getMsg());
                         showDialogAndFocus("wrong username or password", null);
                     }
                 } catch (Throwable t) {
