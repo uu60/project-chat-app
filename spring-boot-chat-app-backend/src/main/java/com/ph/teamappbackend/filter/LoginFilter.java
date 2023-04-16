@@ -13,6 +13,9 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author octopus
@@ -25,6 +28,10 @@ public class LoginFilter implements Filter {
     Gson gson;
 
     public final static ThreadLocal<DecodedJWT> DECODED_JWT_THREADLOCAL = new ThreadLocal<>();
+    private final static List<String> UNCHECK_URI_LIST = new ArrayList<>();
+    static {
+        UNCHECK_URI_LIST.addAll(Arrays.asList("/login", "/register"));
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -41,8 +48,9 @@ public class LoginFilter implements Filter {
             } catch (Exception ignored) {
                 // invalid token
             }
-        } else if (request.getRequestURI().equals("/login")) {
+        } else if (UNCHECK_URI_LIST.contains(request.getRequestURI())) {
             filterChain.doFilter(request, response);
+            return;
         }
         if (!isTokenOk) {
             response.getOutputStream().write(gson.toJson(Resp.error(ErrorCodeConst.JWT_TOKEN_INVALID,
