@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.RegActivity">
+
+    <!--使用线性布局-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#F5F5F5">
+
+        <ImageButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/re"
+            android:layout_margin="2pt"
+            android:padding="5dp"
+            android:background="#f5f5f5"
+            android:scaleType="centerCrop"/>
+
+
+        <!--Logo-->
+        <ImageView
+            android:id="@+id/LogoImage"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/logo"/>
+
+        <!--标题-->
+        <TextView
+            android:id="@+id/TitleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="Chatapp Registration"
+            android:gravity="center"
+            android:textStyle="italic"
+            android:textColor="#808080"
+            android:textSize="25dp" />
+
+        <!--嵌套线性布局-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--嵌套线性布局-->
+            <LinearLayout
+                android:id="@+id/UserNameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <!--用户名输入-->
+                <EditText
+                    android:id="@+id/UserNameEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/edit_text"
+                    android:hint="Enter username"
+                    android:textSize="20dp"
+                    android:singleLine="true" />
+
+            </LinearLayout>
+
+            <!--嵌套线性布局-->
+            <LinearLayout
+                android:id="@+id/PassWordLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!--密码输入-->
+                <EditText
+                    android:id="@+id/PassWordEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/edit_text"
+                    android:hint="Enter password"
+                    android:textSize="20dp"
+                    android:maxLength="16"
+                    android:singleLine="true"
+                    android:inputType="textPassword" />
+
+            </LinearLayout>
+
+            <!--嵌套线性布局-->
+            <LinearLayout
+                android:id="@+id/PasswordAgainLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!--二次密码输入-->
+                <EditText
+                    android:id="@+id/PassWordAgainEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/edit_text"
+                    android:hint="Enter password again"
+                    android:maxLength="16"
+                    android:textSize="20dp"
+                    android:singleLine="true"
+                    android:inputType="textPassword" />
+
+            </LinearLayout>
+
+
+            <!--嵌套线性布局-->
+            <LinearLayout
+                android:id="@+id/ButtonLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!--立即注册按钮-->
+                <Button
+                    android:id="@+id/SignUpButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button"
+                    android:text="Register Now"
+                    android:textColor="@color/white"
+                    android:textSize="24dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
