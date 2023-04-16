@@ -1,16 +1,14 @@
-package com.ph.teamapplication.activity;
+package com.ph.chatapplication.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import com.ph.chatapplication.R;
 
-import com.ph.teamapplication.R;
-
-public class chatActivity extends AppCompatActivity {
+public class RegActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_reg);
     }
 }

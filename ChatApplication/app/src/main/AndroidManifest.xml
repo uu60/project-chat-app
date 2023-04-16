@@ -20,7 +20,7 @@
             android:name=".activity.RegActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.chatActivity"
+            android:name=".activity.ChatActivity"
             android:exported="false" />
         <activity
             android:name=".activity.MainActivity"

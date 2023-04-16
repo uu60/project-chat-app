@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.ph.teamapplication'
+    namespace 'com.ph.chatapplication'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.ph.teamapplication"
+        applicationId "com.ph.chatapplication"
         minSdk 24
         targetSdk 33
         versionCode 1

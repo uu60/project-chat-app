@@ -1,4 +1,4 @@
-package com.ph.teamapplication;
+package com.ph.chatapplication;
 
 import org.junit.Test;
 

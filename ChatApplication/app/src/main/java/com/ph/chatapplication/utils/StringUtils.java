@@ -1,4 +1,4 @@
-package com.ph.teamapplication.utils;
+package com.ph.chatapplication.utils;
 
 public class StringUtils {
     public static boolean isEmpty(String str) {

@@ -1,4 +1,4 @@
-package com.ph.teamapplication.utils;
+package com.ph.chatapplication.utils;
 
 import android.util.Log;
 
