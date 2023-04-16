@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -69,14 +71,7 @@ public class Requests {
     private static Resp http(M m, String url, Map<String, String> paramMap, Map<String, String> headerMap) {
         try {
             Request.Builder reqBuilder = new Request.Builder().url(url);
-            FormBody.Builder bodyBuilder = new FormBody.Builder();
-            boolean emptyArgs = paramMap == null ||
-                    paramMap.isEmpty();
-            if (!emptyArgs) {
-                // 把requestBody每一对参数key value添加到请求体
-                paramMap.forEach(bodyBuilder::add);
-            }
-            FormBody requestBody = bodyBuilder.build();
+            RequestBody requestBody = RequestBody.create(Instances.gson.toJson(paramMap), MediaType.parse("application/json; charset=utf-8"));
             if (m == M.GET) {
                 reqBuilder.get();
             } else if (m == M.DELETE) {
