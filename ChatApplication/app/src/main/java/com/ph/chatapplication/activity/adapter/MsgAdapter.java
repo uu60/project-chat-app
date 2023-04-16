@@ -1,4 +1,4 @@
-package com.ph.chatapplication.activity;
+package com.ph.chatapplication.activity.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
