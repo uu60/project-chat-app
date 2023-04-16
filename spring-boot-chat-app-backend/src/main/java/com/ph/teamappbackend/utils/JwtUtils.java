@@ -10,11 +10,10 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.ph.teamappbackend.filter.LoginFilter;
 import com.ph.teamappbackend.pojo.entity.User;
-import org.springframework.stereotype.Component;
+import com.ph.teamappbackend.pojo.vo.AccountVo;
 import org.springframework.util.StringUtils;
-
-import java.util.Calendar;
 
 public class JwtUtils {
 
@@ -30,14 +29,18 @@ public class JwtUtils {
 
     public static DecodedJWT verify(String token) {
         if (!StringUtils.hasText(token)) {
-            return null;
+            throw new RuntimeException("Empty token.");
         }
         JWTVerifier build = JWT.require(Algorithm.HMAC256(SECRET_KEY)).build();
         try {
             return build.verify(token);
         } catch (Exception e) {
-            return null;
+            throw new RuntimeException("Invalid token.");
         }
+    }
+
+    public static Integer getCurrentUserId() {
+        return LoginFilter.DECODED_JWT_THREADLOCAL.get().getClaim("userId").asInt();
     }
 
 }

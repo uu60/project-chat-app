@@ -2,9 +2,8 @@ package com.ph.teamappbackend.service;
 
 import com.ph.teamappbackend.mapper.UserMapper;
 import com.ph.teamappbackend.pojo.entity.User;
-import com.ph.teamappbackend.pojo.vo.UserTo;
+import com.ph.teamappbackend.pojo.vo.AccountVo;
 import com.ph.teamappbackend.utils.JwtUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ public class AuthorizationService {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public String validateAndGetToken(UserTo to) {
+    public String validateAndGetToken(AccountVo to) {
         checkUsernameAndPasswordWithException(to.getUsername(), to.getPassword());
         User user = userMapper.selectOneByUsername(to.getUsername());
         if (user == null || !bCryptPasswordEncoder.matches(to.getPassword(), user.getPassword())) {
@@ -31,7 +30,7 @@ public class AuthorizationService {
         return JwtUtils.getToken(user);
     }
 
-    public void register(UserTo to) {
+    public void register(AccountVo to) {
         checkUsernameAndPasswordWithException(to.getUsername(), to.getPassword());
         User user = userMapper.selectOneByUsername(to.getUsername());
         if (user != null) {
