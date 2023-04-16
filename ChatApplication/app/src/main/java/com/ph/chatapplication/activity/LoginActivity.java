@@ -75,19 +75,20 @@ public class LoginActivity extends AppCompatActivity {
                     } else if (resp.getCode() == ErrorCodeConst.SUCCESS) {
                         String s = "success";
                         Log.d("login", s);
-                        showDialogAndFocus("success enter", null);
-                        Log.d("value",resp.getMsg());
-//                        preference = getSharedPreferences(username, MODE_PRIVATE);
-//                        SharedPreferences.Editor editor = preference.edit();
-//                        editor.putString("token", token);
-//                        editor.commit();
+                        //showDialogAndFocus("success enter", null);
+                        String token = (String)resp.getData();
+
+                        preference = getSharedPreferences(username, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preference.edit();
+                        editor.putString("token", token);
+                        editor.commit();
 
                     } else if (resp.getCode() == ErrorCodeConst.JWT_TOKEN_INVALID) {
                         String s = "fail";
                         Log.d("login", s);
-                        Log.d("value",resp.getMsg());
                         showDialogAndFocus("wrong username or password", null);
                     }
+
                 } catch (Throwable t) {
                     System.out.println();
                 }
@@ -95,7 +96,13 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
-
+    private void reload() {
+        String token = preference.getString("token", null);
+        Log.d("token",token);
+        if (token != null) {
+            Log.d("token",token);
+        }
+    }
     private void showDialogAndFocus(String msg, View focus) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Notice");
