@@ -41,6 +41,8 @@ public class LoginFilter implements Filter {
             } catch (Exception ignored) {
                 // invalid token
             }
+        } else if (request.getRequestURI().equals("/login")) {
+            filterChain.doFilter(request, response);
         }
         if (!isTokenOk) {
             response.getOutputStream().write(gson.toJson(Resp.error(ErrorCodeConst.JWT_TOKEN_INVALID,
