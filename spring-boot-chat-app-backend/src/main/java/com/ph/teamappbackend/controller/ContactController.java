@@ -28,17 +28,5 @@ public class ContactController {
         return Resp.ok().setData(contacts);
     }
 
-//    @PostMapping("/add_contact")
-//    public Resp addContact(@RequestBody Map<String, Integer> params) {
-//        Integer currentUserId = JwtUtils.getCurrentUserId();
-//        Integer contactId = params.get("contact_id");
-//        try {
-//            contactService.addContact(currentUserId, contactId);
-//            return Resp.ok();
-//        } catch (Exception e) {
-//            return Resp.error(ErrorCodeConst.CONTACT_ADD_FAILED, e.getMessage());
-//        }
-//    }
-
 
 }

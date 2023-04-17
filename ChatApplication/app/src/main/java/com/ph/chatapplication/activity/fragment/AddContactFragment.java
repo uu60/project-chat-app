@@ -24,6 +24,7 @@ public class AddContactFragment extends Fragment {
 
     TextView tvHead;
     RecyclerView rvContactReq;
+    TextView tvNoRequest;
     Handler handler;
 
     @Override
@@ -36,6 +37,7 @@ public class AddContactFragment extends Fragment {
         rvContactReq = inflate.findViewById(R.id.rv_contact_req);
         rvContactReq.setLayoutManager(new LinearLayoutManager(activity,
                 LinearLayoutManager.VERTICAL, false));
+        tvNoRequest = inflate.findViewById(R.id.tv_no_request);
         initHandler();
         Instances.pool.execute(() -> {
             Message message = new Message();
@@ -48,10 +50,19 @@ public class AddContactFragment extends Fragment {
 
     private void initHandler() {
         handler = new Handler(m -> {
-            rvContactReq.setAdapter(new AddContactFragmentAdapter((List<AddContactFragmentAdapter.DataHolder>) m.obj));
-            // Inflate the layout for this fragment
-            rvContactReq.addItemDecoration(new DividerItemDecoration(getContext(),
-                    DividerItemDecoration.VERTICAL));
+            List<AddContactFragmentAdapter.DataHolder> data =
+                    (List<AddContactFragmentAdapter.DataHolder>) m.obj;
+            if (data != null && !data.isEmpty()) {
+                rvContactReq.setAdapter(new AddContactFragmentAdapter(data));
+                // Inflate the layout for this fragment
+                rvContactReq.addItemDecoration(new DividerItemDecoration(getContext(),
+                        DividerItemDecoration.VERTICAL));
+                rvContactReq.setVisibility(View.VISIBLE);
+                tvNoRequest.setVisibility(View.GONE);
+            } else {
+                rvContactReq.setVisibility(View.GONE);
+                tvNoRequest.setVisibility(View.VISIBLE);
+            }
             return true;
         });
     }

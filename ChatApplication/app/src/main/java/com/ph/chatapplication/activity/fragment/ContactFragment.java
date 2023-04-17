@@ -37,6 +37,7 @@ public class ContactFragment extends Fragment {
 
     private TextView tvHead;
     private RecyclerView rvContactFrag;
+    private TextView tvNoContact;
     private Handler recyclerHandler;
 
     @Override
@@ -48,11 +49,12 @@ public class ContactFragment extends Fragment {
         tvHead = activity.findViewById(R.id.tv_head);
         tvHead.setText("Contact");
 
-        initRecyclerHandler();
         rvContactFrag = inflate.findViewById(R.id.rv_contact_frag);
         rvContactFrag.setLayoutManager(new LinearLayoutManager(activity,
                 LinearLayoutManager.VERTICAL, false));
 
+        tvNoContact = inflate.findViewById(R.id.tv_no_contact);
+        initRecyclerHandler();
         // search token to get user info
         SharedPreferences preference = getActivity().getSharedPreferences("token",
                 Activity.MODE_PRIVATE);
@@ -105,10 +107,17 @@ public class ContactFragment extends Fragment {
         this.recyclerHandler = new Handler(message -> {
             List<ContactFragmentAdapter.DataHolder> data =
                     (List<ContactFragmentAdapter.DataHolder>) message.obj;
-            rvContactFrag.setAdapter(new ContactFragmentAdapter(data));
-            // Inflate the layout for this fragment
-            rvContactFrag.addItemDecoration(new DividerItemDecoration(getContext(),
-                    DividerItemDecoration.VERTICAL));
+            if (data != null && !data.isEmpty()) {
+                rvContactFrag.setVisibility(View.VISIBLE);
+                tvNoContact.setVisibility(View.INVISIBLE);
+                rvContactFrag.setAdapter(new ContactFragmentAdapter(data));
+                // Inflate the layout for this fragment
+                rvContactFrag.addItemDecoration(new DividerItemDecoration(getContext(),
+                        DividerItemDecoration.VERTICAL));
+            } else {
+                rvContactFrag.setVisibility(View.INVISIBLE);
+                tvNoContact.setVisibility(View.VISIBLE);
+            }
             return true;
         });
     }
