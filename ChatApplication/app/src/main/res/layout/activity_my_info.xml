@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+  <LinearLayout
+      android:id="@+id/layout_titlebar"
+      android:layout_width="match_parent"
+      android:layout_height="52dp"
+      android:background="#ECECEC">
+
+    <ImageView
+        android:id="@+id/iv_backward"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:ellipsize="none"
+        android:layout_gravity="center"
+        android:singleLine="true"
+        android:src="@drawable/ic_back" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:ellipsize="marquee"
+        android:gravity="center_horizontal|center"
+        android:singleLine="true"
+        android:text="标题栏"
+        android:textColor="@android:color/black"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/tv_forward"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:paddingRight="5dp"
+        android:singleLine="true"
+        android:text="save"
+        android:textColor="@android:color/black"
+        android:textSize="18dp"/>
+  </LinearLayout>
+
+<!--  信息栏-->
+  <LinearLayout
+      android:layout_marginTop="20dp"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
+<!--    文字部分-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+<!--      信息1-->
+      <LinearLayout
+          android:layout_margin="5dp"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="username"
+            android:layout_marginLeft="5dp"
+            android:textSize="20dp"
+            android:layout_marginRight="20dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="根据获取到的设置"/>
+      </LinearLayout>
+    </LinearLayout>
+  </LinearLayout>
+
+
+</LinearLayout>
