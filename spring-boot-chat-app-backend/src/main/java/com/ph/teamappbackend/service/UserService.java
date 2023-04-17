@@ -8,13 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * @author octopus
  * @since 2023/4/15 20:37
  */
 @Service
-public class AuthorizationService {
+public class UserService {
 
     @Autowired
     UserMapper userMapper;
@@ -51,5 +55,27 @@ public class AuthorizationService {
                 || username.length() < 5 || password.length() < 8) {
             throw new RuntimeException("Username or password length is illegal.");
         }
+    }
+
+    public void savePortrait(Integer currentUserId, MultipartFile mf) {
+        String originalFilename = mf.getOriginalFilename();
+        if (!StringUtils.hasText(originalFilename)) {
+            throw new RuntimeException("File name empty.");
+        }
+        File file = new File("src/main/resources/portrait/" + currentUserId + originalFilename.substring(originalFilename.lastIndexOf(
+                ".")));
+        try (FileOutputStream outputStream = new FileOutputStream(file)) {
+            if (!file.createNewFile()) {
+                throw new RuntimeException();
+            }
+            outputStream.write(mf.getBytes());
+        } catch (Exception e) {
+            throw new RuntimeException("File save error.");
+        }
+    }
+
+    public void changeDetails(Integer currentUserId, User user) {
+        user.setId(currentUserId);
+        userMapper.updateById(user);
     }
 }
