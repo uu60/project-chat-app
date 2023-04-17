@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ph.chatapplication.R;
+import com.ph.chatapplication.activity.fragment.ContactFragment;
 import com.ph.chatapplication.constant.ErrorCodeConst;
 import com.ph.chatapplication.utils.Instances;
 import com.ph.chatapplication.utils.Requests;
@@ -55,6 +56,10 @@ public class LoginActivity extends AppCompatActivity {
             head.put("JWT-Token", token.get());
             Instances.pool.execute(() ->{
                         Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact", params, head);
+                        if (resp.getCode() == ErrorCodeConst.SUCCESS){
+                            Intent intent = new Intent(this, HomeActivity.class);
+                            startActivity(intent);
+                        }
                     });
 
         }
@@ -118,8 +123,8 @@ public class LoginActivity extends AppCompatActivity {
                 editor.apply();
 
                 // TODO: 跳转到联系人列表
-//                Intent intent = new Intent(this, );
-//                startActivity(intent);
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
 
             } else if (resp.getCode() == ErrorCodeConst.LOGIN_FAILED) {
                 String s = "fail";
