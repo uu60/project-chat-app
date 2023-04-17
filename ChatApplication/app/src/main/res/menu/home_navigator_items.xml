@@ -2,10 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
             android:id="@+id/nav_contact"
-            android:icon="@mipmap/ic_launcher"
-            android:title="Contact"/>
+            android:icon="@drawable/ic_contact"
+            android:title="Contact" />
+    <item
+            android:id="@+id/nav_add_contact"
+            android:icon="@drawable/ic_add_contact"
+            android:title="Contact" />
     <item
             android:id="@+id/nav_me"
-            android:icon="@mipmap/ic_launcher"
-            android:title="Me"/>
+            android:icon="@drawable/ic_me"
+            android:title="Me" />
 </menu>
