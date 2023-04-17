@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/item_contact"
+        android:background="#FEFEFE"
+        android:padding="10dp">
+
+    <ImageView
+            android:id="@+id/im_portrait"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="23dp"
+                android:layout_marginLeft="10dp"
+                android:text="nickname" />
+
+        <TextView
+                android:id="@+id/tv_request_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:text="nickname" />
+    </LinearLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+        <Button
+                android:id="@+id/ib_add"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="10dp"
+                android:text="✓"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:textAlignment="center"
+                android:background="@drawable/green_button"
+                android:layout_centerInParent="true" />
+
+        <Button
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_toLeftOf="@+id/ib_add"
+                android:background="@drawable/red_button"
+                android:textColor="@color/white"
+                android:text="✗"
+                android:textStyle="bold"
+                android:layout_centerInParent="true" />
+    </RelativeLayout>
+</LinearLayout>

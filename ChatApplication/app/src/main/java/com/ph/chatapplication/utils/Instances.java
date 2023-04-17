@@ -2,6 +2,8 @@ package com.ph.chatapplication.utils;
 
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -21,4 +23,7 @@ public class Instances {
     );
 
     public static final Gson gson = new Gson();
+
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+            Locale.CHINA);
 }

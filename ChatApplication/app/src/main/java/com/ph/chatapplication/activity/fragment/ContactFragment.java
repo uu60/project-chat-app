@@ -90,7 +90,6 @@ public class ContactFragment extends Fragment {
             });
 
         }
-
         return inflate;
     }
     private void push(List<List<Map>> data){
