@@ -4,7 +4,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
+    <RelativeLayout
+            android:id="@+id/layout_titlebar"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:background="#ECECEC">
@@ -22,12 +23,13 @@
                 android:id="@+id/tv_room"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textAlignment="center"
                 android:text="ChatRoom"
                 android:textColor="@color/black"
                 android:textSize="23sp" />
-
-    </androidx.appcompat.widget.Toolbar>
+    </RelativeLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
