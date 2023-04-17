@@ -2,83 +2,164 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:orientation="vertical">
 
-  <LinearLayout
-      android:id="@+id/layout_titlebar"
-      android:layout_width="match_parent"
-      android:layout_height="52dp"
-      android:background="#ECECEC">
-
-    <ImageView
-        android:id="@+id/iv_backward"
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
-        android:ellipsize="none"
-        android:layout_gravity="center"
-        android:singleLine="true"
-        android:src="@drawable/ic_back" />
-
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:ellipsize="marquee"
-        android:gravity="center_horizontal|center"
-        android:singleLine="true"
-        android:text="标题栏"
-        android:textColor="@android:color/black"
-        android:textSize="20dp" />
-
-    <TextView
-        android:id="@+id/tv_forward"
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:ellipsize="end"
-        android:gravity="center"
-        android:paddingRight="5dp"
-        android:singleLine="true"
-        android:text="save"
-        android:textColor="@android:color/black"
-        android:textSize="18dp"/>
-  </LinearLayout>
-
-<!--  信息栏-->
-  <LinearLayout
-      android:layout_marginTop="20dp"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:orientation="vertical">
-
-<!--    文字部分-->
     <LinearLayout
+        android:id="@+id/layout_titlebar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-<!--      信息1-->
-      <LinearLayout
-          android:layout_margin="5dp"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:orientation="horizontal">
+        android:layout_height="52dp"
+        android:background="#ECECEC">
+
+        <ImageView
+            android:id="@+id/iv_backward"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:ellipsize="none"
+            android:singleLine="true"
+            android:src="@drawable/ic_back" />
 
         <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:gravity="center_horizontal|center"
+            android:singleLine="true"
+            android:text="标题栏-要修改"
+            android:textColor="@android:color/black"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/tv_forward"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="username"
-            android:layout_marginLeft="5dp"
-            android:textSize="20dp"
-            android:layout_marginRight="20dp"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="根据获取到的设置"/>
-      </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:text="change"
+            android:clickable="true"
+            android:textColor="@color/purple_500"
+            android:textSize="20dp" />
     </LinearLayout>
-  </LinearLayout>
 
 
-</LinearLayout>
+    <!--    文字部分-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="50dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+
+
+            <!--每一项都要从数据库里取出来先填进去，然后用户可修改-->
+            <!--账号-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Username: "
+                    android:textSize="19dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="11111111要改"
+                    android:textSize="19dp" />
+
+
+            </LinearLayout>
+
+            <View
+
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:background="#aa000000" />
+            <!--密码-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Password: "
+                    android:textSize="19dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="11111111要改"
+                    android:textSize="19dp" />
+            </LinearLayout>
+
+            <View
+
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:background="#aa000000" />
+
+            <!--个人邮箱-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Email: "
+                    android:textSize="19dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="11111111要改"
+                    android:textSize="19dp" />
+
+            </LinearLayout>
+            <View
+
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:background="#aa000000" />
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+

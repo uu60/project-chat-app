@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layout_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="#ECECEC">
+
+        <ImageView
+            android:id="@+id/iv_backward"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:ellipsize="none"
+            android:singleLine="true"
+            android:src="@drawable/ic_back" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:gravity="center_horizontal|center"
+            android:singleLine="true"
+            android:text="标题栏-要修改"
+            android:textColor="@android:color/black"
+            android:textSize="20dp" />
+
+    </LinearLayout>
+
+
+    <!--    文字部分-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingTop="50dp"
+        android:paddingRight="5dp">
+
+        <!--每一项都要从数据库里取出来先填进去，然后用户可修改-->
+        <!--账号-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Username: "
+                android:textSize="19dp" />
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter username"
+                android:inputType="phone"
+                android:maxLength="11" />
+
+        </LinearLayout>
+
+        <!--密码-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Password: "
+                android:textSize="19dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter password"
+                android:inputType="textPassword" />
+        </LinearLayout>
+
+        <!--        确认密码-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Confirm password: "
+                android:textSize="13dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter password again"
+                android:inputType="textPassword" />
+        </LinearLayout>
+
+
+        <!--个人邮箱-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Email: "
+                android:textSize="19dp" />
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter email"
+                android:inputType="phone"
+                android:maxLength="11" />
+
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Confirm change"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <TextView
+
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:clickable="true"
+                    android:textSize="18dp"
+                    android:text="Return information center"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
+
