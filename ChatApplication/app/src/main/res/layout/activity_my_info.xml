@@ -29,9 +29,9 @@
                 android:layout_weight="1"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
-                android:text="标题栏-要修改"
+                android:text="Details"
                 android:textColor="@android:color/black"
-                android:textSize="20dp" />
+                android:textSize="23dp" />
 
         <TextView
                 android:id="@+id/tv_forward"
@@ -43,10 +43,10 @@
                 android:gravity="center"
                 android:paddingRight="5dp"
                 android:singleLine="true"
-                android:text="change"
+                android:text="Modify"
                 android:clickable="true"
                 android:textColor="@color/purple_500"
-                android:textSize="20dp" />
+                android:textSize="23dp" />
     </RelativeLayout>
 
 
@@ -59,13 +59,15 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp">
 
+        <ImageButton
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center" />
 
-        <!--每一项都要从数据库里取出来先填进去，然后用户可修改-->
-        <!--账号-->
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
 
                 android:orientation="horizontal">
 
@@ -74,13 +76,13 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Username: "
-                    android:textSize="19dp" />
+                    android:textSize="23dp" />
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="11111111要改"
-                    android:textSize="19dp" />
+                    android:textSize="23dp" />
 
 
         </LinearLayout>
@@ -94,27 +96,28 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="10dp"
                 android:background="#aa000000" />
-        <!--密码-->
+
+        <!--Nickname-->
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
             <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Password: "
-                    android:textSize="19dp" />
+                    android:text="Nickname: "
+                    android:textSize="23dp" />
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="11111111要改"
-                    android:textSize="19dp" />
+                    android:textSize="23dp" />
+
         </LinearLayout>
+
 
         <View
 
@@ -125,12 +128,37 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="10dp"
                 android:background="#aa000000" />
-
-        <!--个人邮箱-->
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Phone: "
+                    android:textSize="23dp" />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="11111111要改"
+                    android:textSize="23dp" />
+
+        </LinearLayout>
+        <View
+
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginBottom="10dp"
+                android:background="#aa000000" />
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
             <TextView
@@ -138,16 +166,15 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Email: "
-                    android:textSize="19dp" />
+                    android:textSize="23dp" />
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="11111111要改"
-                    android:textSize="19dp" />
+                    android:textSize="23dp" />
 
         </LinearLayout>
-
         <View
 
                 android:layout_width="fill_parent"
@@ -155,8 +182,64 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
                 android:background="#aa000000" />
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
+            <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Address: "
+                    android:textSize="23dp" />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="11111111要改"
+                    android:textSize="23dp" />
+
+        </LinearLayout>
+        <View
+
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:background="#aa000000" />
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Register: "
+                    android:textSize="23dp" />
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="11111111要改"
+                    android:textSize="23dp" />
+
+        </LinearLayout>
+        <View
+
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:background="#aa000000" />
     </LinearLayout>
 
 

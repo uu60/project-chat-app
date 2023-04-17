@@ -28,7 +28,7 @@ public class ContactService {
     UserMapper userMapper;
 
     public List<User> getAllContactUsers(Integer currentUserId) {
-        List<Contact> contacts = contactMapper.selectList(new QueryWrapper<Contact>().eq("id", currentUserId));
+        List<Contact> contacts = contactMapper.selectList(new QueryWrapper<Contact>().eq("user_id", currentUserId));
         List<Integer> collect = contacts.stream().map(Contact::getContactId).collect(Collectors.toList());
         if (collect.isEmpty()) {
             return new ArrayList<>();
