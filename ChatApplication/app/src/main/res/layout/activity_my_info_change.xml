@@ -5,34 +5,33 @@
     android:background="@android:color/white"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/layout_titlebar"
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:background="#ECECEC">
 
         <ImageView
-            android:id="@+id/iv_backward"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:ellipsize="none"
-            android:singleLine="true"
-            android:src="@drawable/ic_back" />
+                android:id="@+id/iv_backward"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:src="@drawable/ic_back" />
 
         <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:ellipsize="marquee"
-            android:gravity="center_horizontal|center"
-            android:singleLine="true"
-            android:text="标题栏-要修改"
-            android:textColor="@android:color/black"
-            android:textSize="20dp" />
+                android:id="@+id/tv_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textAlignment="center"
+                android:text="ChatRoom"
+                android:textColor="@color/black"
+                android:textSize="23sp" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <!--    文字部分-->
