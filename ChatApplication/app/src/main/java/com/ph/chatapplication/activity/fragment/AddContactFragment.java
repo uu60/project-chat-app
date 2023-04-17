@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.AddContactFragmentAdapter;
-import com.ph.chatapplication.activity.adapter.ContactFragmentAdapter;
 import com.ph.chatapplication.utils.Instances;
 
 import java.util.List;
