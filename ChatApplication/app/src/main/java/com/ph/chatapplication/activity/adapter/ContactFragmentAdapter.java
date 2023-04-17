@@ -13,6 +13,7 @@ import com.ph.chatapplication.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author octopus
@@ -22,29 +23,29 @@ public class ContactFragmentAdapter extends RecyclerView.Adapter<ContactFragment
 
     private List<DataHolder> data = new ArrayList<>();
 
-    public ContactFragmentAdapter(List<DataHolder> data) {
-//        this.data = data;
+
+    public ContactFragmentAdapter(List<List<Map>> data) {
+        for (Map temp : data.get(0)){
+            String s = (String) temp.get("portraitUrl");
+            this.data.add(new DataHolder((String) temp.get("portraitUrl"), (String) temp.get("nickname")));
+        }
+
+        setData(this.data);
+    }
+
+    public ContactFragmentAdapter(Object data) {
+
         setData(this.data);
     }
 
     public void setData(List<DataHolder> data) {
 //        this.data = data;
         // test data
-        data.add(new DataHolder("www", "user1"));
-        data.add(new DataHolder("www", "user1"));
-        data.add(new DataHolder("www", "user1"));
-        data.add(new DataHolder("www", "user1"));
-        data.add(new DataHolder("www", "user1"));
-        data.add(new DataHolder("www", "user1"));
-        data.add(new DataHolder("www", "user1"));
-        data.add(new DataHolder("www", "user1"));
-        data.add(new DataHolder("www", "user1"));
-        data.add(new DataHolder("www", "user1"));
-        data.add(new DataHolder("www", "user1"));
-        data.add(new DataHolder("www", "user1"));
-        data.add(new DataHolder("www", "user1"));
-        data.add(new DataHolder("www", "user1"));
-        data.add(new DataHolder("www", "user1"));
+
+//
+//        data.add(new DataHolder("www", "user1"));
+//        data.add(new DataHolder("www", "user1"));
+//        data.add(new DataHolder("www", "user1"));
     }
 
     @NonNull
