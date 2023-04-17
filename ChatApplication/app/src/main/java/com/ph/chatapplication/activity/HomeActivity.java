@@ -33,19 +33,17 @@ public class HomeActivity extends AppCompatActivity {
         initFragments();
         // get navigation view
         BottomNavigationView navView = findViewById(R.id.nav_home);
+        navView.setItemIconSize(100);
         switchFragment(0);
-        navView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.nav_contact) {
-                    switchFragment(0);
-                } else if (item.getItemId() == R.id.nav_add_contact) {
-                    switchFragment(1);
-                } else {
-                    switchFragment(2);
-                }
-                return true;
+        navView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_contact) {
+                switchFragment(0);
+            } else if (item.getItemId() == R.id.nav_add_contact) {
+                switchFragment(1);
+            } else {
+                switchFragment(2);
             }
+            return true;
         });
     }
 

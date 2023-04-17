@@ -4,6 +4,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/item_contact"
+        android:background="#FEFEFE"
         android:padding="10dp">
 
     <ImageView

@@ -43,7 +43,8 @@ public class Requests {
         return get(url, requestParamsMap, null);
     }
 
-    public static Resp get(String url, Map<String, String> requestParamMap, Map<String, String> headerMap) {
+    public static Resp get(String url, Map<String, String> requestParamMap,
+                           Map<String, String> headerMap) {
         if (requestParamMap == null || requestParamMap.isEmpty()) {
             return get(url);
         }
@@ -64,14 +65,17 @@ public class Requests {
         return post(url, requestBodyMap, null);
     }
 
-    public static Resp post(String url, Map<String, String> requestBodyMap, Map<String, String> headerMap) {
+    public static Resp post(String url, Map<String, String> requestBodyMap,
+                            Map<String, String> headerMap) {
         return http(M.POST, url, requestBodyMap, headerMap);
     }
 
-    private static Resp http(M m, String url, Map<String, String> paramMap, Map<String, String> headerMap) {
+    private static Resp http(M m, String url, Map<String, String> paramMap,
+                             Map<String, String> headerMap) {
         try {
             Request.Builder reqBuilder = new Request.Builder().url(url);
-            RequestBody requestBody = RequestBody.create(Instances.gson.toJson(paramMap), MediaType.parse("application/json; charset=utf-8"));
+            RequestBody requestBody = RequestBody.create(Instances.gson.toJson(paramMap),
+                    MediaType.parse("application/json; charset=utf-8"));
             if (m == M.GET) {
                 reqBuilder.get();
             } else if (m == M.DELETE) {
