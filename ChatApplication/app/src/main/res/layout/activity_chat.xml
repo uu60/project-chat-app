@@ -6,17 +6,17 @@
 
     <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:background="#ECECEC">
 
-        <ImageButton
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/ic_back"
-                android:padding="5dp"
-                android:background="#00FF0000"
-                android:scaleType="centerCrop" />
-
+        <ImageView
+                android:id="@+id/iv_backward"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:src="@drawable/ic_back" />
 
         <TextView
                 android:id="@+id/tv_room"
