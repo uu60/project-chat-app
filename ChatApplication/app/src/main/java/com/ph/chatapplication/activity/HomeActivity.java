@@ -33,12 +33,7 @@ public class HomeActivity extends AppCompatActivity {
         initFragments();
         // get navigation view
         BottomNavigationView navView = findViewById(R.id.nav_home);
-//        // build fragment container
-//        NavController navController = Navigation.findNavController(this, R.id
-//        .frag_container_home);
-//
-//        // start up
-//        NavigationUI.setupWithNavController(navView, navController);
+        switchFragment(0);
         navView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
