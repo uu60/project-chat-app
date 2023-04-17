@@ -11,17 +11,17 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.ph.chatapplication.R;
 
-public class MeFragment extends Fragment {
+public class AddContactFragment extends Fragment {
 
-    private TextView tvHead;
+    TextView tvHead;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
         tvHead = activity.findViewById(R.id.tv_head);
-        tvHead.setText("Me");
+        tvHead.setText("Add Contact");
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_me, container, false);
+        return inflater.inflate(R.layout.fragment_add_contact, container, false);
     }
 }
