@@ -1,5 +1,7 @@
 package com.ph.chatapplication.activity.fragment;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,8 +20,14 @@ import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.AddContactFragmentAdapter;
 import com.ph.chatapplication.activity.adapter.ContactFragmentAdapter;
 import com.ph.chatapplication.utils.Instances;
+import com.ph.chatapplication.utils.Requests;
+import com.ph.chatapplication.utils.Resp;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AddContactFragment extends Fragment {
 
@@ -37,11 +45,34 @@ public class AddContactFragment extends Fragment {
         rvContactReq = inflate.findViewById(R.id.rv_contact_req);
         rvContactReq.setLayoutManager(new LinearLayoutManager(activity,
                 LinearLayoutManager.VERTICAL, false));
+
+        SharedPreferences preference = getActivity().getSharedPreferences("token",
+                Activity.MODE_PRIVATE);
+        String tokenStr = preference.getString("token", null);
+        AtomicReference<String> token = new AtomicReference<>(tokenStr);
+        List<ContactFragmentAdapter.DataHolder> data = new ArrayList<>();
+
+        Map<String, String> params = new HashMap<>();
+        String name = "";
+        String pwd = "";
+        params.put("username", name);
+        Map<String, String> head = new HashMap<>();
+        head.put("JWT-Token", token.get());
+
         initHandler();
         Instances.pool.execute(() -> {
             Message message = new Message();
             // TODO 待处理
-            message.setData(null);
+            if (token != null){
+                Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact_request", params, head);
+                List<Map<String, Object>> temp = (List) resp.getData();
+                if (temp != null){
+                    int code = resp.getCode();
+                }
+            }else {
+                message.setData(null);
+            }
+
             handler.sendMessage(message);
         });
         return inflate;
