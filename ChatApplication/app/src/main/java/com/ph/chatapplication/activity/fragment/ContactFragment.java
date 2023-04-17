@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,33 +35,30 @@ public class ContactFragment extends Fragment {
 
     private TextView tvHead;
     private RecyclerView rvContactFrag;
-
-    private SharedPreferences preference;
+    private Handler recyclerHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.e("contactfragment", this.toString());
         View inflate = inflater.inflate(R.layout.fragment_contact, container, false);
         FragmentActivity activity = getActivity();
         tvHead = activity.findViewById(R.id.tv_head);
         tvHead.setText("Contact");
 
+        initRecyclerHandler();
         rvContactFrag = inflate.findViewById(R.id.rv_contact_frag);
-        try {
-            rvContactFrag.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
+        rvContactFrag.setLayoutManager(new LinearLayoutManager(activity,
+                LinearLayoutManager.VERTICAL, false));
 
         // search token to get user info
-        preference = getActivity().getSharedPreferences("token", Activity.MODE_PRIVATE);
-        AtomicReference<String> token = new AtomicReference<>(reload());
-        List<List<Map>> data = new ArrayList<>();
+        SharedPreferences preference = getActivity().getSharedPreferences("token",
+                Activity.MODE_PRIVATE);
+        String tokenStr = preference.getString("token", null);
+        AtomicReference<String> token = new AtomicReference<>(tokenStr);
+        List<ContactFragmentAdapter.DataHolder> data = new ArrayList<>();
         // get user info
-        if (token.get() != null){
-            String msg = "alive";
-            Log.d("token", msg);
-
+        if (token.get() != null) {
             Map<String, String> params = new HashMap<>();
             String name = "";
             String pwd = "";
@@ -68,45 +67,33 @@ public class ContactFragment extends Fragment {
 
             Map<String, String> head = new HashMap<>();
             head.put("JWT-Token", token.get());
-            Instances.pool.execute(() ->{
+            Instances.pool.execute(() -> {
                 Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact", params, head);
-                if (resp.getCode() == ErrorCodeConst.SUCCESS){
-                    List<Map> temp = (List<Map>) resp.getData();
-                    data.add(temp);
-                    String s = "?";
-                    Log.d("type",s);
-
-                    rvContactFrag.setAdapter(new ContactFragmentAdapter(data));
-                    // Inflate the layout for this fragment
-                    rvContactFrag.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
-
+                List<Map<String, String>> temp = (List<Map<String, String>>) resp.getData();
+                if (temp != null) {
+                    temp.forEach(map -> {
+                        data.add(new ContactFragmentAdapter.DataHolder(map.get("portraitUrl"),
+                                map.get("nickname")));
+                    });
                 }
-                else {
-                    rvContactFrag.setAdapter(new ContactFragmentAdapter(null));
-                    // Inflate the layout for this fragment
-                    rvContactFrag.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
-
-                }
+                Message msg = new Message();
+                msg.obj = data;
+                recyclerHandler.sendMessage(msg);
             });
 
         }
         return inflate;
     }
-    private void push(List<List<Map>> data){
-        rvContactFrag.setAdapter(new ContactFragmentAdapter(data));
-        // Inflate the layout for this fragment
-        rvContactFrag.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
 
-    }
-    private String reload() {
-        String token = preference.getString("token", null);
-        if (token != null) {
-            Log.d("token", token);
-            return token;
-        }else {
-            String s = "null";
-            Log.d("token", s);
-        }
-        return token;
+    private void initRecyclerHandler() {
+        this.recyclerHandler = new Handler(message -> {
+            List<ContactFragmentAdapter.DataHolder> data =
+                    (List<ContactFragmentAdapter.DataHolder>) message.obj;
+            rvContactFrag.setAdapter(new ContactFragmentAdapter(data));
+            // Inflate the layout for this fragment
+            rvContactFrag.addItemDecoration(new DividerItemDecoration(getContext(),
+                    DividerItemDecoration.VERTICAL));
+            return true;
+        });
     }
 }

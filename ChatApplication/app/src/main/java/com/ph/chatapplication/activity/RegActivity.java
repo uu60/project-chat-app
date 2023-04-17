@@ -3,14 +3,17 @@ package com.ph.chatapplication.activity;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ph.chatapplication.R;
@@ -25,15 +28,13 @@ import java.util.Map;
 
 public class RegActivity extends AppCompatActivity {
     private Button regNow;
-
     private ImageButton btBack;
     private EditText etUsername;
-
     private EditText etPwd;
-
     private EditText sePwd;
 
-    private Handler handler;
+    private Handler wrongFormatHandler;
+    private Handler registerSuccessHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,17 +68,17 @@ public class RegActivity extends AppCompatActivity {
         String passwordSec = sePwd.getText().toString();
 
         if (StringUtils.isEmpty(username) || username.length() < 5) {
-            sendToHandler("Username must longer than 4 characters.");
+            sendToWrongFormatHandler("Username must longer than 4 characters.");
             return;
         }
 
         if (StringUtils.isEmpty(password) || password.length() < 8) {
-            sendToHandler("Password must longer than 7 characters.");
+            sendToWrongFormatHandler("Password must longer than 7 characters.");
             return;
         }
 
-        if (!passwordSec.equals(password)){
-            sendToHandler("Two password different!");
+        if (!passwordSec.equals(password)) {
+            sendToWrongFormatHandler("Two password different!");
             return;
         }
 
@@ -89,50 +90,43 @@ public class RegActivity extends AppCompatActivity {
         Instances.pool.execute(() -> {
             Resp resp = Requests.post(Requests.SERVER_URL_PORT + "/register", params);
             String getResp = "True";
-            Log.d("getResp",getResp);
+            Log.d("getResp", getResp);
 
-            if (resp.getCode() == ErrorCodeConst.REGISTER_FAILED){
+            if (resp.getCode() == ErrorCodeConst.REGISTER_FAILED) {
                 String s = "failed";
                 Log.d("Register", s);
-                sendToHandler("connect fail or username exited");
-                //Toast.makeText(RegActivity.this, "Register Failed", Toast.LENGTH_LONG);
+                sendToWrongFormatHandler(resp.getMsg());
             } else if (resp.getCode() == ErrorCodeConst.SUCCESS) {
-                String s = "success";
-                Log.d("Register", s);
-                Looper.prepare();
-                Toast.makeText(RegActivity.this, "Register Success", Toast.LENGTH_LONG);
-                Looper.loop();
-                finish();
+                registerSuccessHandler.sendMessage(new Message());
             }
 
         });
     }
 
     private void initHandler() {
-        handler = new Handler((message) -> {
+        wrongFormatHandler = new Handler((message) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Notice");
             builder.setMessage((String) message.obj);
 
-            builder.setPositiveButton("OK",
-                    (dialog, which) -> {
-//                            if (focus != null) {
-//                                focus.requestFocus();
-//                                InputMethodManager imm =
-//                                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                                imm.showSoftInput(focus, 0);
-//                            }
-                    });
-            //根据构建器创建一个对话框对象
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                // pass
+            });
             AlertDialog dialog = builder.create();
             dialog.show();
             return true;
         });
+
+        registerSuccessHandler = new Handler((message) -> {
+            Toast.makeText(this, "Register successfully.", Toast.LENGTH_LONG).show();
+            finish();
+            return true;
+        });
     }
 
-    private void sendToHandler(String msg) {
+    private void sendToWrongFormatHandler(String msg) {
         Message message = new Message();
         message.obj = msg;
-        handler.sendMessage(message);
+        wrongFormatHandler.sendMessage(message);
     }
 }

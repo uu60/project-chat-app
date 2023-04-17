@@ -24,6 +24,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         // 注册WebSocket处理器和拦截器，设置访问路径为/ws/*
-        registry.addHandler(ChatHandler, "/ws_chat/*").setAllowedOrigins("*").addInterceptors(myHandler());
+//        registry.addHandler(ChatHandler, "/ws_chat/*").setAllowedOrigins("*").addInterceptors(myHandler());
     }
 }
