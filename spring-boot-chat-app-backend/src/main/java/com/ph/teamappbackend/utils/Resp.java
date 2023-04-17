@@ -1,5 +1,6 @@
 package com.ph.teamappbackend.utils;
 
+import com.ph.teamappbackend.constant.ErrorCodeConst;
 import lombok.Data;
 import lombok.Setter;
 
@@ -11,7 +12,7 @@ import java.io.Serializable;
  */
 @Data
 public class Resp {
-    private Integer code = 0;
+    private Integer code = ErrorCodeConst.SUCCESS;
     private String msg;
     private Object data;
 

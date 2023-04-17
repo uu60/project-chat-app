@@ -33,7 +33,7 @@ public class ContactService {
         if (collect.isEmpty()) {
             return new ArrayList<>();
         }
-        return userMapper.selectList(new QueryWrapper<User>().in("id", collect));
+        return userMapper.selectList(new QueryWrapper<User>().in("id", collect)).stream().peek(user -> user.setPassword(null)).collect(Collectors.toList());
     }
 
     @Transactional(rollbackFor = Throwable.class)
