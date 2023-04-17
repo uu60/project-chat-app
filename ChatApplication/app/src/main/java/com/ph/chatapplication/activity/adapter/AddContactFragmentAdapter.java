@@ -94,7 +94,7 @@ public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFr
         }
     }
 
-    static class DataHolder {
+    public static class DataHolder {
         Integer userId;
         String nickName;
         Bitmap portrait;

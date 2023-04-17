@@ -24,8 +24,10 @@ import com.ph.chatapplication.constant.ErrorCodeConst;
 import com.ph.chatapplication.utils.Instances;
 import com.ph.chatapplication.utils.Requests;
 import com.ph.chatapplication.utils.Resp;
+import com.ph.chatapplication.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,12 +71,26 @@ public class ContactFragment extends Fragment {
             head.put("JWT-Token", token.get());
             Instances.pool.execute(() -> {
                 Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact", params, head);
-                List<Map<String, String>> temp = (List<Map<String, String>>) resp.getData();
+                List<Map<String, Object>> temp = (List) resp.getData();
                 if (temp != null) {
                     temp.forEach(map -> {
-                        data.add(new ContactFragmentAdapter.DataHolder(map.get("portraitUrl"),
-                                map.get("nickname")));
+                        int id;
+                        String nickname = null;
+                        Object nicknameObj = map.get("nickname");
+                        if (nicknameObj != null) {
+                            nickname = nicknameObj.toString();
+                        }
+                        try {
+                            Object idObj = map.get("id");
+                            id = Integer.parseInt(idObj.toString());
+                        } catch (Exception e) {
+                            Log.e("ContactFragment", e.toString());
+                            return;
+                        }
+                        data.add(new ContactFragmentAdapter.DataHolder(id, null,
+                                nickname));
                     });
+                    data.sort(Comparator.comparing(ContactFragmentAdapter.DataHolder::getNickName));
                 }
                 Message msg = new Message();
                 msg.obj = data;

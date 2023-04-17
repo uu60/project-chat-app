@@ -1,6 +1,8 @@
 package com.ph.chatapplication.activity.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.AddContactFragmentAdapter;
 import com.ph.chatapplication.activity.adapter.ContactFragmentAdapter;
+import com.ph.chatapplication.utils.Instances;
+
+import java.util.List;
 
 public class AddContactFragment extends Fragment {
 
     TextView tvHead;
     RecyclerView rvContactReq;
+    Handler handler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,10 +37,23 @@ public class AddContactFragment extends Fragment {
         rvContactReq = inflate.findViewById(R.id.rv_contact_req);
         rvContactReq.setLayoutManager(new LinearLayoutManager(activity,
                 LinearLayoutManager.VERTICAL, false));
-        rvContactReq.setAdapter(new AddContactFragmentAdapter(null));
-        // Inflate the layout for this fragment
-        rvContactReq.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL));
+        initHandler();
+        Instances.pool.execute(() -> {
+            Message message = new Message();
+            // TODO 待处理
+            message.setData(null);
+            handler.sendMessage(message);
+        });
         return inflate;
+    }
+
+    private void initHandler() {
+        handler = new Handler(m -> {
+            rvContactReq.setAdapter(new AddContactFragmentAdapter((List<AddContactFragmentAdapter.DataHolder>) m.obj));
+            // Inflate the layout for this fragment
+            rvContactReq.addItemDecoration(new DividerItemDecoration(getContext(),
+                    DividerItemDecoration.VERTICAL));
+            return true;
+        });
     }
 }

@@ -11,5 +11,6 @@ public class ErrorCodeConst {
     public static final int REGISTER_FAILED = 103;
     public static final int CONTACT_ADD_FAILED = 104;
     public static final int PORTRAIT_CHANGE_FAILED = 105;
-    public static final int DETAILS_CHANGE_FAILED = 105;
+    public static final int DETAILS_CHANGE_FAILED = 106;
+    public static final int CONTACT_REQUEST_FAILED = 107;
 }

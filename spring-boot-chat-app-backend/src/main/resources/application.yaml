@@ -6,3 +6,10 @@ spring:
     url: jdbc:mysql://localhost:3306/team_app
 mybatis:
   mapper-locations: classpath:mapper/*.xml
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-value: 1
+      logic-not-delete-value: 0

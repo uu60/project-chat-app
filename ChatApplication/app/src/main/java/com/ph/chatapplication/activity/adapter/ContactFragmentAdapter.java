@@ -1,5 +1,6 @@
 package com.ph.chatapplication.activity.adapter;
 
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,14 @@ public class ContactFragmentAdapter extends RecyclerView.Adapter<ContactFragment
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
-        holder.tvNickname.setText(data.get(position).nickName);
+        DataHolder dataHolder = data.get(position);
+        holder.dataHolder = dataHolder;
+        holder.tvNickname.setText(dataHolder.nickName);
+        if (dataHolder.portrait == null) {
+            holder.imPortrait.setImageResource(R.drawable.ic_default_portrait);
+        } else {
+            holder.imPortrait.setImageBitmap(dataHolder.portrait);
+        }
     }
 
     @Override
@@ -50,6 +58,7 @@ public class ContactFragmentAdapter extends RecyclerView.Adapter<ContactFragment
 
         private ImageView imPortrait;
         private TextView tvNickname;
+        private DataHolder dataHolder;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -59,12 +68,26 @@ public class ContactFragmentAdapter extends RecyclerView.Adapter<ContactFragment
     }
 
     public static class DataHolder {
-        String portraitUrl;
+        Integer userId;
+        Bitmap portrait;
         String nickName;
 
-        public DataHolder(String portraitUrl, String nickName) {
-            this.portraitUrl = portraitUrl;
+        public DataHolder(Integer userId, Bitmap portrait, String nickName) {
+            this.userId = userId;
+            this.portrait = portrait;
             this.nickName = nickName;
+        }
+
+        public Integer getUserId() {
+            return userId;
+        }
+
+        public Bitmap getPortrait() {
+            return portrait;
+        }
+
+        public String getNickName() {
+            return nickName;
         }
     }
 }
