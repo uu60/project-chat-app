@@ -68,12 +68,13 @@
                 android:layout_marginBottom="20dp">
 
             <ImageButton
-                android:id="@+id/ib_portrait"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_centerInParent="true"
-                android:onClick="changeAvatar"
-                android:src="@drawable/circle_style" />
+                    android:id="@+id/ib_portrait"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:onClick="changeAvatar"
+                    android:src="@drawable/circle_style"
+                    android:background="@color/white"
+                    android:layout_centerInParent="true" />
 
 
             <ImageView
@@ -82,8 +83,8 @@
                     android:src="@drawable/ic_add_photo"
                     android:layout_alignBottom="@+id/ib_portrait"
                     android:layout_alignRight="@id/ib_portrait"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginRight="0dp"
+                    android:layout_marginBottom="0dp" />
 
         </RelativeLayout>
 
@@ -222,6 +223,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="11111111要改"
+                    android:maxLines="5"
                     android:textSize="23dp" />
 
         </LinearLayout>

@@ -47,7 +47,7 @@ public class MyInfoActivity extends AppCompatActivity {
     //弹窗视图
     private View bottomView;
     //存储拍完照后的图片
-    private File outputImagePath;
+//    private File outputImagePath;
     //启动相机标识
     public static final int TAKE_PHOTO = 1;
     //启动相册标识
@@ -107,20 +107,7 @@ public class MyInfoActivity extends AppCompatActivity {
      * 检查版本
      */
     private void checkVersion() {
-//            //如果你是在Fragment中，则把this换成getActivity()
-//            rxPermissions = new RxPermissions(this);
-//            //权限请求
-//            rxPermissions.request(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
-//                if (granted) {//申请成功
-//                    showMsg("已获取权限");
-//                    hasPermissions = true;
-//                } else {//申请失败
-//                    showMsg("权限未开启");
-//                    hasPermissions = false;
-//                }
-//            });
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 555);
-
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 555);
     }
 
 
@@ -169,7 +156,7 @@ public class MyInfoActivity extends AppCompatActivity {
         SimpleDateFormat timeStampFormat = new SimpleDateFormat(
                 "yyyy_MM_dd_HH_mm_ss");
         String filename = timeStampFormat.format(new Date());
-        outputImagePath = new File(getExternalCacheDir(),
+        File outputImagePath = new File(getExternalCacheDir(),
                 filename + ".jpg");
         Intent takePhotoIntent = CameraUtils.getTakePhotoIntent(this, outputImagePath);
         // 开启一个带有返回值的Activity，请求码为TAKE_PHOTO
@@ -202,7 +189,7 @@ public class MyInfoActivity extends AppCompatActivity {
             case TAKE_PHOTO:
                 if (resultCode == RESULT_OK) {
                     //显示图片
-                    displayImage(outputImagePath.getAbsolutePath());
+//                    displayImage(outputImagePath.getAbsolutePath());
                 }
                 break;
             //打开相册后返回
