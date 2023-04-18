@@ -65,7 +65,7 @@ public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFr
     }
 
     public interface ButtonInterface{
-        public void onclick( View view,int userId, int btn);
+        public void onclick( View view,int userId, int btn, int position );
     }
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
@@ -90,7 +90,7 @@ public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFr
                 if (buttonInterface != null) {
 //                  接口实例化后的而对象，调用重写后的方法
                     int btn = 0;
-                    buttonInterface.onclick(v, dataHolder.userId, btn);
+                    buttonInterface.onclick(v, dataHolder.userId, btn, position);
                 }
             }
         });
@@ -101,12 +101,17 @@ public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFr
                 if (buttonInterface != null) {
 //                  接口实例化后的而对象，调用重写后的方法
                     int btn = 1;
-                    buttonInterface.onclick(v, dataHolder.userId, btn);
+                    buttonInterface.onclick(v, dataHolder.userId, btn, position);
                 }
             }
         });
     }
-
+    public void removeData(int position) {
+        data.remove(position);
+        //删除动画
+        notifyItemRemoved(position);
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemCount() {
         return data.size();

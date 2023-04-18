@@ -43,6 +43,7 @@ public class AddContactFragment extends Fragment {
     Handler handler;
 
     private Handler testSuccessHandler;
+    private Handler reduceAddHandler;
 
 
 
@@ -141,23 +142,10 @@ public class AddContactFragment extends Fragment {
                 tvNoRequest.setVisibility(View.GONE);
                 maindata.buttonSetOnclick(new AddContactFragmentAdapter.ButtonInterface() {
                     @Override
-                    public void onclick(View view, int userId, int btn) {
-
-                        if (btn == 0){
-                            Toast.makeText(getActivity(), "add", Toast.LENGTH_LONG).show();
-                            Map<String, String> params = new HashMap<>();
-                            String name = "";
-                            params.put("username", name);
-                            String isAgree = "/0";
-                            Map<String, String> head = new HashMap<>();
-                            head.put("JWT-Token", token);
-                            Instances.pool.execute(() -> {
-                                Message message = new Message();
-                                if (token != null){
-                                    Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/deal/"+String.valueOf(userId)+isAgree, params, head);
-                                    List<Map<String, Object>> temp = (List) resp.getData();
-                                }
-                            });
+                    public void onclick(View view, int userId, int btn, int position) {
+                        Boolean out = postAdd(btn, userId, token);
+                        if (out){
+                            maindata.removeData(position);
                         }
                     }
                 });
@@ -167,12 +155,50 @@ public class AddContactFragment extends Fragment {
             }
             return true;
         });
+
         testSuccessHandler = new Handler((message) -> {
-            Toast.makeText(getActivity(), "Add successfully.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Operation error!", Toast.LENGTH_LONG).show();
+            return true;
+        });
+
+        reduceAddHandler = new Handler((messgae) -> {
+
             return true;
         });
 
     }
+    
+    private Boolean postAdd(int btn, int userId, String token){
+        AtomicReference<Boolean> out = new AtomicReference<>(false);
 
+        Toast.makeText(getActivity(), "add", Toast.LENGTH_LONG).show();
+        Map<String, String> params = new HashMap<>();
+        String id = String.valueOf(userId);
+        String name = "";
+        params.put("username", name);
+        String isAgree = String.valueOf(btn);
+        Map<String, String> head = new HashMap<>();
+        head.put("JWT-Token", token);
+
+        Instances.pool.execute(() -> {
+            Message message = new Message();
+            if (token != null){
+                Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/deal/"+id+"/"+isAgree, params, head);
+                try {
+                    if (resp == null || resp.getCode() == null || resp.getCode() == ErrorCodeConst.CONTACT_ADD_FAILED){
+                        testSuccessHandler.sendMessage(new Message());
+                        String s = "connect failed";
+                        Log.e("postAdd", s);
+                    } else if (resp.getCode() == ErrorCodeConst.SUCCESS) {
+                        out.set(true);
+                    }
+                }catch (Exception e){
+                    testSuccessHandler.sendMessage((new Message()));
+                    Log.e("postAdd", String.valueOf(e));
+                }
+            }
+        });
+        return out.get();
+    }
 
 }
