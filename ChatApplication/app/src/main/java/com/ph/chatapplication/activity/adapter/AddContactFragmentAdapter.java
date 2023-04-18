@@ -26,28 +26,28 @@ public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFr
     private List<DataHolder> data = new ArrayList<>();
 
     public AddContactFragmentAdapter(List<DataHolder> data) {
-//        this.data = data;
-        setData(this.data);
+        this.data = data;
+        //setData(this.data);
     }
 
-    public void setData(List<DataHolder> data) {
-//        this.data = data;
-        // test data
-        data.add(new DataHolder(1, "user1", null, new Date()));
-        data.add(new DataHolder(1, "user1", null, new Date()));
-        data.add(new DataHolder(1, "user1", null, new Date()));
-        data.add(new DataHolder(1, "user1", null, new Date()));
-        data.add(new DataHolder(1, "user1", null, new Date()));
-        data.add(new DataHolder(1, "user1", null, new Date()));
-        data.add(new DataHolder(1, "user1", null, new Date()));
-        data.add(new DataHolder(1, "user1", null, new Date()));
-        data.add(new DataHolder(1, "user1", null, new Date()));
-        data.add(new DataHolder(1, "user1", null, new Date()));
-        data.add(new DataHolder(1, "user1", null, new Date()));
-        data.add(new DataHolder(1, "user1", null, new Date()));
-        data.add(new DataHolder(1, "user1", null, new Date()));
-        data.add(new DataHolder(1, "user1", null, new Date()));
-    }
+//    public void setData(List<DataHolder> data) {
+////        this.data = data;
+//        // test data
+//        data.add(new DataHolder(1, "user1", null, new Date()));
+//        data.add(new DataHolder(1, "user1", null, new Date()));
+//        data.add(new DataHolder(1, "user1", null, new Date()));
+//        data.add(new DataHolder(1, "user1", null, new Date()));
+//        data.add(new DataHolder(1, "user1", null, new Date()));
+//        data.add(new DataHolder(1, "user1", null, new Date()));
+//        data.add(new DataHolder(1, "user1", null, new Date()));
+//        data.add(new DataHolder(1, "user1", null, new Date()));
+//        data.add(new DataHolder(1, "user1", null, new Date()));
+//        data.add(new DataHolder(1, "user1", null, new Date()));
+//        data.add(new DataHolder(1, "user1", null, new Date()));
+//        data.add(new DataHolder(1, "user1", null, new Date()));
+//        data.add(new DataHolder(1, "user1", null, new Date()));
+//        data.add(new DataHolder(1, "user1", null, new Date()));
+//    }
 
     @NonNull
     @Override
