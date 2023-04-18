@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -84,6 +85,8 @@ public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFr
         private final ImageView imPortrait;
         private final TextView tvNickname;
         private final TextView tvRequestTime;
+        private final Button btnAdd;
+        private final Button btnRefuse;
         private DataHolder dataHolder;
 
         public ViewHolder(@NonNull View itemView) {
@@ -91,6 +94,8 @@ public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFr
             imPortrait = itemView.findViewById(R.id.im_portrait);
             tvNickname = itemView.findViewById(R.id.tv_nickname);
             tvRequestTime = itemView.findViewById(R.id.tv_request_time);
+            btnAdd = itemView.findViewById(R.id.btn_add);
+            btnRefuse = itemView.findViewById(R.id.btn_refuse);
         }
     }
 
