@@ -67,7 +67,7 @@ public class AddContactFragment extends Fragment {
         params.put("username", name);
         Map<String, String> head = new HashMap<>();
         head.put("JWT-Token", token.get());
-        SimpleDateFormat sdfUse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdfUse = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
         initHandler();
         Instances.pool.execute(() -> {
@@ -87,23 +87,17 @@ public class AddContactFragment extends Fragment {
                         if (nicknameObj != null) {
                             nickname = nicknameObj.toString();
                         }
-                        String requestTime;
+                        Date requestTime;
                         try {
                             Object idObj = map.get("id");
                             id = Double.valueOf(idObj.toString()).intValue();
-                            requestTime = sdfUse.format(Instances.sdf.parse(map.get("requestTime").toString()));
-
+                            requestTime = sdfUse.parse(map.get("requestTime").toString());
 
                         } catch (Exception e) {
                             Log.e("ContactFragment", e.toString());
                             return;
                         }
-                        try {
-                            Date time = sdfUse.parse(requestTime);
-                            data.add(new AddContactFragmentAdapter.DataHolder(id, nickname,null,sdfUse.parse(requestTime)));
-                        } catch (ParseException e) {
-                            throw new RuntimeException(e);
-                        }
+                        data.add(new AddContactFragmentAdapter.DataHolder(id, nickname,null,requestTime));
                     });
                 } else if (resp.getCode() == ErrorCodeConst.CONTACT_ADD_FAILED) {
                     message.setData(null);
@@ -114,6 +108,9 @@ public class AddContactFragment extends Fragment {
             message.obj = data;
             handler.sendMessage(message);
         });
+
+
+
         return inflate;
     }
 
