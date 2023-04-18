@@ -91,14 +91,20 @@ public class RegActivity extends AppCompatActivity {
             Resp resp = Requests.post(Requests.SERVER_URL_PORT + "/register", params);
             String getResp = "True";
             Log.d("getResp", getResp);
-
-            if (resp.getCode() == ErrorCodeConst.REGISTER_FAILED) {
-                String s = "failed";
-                Log.d("Register", s);
-                sendToWrongFormatHandler(resp.getMsg());
-            } else if (resp.getCode() == ErrorCodeConst.SUCCESS) {
-                registerSuccessHandler.sendMessage(new Message());
+            try {
+                if (resp.getCode() == ErrorCodeConst.REGISTER_FAILED) {
+                    String s = "failed";
+                    Log.d("Register", s);
+                    sendToWrongFormatHandler(resp.getMsg());
+                } else if (resp.getCode() == ErrorCodeConst.SUCCESS) {
+                    registerSuccessHandler.sendMessage(new Message());
+                }
+            } catch (Exception e){
+                Log.e("RegActivity Token request", e.toString());
+                sendToWrongFormatHandler("connect failed!");
+                return;
             }
+
 
         });
     }

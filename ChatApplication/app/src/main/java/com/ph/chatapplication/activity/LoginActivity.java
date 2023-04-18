@@ -55,12 +55,20 @@ public class LoginActivity extends AppCompatActivity {
             Map<String, String> head = new HashMap<>();
             head.put("JWT-Token", token.get());
             Instances.pool.execute(() ->{
-                        Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact", params, head);
-                        if (resp.getCode() == ErrorCodeConst.SUCCESS){
-                            Intent intent = new Intent(this, HomeActivity.class);
-                            startActivity(intent);
-                        }
-                    });
+                try {
+                    Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact", params, head);
+                    if (resp.getCode() == ErrorCodeConst.SUCCESS){
+                        Intent intent = new Intent(this, HomeActivity.class);
+                        startActivity(intent);
+                    }else {
+
+                    }
+                } catch (Exception e){
+                    Log.e("LoginActivity Token request", e.toString());
+                    return;
+                }
+
+            });
 
         }
 
