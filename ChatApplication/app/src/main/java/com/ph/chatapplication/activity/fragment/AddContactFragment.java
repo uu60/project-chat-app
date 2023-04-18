@@ -27,6 +27,7 @@ import com.ph.chatapplication.constant.ErrorCodeConst;
 import com.ph.chatapplication.utils.Instances;
 import com.ph.chatapplication.utils.Requests;
 import com.ph.chatapplication.utils.Resp;
+import com.ph.chatapplication.utils.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,6 +91,11 @@ public class AddContactFragment extends Fragment {
 
         Instances.pool.execute(() -> {
             Message message = new Message();
+            if (StringUtils.isEmpty(username) || username.length() < 5) {
+                message.obj = "Username must longer than 4 characters.";
+                wrongFormatHandler.sendMessage(message);
+                return;
+            }
             // 传送token
             if (token != null){
                 //TODO 修改request请求的内容！
