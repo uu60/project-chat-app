@@ -1,5 +1,6 @@
 package com.ph.chatapplication.activity.adapter;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import java.util.List;
 public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFragmentAdapter.ViewHolder> {
 
     private List<DataHolder> data = new ArrayList<>();
+    private ButtonInterface buttonInterface;
 
     public AddContactFragmentAdapter(List<DataHolder> data) {
         this.data = data;
@@ -58,9 +60,17 @@ public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFr
         return new ViewHolder(view);
     }
 
+    public void buttonSetOnclick(ButtonInterface buttonInterface){
+        this.buttonInterface=buttonInterface;
+    }
+
+    public interface ButtonInterface{
+        public void onclick( View view,int userId, int btn);
+    }
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
         DataHolder dataHolder = data.get(position);
+        Integer userId = dataHolder.userId;
         viewHolder.dataHolder = dataHolder;
         viewHolder.tvNickname.setText(dataHolder.nickName);
         try {
@@ -73,6 +83,28 @@ public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFr
         } else {
             viewHolder.imPortrait.setImageBitmap(dataHolder.portrait);
         }
+        //viewHolder.btnAdd.setText(data.get(position).toString());
+        viewHolder.btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                if (buttonInterface != null) {
+//                  接口实例化后的而对象，调用重写后的方法
+                    int btn = 0;
+                    buttonInterface.onclick(v, dataHolder.userId, btn);
+                }
+            }
+        });
+        //viewHolder.btnRefuse.setText(data.get(position).toString());
+        viewHolder.btnRefuse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                if (buttonInterface != null) {
+//                  接口实例化后的而对象，调用重写后的方法
+                    int btn = 1;
+                    buttonInterface.onclick(v, dataHolder.userId, btn);
+                }
+            }
+        });
     }
 
     @Override

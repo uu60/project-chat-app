@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -19,20 +20,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.AddContactFragmentAdapter;
-import com.ph.chatapplication.activity.adapter.ContactFragmentAdapter;
 import com.ph.chatapplication.constant.ErrorCodeConst;
 import com.ph.chatapplication.utils.Instances;
 import com.ph.chatapplication.utils.Requests;
 import com.ph.chatapplication.utils.Resp;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class AddContactFragment extends Fragment {
@@ -41,6 +41,8 @@ public class AddContactFragment extends Fragment {
     RecyclerView rvContactReq;
     TextView tvNoRequest;
     Handler handler;
+
+    private Handler testSuccessHandler;
 
 
 
@@ -55,6 +57,7 @@ public class AddContactFragment extends Fragment {
         rvContactReq.setLayoutManager(new LinearLayoutManager(activity,
                 LinearLayoutManager.VERTICAL, false));
         tvNoRequest = inflate.findViewById(R.id.tv_no_request);
+
 
         SharedPreferences preference = getActivity().getSharedPreferences("token",
                 Activity.MODE_PRIVATE);
@@ -105,8 +108,12 @@ public class AddContactFragment extends Fragment {
             }else {
                 message.setData(null);
             }
-            message.obj = data;
+            Map<String, List<AddContactFragmentAdapter.DataHolder>> m = new HashMap<String, List<AddContactFragmentAdapter.DataHolder>>();
+            m.put(String.valueOf(token),data);
+            message.obj = m;
             handler.sendMessage(message);
+
+
         });
 
 
@@ -116,20 +123,56 @@ public class AddContactFragment extends Fragment {
 
     private void initHandler() {
         handler = new Handler(m -> {
+            Map<String, List<AddContactFragmentAdapter.DataHolder>> map =
+                    (Map<String, List<AddContactFragmentAdapter.DataHolder>>) m.obj;
+            Set<Map.Entry<String, List<AddContactFragmentAdapter.DataHolder>>> entrySet = map.entrySet();
+            Iterator<Map.Entry<String, List<AddContactFragmentAdapter.DataHolder>>> kToken = entrySet.iterator();
+            Map.Entry<String, List<AddContactFragmentAdapter.DataHolder>> entry = kToken.next();
+            String token = entry.getKey();
             List<AddContactFragmentAdapter.DataHolder> data =
-                    (List<AddContactFragmentAdapter.DataHolder>) m.obj;
+                    (List<AddContactFragmentAdapter.DataHolder>) entry.getValue();
             if (data != null && !data.isEmpty()) {
-                rvContactReq.setAdapter(new AddContactFragmentAdapter(data));
+                AddContactFragmentAdapter maindata = new AddContactFragmentAdapter(data);
+                rvContactReq.setAdapter(maindata);
                 // Inflate the layout for this fragment
                 rvContactReq.addItemDecoration(new DividerItemDecoration(getContext(),
                         DividerItemDecoration.VERTICAL));
                 rvContactReq.setVisibility(View.VISIBLE);
                 tvNoRequest.setVisibility(View.GONE);
+                maindata.buttonSetOnclick(new AddContactFragmentAdapter.ButtonInterface() {
+                    @Override
+                    public void onclick(View view, int userId, int btn) {
+
+                        if (btn == 0){
+                            Toast.makeText(getActivity(), "add", Toast.LENGTH_LONG).show();
+                            Map<String, String> params = new HashMap<>();
+                            String name = "";
+                            params.put("username", name);
+                            String isAgree = "/0";
+                            Map<String, String> head = new HashMap<>();
+                            head.put("JWT-Token", token);
+                            Instances.pool.execute(() -> {
+                                Message message = new Message();
+                                if (token != null){
+                                    Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/deal/"+String.valueOf(userId)+isAgree, params, head);
+                                    List<Map<String, Object>> temp = (List) resp.getData();
+                                }
+                            });
+                        }
+                    }
+                });
             } else {
                 rvContactReq.setVisibility(View.GONE);
                 tvNoRequest.setVisibility(View.VISIBLE);
             }
             return true;
         });
+        testSuccessHandler = new Handler((message) -> {
+            Toast.makeText(getActivity(), "Add successfully.", Toast.LENGTH_LONG).show();
+            return true;
+        });
+
     }
+
+
 }
