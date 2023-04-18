@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -43,8 +44,7 @@ public class AddContactFragment extends Fragment {
     Handler handler;
 
     private Handler testSuccessHandler;
-    private Handler reduceAddHandler;
-
+    private Handler wrongFormatHandler;
 
 
     @Override
@@ -79,33 +79,47 @@ public class AddContactFragment extends Fragment {
             // 传送token
             if (token.get() != null){
                 Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact_request", params, head);
-                List<Map<String, Object>> temp = (List) resp.getData();
-                int code = resp.getCode();
-                if (resp.getCode() == ErrorCodeConst.SUCCESS){
-                    temp.forEach(map -> {
-                        int id;
-                        String nickname = null;
-                        Object nicknameObj = map.get("nickname");
+
+                List<Map<String, Object>> temp = null;
+                try {
+                    temp = (List) resp.getData();
+                } catch (Exception e){
+                    Message msg = new Message();
+                    String s = "connect failed!";
+                    msg.obj = s;
+                    wrongFormatHandler.sendMessage(msg);
+                    Log.e("get request contact", String.valueOf(e));
+                }
+                if (temp != null){
+                    if (resp.getCode() == ErrorCodeConst.SUCCESS){
+                        temp.forEach(map -> {
+                            int id;
+                            String nickname = null;
+                            Object nicknameObj = map.get("nickname");
 
 
-                        if (nicknameObj != null) {
-                            nickname = nicknameObj.toString();
-                        }
-                        Date requestTime;
-                        try {
-                            Object idObj = map.get("id");
-                            id = Double.valueOf(idObj.toString()).intValue();
-                            requestTime = sdfUse.parse(map.get("requestTime").toString());
+                            if (nicknameObj != null) {
+                                nickname = nicknameObj.toString();
+                            }
+                            Date requestTime;
+                            try {
+                                Object idObj = map.get("id");
+                                id = Double.valueOf(idObj.toString()).intValue();
+                                requestTime = sdfUse.parse(map.get("requestTime").toString());
 
-                        } catch (Exception e) {
-                            Log.e("ContactFragment", e.toString());
-                            return;
-                        }
-                        data.add(new AddContactFragmentAdapter.DataHolder(id, nickname,null,requestTime));
-                    });
-                } else if (resp.getCode() == ErrorCodeConst.CONTACT_ADD_FAILED) {
+                            } catch (Exception e) {
+                                Log.e("ContactFragment", e.toString());
+                                return;
+                            }
+                            data.add(new AddContactFragmentAdapter.DataHolder(id, nickname,null,requestTime));
+                        });
+                    } else if (resp.getCode() == ErrorCodeConst.CONTACT_ADD_FAILED) {
+                        message.setData(null);
+                    }
+                }else {
                     message.setData(null);
                 }
+
             }else {
                 message.setData(null);
             }
@@ -161,10 +175,19 @@ public class AddContactFragment extends Fragment {
             return true;
         });
 
-        reduceAddHandler = new Handler((messgae) -> {
+        wrongFormatHandler = new Handler((message) -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Notice");
+            builder.setMessage((String) message.obj);
 
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                // pass
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
             return true;
         });
+
 
     }
     

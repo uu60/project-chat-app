@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -39,6 +40,7 @@ public class ContactFragment extends Fragment {
     private RecyclerView rvContactFrag;
     private TextView tvNoContact;
     private Handler recyclerHandler;
+    private Handler wrongFormatHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,7 +75,16 @@ public class ContactFragment extends Fragment {
             head.put("JWT-Token", token.get());
             Instances.pool.execute(() -> {
                 Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact", params, head);
-                List<Map<String, Object>> temp = (List) resp.getData();
+                List<Map<String, Object>> temp = null;
+                try {
+                    temp = (List) resp.getData();
+                }catch (Exception e){
+                    Message msg = new Message();
+                    String s = "connect failed!";
+                    msg.obj = s;
+                    wrongFormatHandler.sendMessage(msg);
+                    Log.e("get contact", String.valueOf(e));
+                }
                 if (temp != null) {
                     temp.forEach(map -> {
                         int id;
@@ -118,6 +129,19 @@ public class ContactFragment extends Fragment {
                 rvContactFrag.setVisibility(View.INVISIBLE);
                 tvNoContact.setVisibility(View.VISIBLE);
             }
+            return true;
+        });
+
+        wrongFormatHandler = new Handler((message) -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Notice");
+            builder.setMessage((String) message.obj);
+
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                // pass
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
             return true;
         });
     }
