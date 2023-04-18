@@ -24,6 +24,6 @@ public class Instances {
 
     public static final Gson gson = new Gson();
 
-    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS",
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
             Locale.CHINA);
 }
