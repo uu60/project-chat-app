@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +47,8 @@ public class AddContactFragment extends Fragment {
 
     private Handler testSuccessHandler;
     private Handler wrongFormatHandler;
+    private EditText etUsername;
+    private Button btnAdd;
 
 
     @Override
@@ -58,26 +62,85 @@ public class AddContactFragment extends Fragment {
         rvContactReq.setLayoutManager(new LinearLayoutManager(activity,
                 LinearLayoutManager.VERTICAL, false));
         tvNoRequest = inflate.findViewById(R.id.tv_no_request);
-
+        activity.setContentView(R.layout.fragment_add_contact);
+        etUsername = activity.findViewById(R.id.et_username);
+        btnAdd = activity.findViewById(R.id.btn_add);
 
         SharedPreferences preference = getActivity().getSharedPreferences("token",
                 Activity.MODE_PRIVATE);
         String tokenStr = preference.getString("token", null);
         AtomicReference<String> token = new AtomicReference<>(tokenStr);
+        initHandler();
+        btnAdd.setOnClickListener(v -> {
+            doAdd(tokenStr);
+        });
+
+        getAddRequest(tokenStr);
+
+        return inflate;
+    }
+
+    //点击添加好友按钮后
+    private void doAdd(String token){
+        String username = etUsername.getText().toString();
+        Map<String, String> params = new HashMap<>();
+        params.put("username", username);
+        Map<String, String> head = new HashMap<>();
+        head.put("JWT-Token", token);
+
+        Instances.pool.execute(() -> {
+            Message message = new Message();
+            // 传送token
+            if (token != null){
+                //TODO 修改request请求的内容！
+                Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact_request", params, head);
+
+                List<Map<String, Object>> temp = null;
+                try {
+                    temp = (List) resp.getData();
+                } catch (Exception e){
+                    Message msg = new Message();
+                    String s = "connect failed!";
+                    msg.obj = s;
+                    wrongFormatHandler.sendMessage(msg);
+                    Log.e("post add", String.valueOf(e));
+                }
+                if (temp != null){
+                    if (resp.getCode() == ErrorCodeConst.SUCCESS){
+                        message.obj = "Add Sent";
+                        testSuccessHandler.sendMessage(message);
+                    } else if (resp.getCode() == ErrorCodeConst.CONTACT_ADD_FAILED) {
+                        message.obj = "Send failed";
+                        wrongFormatHandler.sendMessage(message);
+                    }
+                }else {
+                    message.obj = "Connect Failed";
+                    wrongFormatHandler.sendMessage(message);
+                }
+
+            }else {
+                message.setData(null);
+            }
+        });
+    }
+
+    //请求后台得到请求添加好友列表
+    private void getAddRequest(String token){
         List<AddContactFragmentAdapter.DataHolder> data = new ArrayList<>();
 
         Map<String, String> params = new HashMap<>();
         String name = "";
         params.put("username", name);
         Map<String, String> head = new HashMap<>();
-        head.put("JWT-Token", token.get());
+        head.put("JWT-Token", token);
         SimpleDateFormat sdfUse = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+
 
         initHandler();
         Instances.pool.execute(() -> {
             Message message = new Message();
             // 传送token
-            if (token.get() != null){
+            if (token != null){
                 Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact_request", params, head);
 
                 List<Map<String, Object>> temp = null;
@@ -130,12 +193,7 @@ public class AddContactFragment extends Fragment {
 
 
         });
-
-
-
-        return inflate;
     }
-
     private void initHandler() {
         handler = new Handler(m -> {
             Map<String, List<AddContactFragmentAdapter.DataHolder>> map =
@@ -171,6 +229,10 @@ public class AddContactFragment extends Fragment {
         });
 
         testSuccessHandler = new Handler((message) -> {
+            if (message.obj != null){
+                Toast.makeText(getActivity(), message.obj.toString(), Toast.LENGTH_LONG).show();
+                return true;
+            }
             Toast.makeText(getActivity(), "Operation error!", Toast.LENGTH_LONG).show();
             return true;
         });
