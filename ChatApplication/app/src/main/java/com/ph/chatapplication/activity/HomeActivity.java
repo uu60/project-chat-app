@@ -65,5 +65,6 @@ public class HomeActivity extends AppCompatActivity {
                 .hide(fragments.get(currentPage))
                 .show(fragments.get(destination))
                 .commit();
+        currentPage = destination;
     }
 }
