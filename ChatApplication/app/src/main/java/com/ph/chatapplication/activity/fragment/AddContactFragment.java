@@ -1,6 +1,5 @@
 package com.ph.chatapplication.activity.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -39,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiConsumer;
 
 public class AddContactFragment extends Fragment {
 
@@ -70,7 +68,7 @@ public class AddContactFragment extends Fragment {
                 LinearLayoutManager.VERTICAL, false));
         tvNoRequest = inflate.findViewById(R.id.tv_no_request);
         etUsername = inflate.findViewById(R.id.et_username);
-        btnAdd = inflate.findViewById(R.id.btn_add);
+        btnAdd = inflate.findViewById(R.id.btn_request);
 
         SharedPreferences preference = getActivity().getSharedPreferences("token",
                 Activity.MODE_PRIVATE);
@@ -238,20 +236,21 @@ public class AddContactFragment extends Fragment {
         });
 
         changeRecyclerHandler = new Handler(m -> {
+            int[] posAndAgree = (int[]) m.obj;
             AddContactFragmentAdapter adapter =
                     (AddContactFragmentAdapter) rvContactReq.getAdapter();
-            adapter.removeData((Integer) m.obj);
+            adapter.removeData(posAndAgree[0]);
             if (adapter.getItemCount() == 0) {
                 rvContactReq.setVisibility(View.GONE);
                 tvNoRequest.setVisibility(View.VISIBLE);
             }
+            Toast.makeText(activity, posAndAgree[1] == 1 ? "Agreed." : "Refused.", Toast.LENGTH_LONG).show();
             return true;
         });
     }
 
     private void postAdd(int isAgree, int userId, String token, int position) {
         Instances.pool.execute(() -> {
-            Message message = new Message();
             if (token != null) {
                 Resp resp =
                         Requests.post(Requests.SERVER_URL_PORT + "/deal/" + userId + "/" + isAgree
@@ -263,7 +262,7 @@ public class AddContactFragment extends Fragment {
                         Log.e("postAdd", s);
                     } else if (resp.getCode() == RespCode.SUCCESS) {
                         Message message1 = new Message();
-                        message1.obj = position;
+                        message1.obj = new int[]{position, isAgree};
                         changeRecyclerHandler.sendMessage(message1);
                     } else if (resp.getCode() == RespCode.JWT_TOKEN_INVALID) {
                         logoutHandler.sendMessage(new Message());

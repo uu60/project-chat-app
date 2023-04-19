@@ -48,7 +48,7 @@ public class ContactRequestController {
     public Resp dealWithRequest(@PathVariable Integer userId, @PathVariable Integer isAgree) {
         Integer currentUserId = JwtUtils.getCurrentUserId();
         try {
-            contactRequestService.dealWithRequest(currentUserId, userId, isAgree == 0);
+            contactRequestService.dealWithRequest(currentUserId, userId, isAgree == 1);
             return Resp.ok();
         } catch (Exception e) {
             return Resp.error(RespCode.CONTACT_REQUEST_FAILED, e.getMessage());

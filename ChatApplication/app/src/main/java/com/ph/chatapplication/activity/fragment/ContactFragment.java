@@ -131,6 +131,7 @@ public class ContactFragment extends Fragment {
                 rvContactFrag.addItemDecoration(new DividerItemDecoration(getContext(),
                         DividerItemDecoration.VERTICAL));
             } else {
+                rvContactFrag.setAdapter(new ContactFragmentAdapter(new ArrayList<>(), this));
                 rvContactFrag.setVisibility(View.INVISIBLE);
                 tvNoContact.setVisibility(View.VISIBLE);
             }
