@@ -106,8 +106,7 @@ public class AddContactFragment extends Fragment {
                 } catch (Exception e){
                     Message msg = new Message();
                     String s = "connect failed!";
-                    msg.obj = s;
-                    wrongFormatHandler.sendMessage(msg);
+
                     Log.e("post add", String.valueOf(e));
                 }
                 if (temp != null){
