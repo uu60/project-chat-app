@@ -63,9 +63,8 @@ public class AddContactFragment extends Fragment {
         rvContactReq.setLayoutManager(new LinearLayoutManager(activity,
                 LinearLayoutManager.VERTICAL, false));
         tvNoRequest = inflate.findViewById(R.id.tv_no_request);
-        activity.setContentView(R.layout.fragment_add_contact);
-        etUsername = activity.findViewById(R.id.et_username);
-        btnAdd = activity.findViewById(R.id.btn_add);
+        etUsername = inflate.findViewById(R.id.et_username);
+        btnAdd = inflate.findViewById(R.id.btn_add);
 
         SharedPreferences preference = getActivity().getSharedPreferences("token",
                 Activity.MODE_PRIVATE);
