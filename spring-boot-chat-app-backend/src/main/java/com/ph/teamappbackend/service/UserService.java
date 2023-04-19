@@ -104,4 +104,12 @@ public class UserService {
             throw new RuntimeException("Portrait read failed.");
         }
     }
+
+    public String getNickName(Integer currentUserId) {
+        User user = userMapper.selectById(currentUserId);
+        if (user == null) {
+            throw new RuntimeException("Account does not exist.");
+        }
+        return user.getNickname();
+    }
 }
