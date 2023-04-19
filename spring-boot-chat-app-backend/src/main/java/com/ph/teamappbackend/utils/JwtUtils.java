@@ -15,6 +15,8 @@ import com.ph.teamappbackend.pojo.entity.User;
 import com.ph.teamappbackend.pojo.vo.AccountVo;
 import org.springframework.util.StringUtils;
 
+import java.util.UUID;
+
 public class JwtUtils {
 
     private final static String SECRET_KEY = "d6a657ed-40c2-4dfb-90f8-6551823af298";
@@ -22,6 +24,8 @@ public class JwtUtils {
     public static String getToken(User u) {
         JWTCreator.Builder builder = JWT.create();
         builder.withClaim("userId", u.getId())
+                .withClaim("deviceId", UUID.randomUUID().toString())
+                .withClaim("loginTimestamp", System.currentTimeMillis())
                 .withClaim("username", u.getUsername());
 
         return builder.sign(Algorithm.HMAC256(SECRET_KEY));
@@ -41,6 +45,14 @@ public class JwtUtils {
 
     public static Integer getCurrentUserId() {
         return LoginFilter.DECODED_JWT_THREADLOCAL.get().getClaim("userId").asInt();
+    }
+
+    public static String getCurrentUserDeviceId() {
+        return LoginFilter.DECODED_JWT_THREADLOCAL.get().getClaim("deviceId").asString();
+    }
+
+    public static Long getCurrentUserLoginTimestamp() {
+        return LoginFilter.DECODED_JWT_THREADLOCAL.get().getClaim("loginTimestamp").asLong();
     }
 
 }
