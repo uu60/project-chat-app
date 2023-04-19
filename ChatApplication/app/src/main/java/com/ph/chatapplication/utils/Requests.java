@@ -2,11 +2,16 @@ package com.ph.chatapplication.utils;
 
 import android.util.Log;
 
+import com.ph.chatapplication.R;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.FormBody;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -21,6 +26,10 @@ public class Requests {
     private static final Map<String, String> dummy = new HashMap<>();
     public static final String SERVER_URL_PORT = "http://192.168.1.102:8080";
     public static final String TOKEN_KEY = "JWT-Token";
+    public static final Resp CONNECTED_FAILED_RESP = new Resp();
+    {
+        CONNECTED_FAILED_RESP.setCode(-1);
+    }
 
     static {
         dummy.put("", "");
@@ -100,7 +109,35 @@ public class Requests {
         } catch (Throwable e) {
             Log.e("http", e.toString());
         }
-        return null;
+        return CONNECTED_FAILED_RESP;
+    }
+
+    public static Resp postFile(String url, String filePath, Map<String, String> headerMap) {
+        try {
+            File file = new File(filePath);
+            RequestBody requestBody= null;
+            //声明请求体的类型为文件表单类型
+            MediaType mediaType = MediaType.parse("multipart/form-data");
+            //通过静态方法创建请求体
+            //file为要上传的文件，mediaType为上一步中 声明的请求体类型
+            requestBody = RequestBody.create(file, mediaType);
+            //创建文件表单的请求体，把文件请求体、文本参数放入表单中
+            MultipartBody multipartBody = new MultipartBody.Builder()
+                    .addFormDataPart("file",file.getName(),requestBody)
+                    .build();
+            Request.Builder builder = new Request.Builder().url(url)
+                    .post(multipartBody);
+            if (headerMap != null && !headerMap.isEmpty()) {
+                headerMap.forEach(builder::header);
+            }
+            Request request = builder.build();
+            Response response = client.newCall(request).execute();
+            String respStr = response.body().string();
+            return Instances.gson.fromJson(respStr, Resp.class);
+        } catch (Exception e) {
+            Log.e("http", e.toString());
+            return CONNECTED_FAILED_RESP;
+        }
     }
 
     public static Map<String, String> getTokenMap(String token) {

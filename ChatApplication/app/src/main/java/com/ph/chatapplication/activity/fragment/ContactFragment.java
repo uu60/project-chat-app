@@ -76,7 +76,7 @@ public class ContactFragment extends Fragment {
                 List<Map<String, Object>> temp = null;
                 try {
                     temp = (List) resp.getData();
-                }catch (Exception e){
+                } catch (Exception e) {
                     Message msg = new Message();
                     String s = "connect failed!";
                     msg.obj = s;

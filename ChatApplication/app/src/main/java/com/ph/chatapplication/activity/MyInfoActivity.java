@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,6 +11,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
@@ -25,9 +25,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.ph.chatapplication.R;
+import com.ph.chatapplication.constant.RespCode;
 import com.ph.chatapplication.utils.BitmapUtils;
 import com.ph.chatapplication.utils.CameraUtils;
 
+import com.ph.chatapplication.utils.Instances;
+import com.ph.chatapplication.utils.LogoutUtils;
+import com.ph.chatapplication.utils.Requests;
+import com.ph.chatapplication.utils.Resp;
 import com.tbruyelle.rxpermissions3.RxPermissions;
 
 import java.io.File;
@@ -59,6 +64,8 @@ public class MyInfoActivity extends AppCompatActivity {
     private String base64Pic;
     //拍照和相册获取图片的Bitmap
     private Bitmap orc_bitmap;
+    private Handler uploadSuccessHandler;
+    private Handler logoutHandler;
 
     //Glide请求图片选项配置
     private RequestOptions requestOptions = RequestOptions.circleCropTransform()
@@ -72,23 +79,33 @@ public class MyInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_info);
         checkVersion();
+        initHandler();
         ib_portrait = findViewById(R.id.ib_portrait);
     }
+
+    private void initHandler() {
+        uploadSuccessHandler = new Handler(m -> {
+            Toast.makeText(this, ((String[]) m.obj)[0], Toast.LENGTH_LONG).show();
+            //显示图片
+            displayImage(((String[]) m.obj)[1]);
+            return true;
+        });
+
+        logoutHandler = new Handler(m -> {
+            LogoutUtils.doLogout(this);
+            return true;
+        });
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case 555: {
-                if (grantResults != null && grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // 权限被用户同意，可以做你要做的事情了。
-                    hasPermissions = true;
-                    Toast.makeText(this, "成了", Toast.LENGTH_SHORT).show();
-                } else {
-                    // 权限被用户拒绝了，可以提示用户,关闭界面等等。
-                    Toast.makeText(this, "他妈的", Toast.LENGTH_SHORT).show();
-                }
-                return;
+        if (requestCode == 555) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                hasPermissions = true;
+            } else {
+                Toast.makeText(this, "You need to permit the app to read your photos.",
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -121,16 +138,9 @@ public class MyInfoActivity extends AppCompatActivity {
         bottomView = getLayoutInflater().inflate(R.layout.dialog_bottom, null);
         bottomSheetDialog.setContentView(bottomView);
         bottomSheetDialog.getWindow().findViewById(com.google.android.material.R.id.design_bottom_sheet).setBackgroundColor(Color.TRANSPARENT);
-        TextView tvTakePictures = bottomView.findViewById(R.id.tv_take_pictures);
         TextView tvOpenAlbum = bottomView.findViewById(R.id.tv_open_album);
         TextView tvCancel = bottomView.findViewById(R.id.tv_cancel);
 
-        //拍照
-        tvTakePictures.setOnClickListener(v -> {
-            takePhoto();
-            showMsg("拍照");
-            bottomSheetDialog.cancel();
-        });
         //打开相册
         tvOpenAlbum.setOnClickListener(v -> {
             openAlbum();
@@ -203,8 +213,7 @@ public class MyInfoActivity extends AppCompatActivity {
                     } else {
                         imagePath = CameraUtils.getImageBeforeKitKatPath(data, this);
                     }
-                    //显示图片
-                    displayImage(imagePath);
+                    uploadPortrait(imagePath);
                 }
                 break;
             default:
@@ -227,6 +236,29 @@ public class MyInfoActivity extends AppCompatActivity {
 
         } else {
             showMsg("图片获取失败");
+        }
+    }
+
+    private void uploadPortrait(String imagePath) {
+        String token = getSharedPreferences("token", MODE_PRIVATE).getString("token", null);
+        if (token != null) {
+            Instances.pool.execute(() -> {
+                Resp resp = Requests.postFile(Requests.SERVER_URL_PORT + "/change_portrait",
+                        imagePath, Requests.getTokenMap(token));
+                if (resp != null) {
+                    if (resp.getCode() == RespCode.SUCCESS) {
+                        Message msg = new Message();
+                        msg.obj = new String[]{"Photo uploaded successfully.", imagePath};
+                        uploadSuccessHandler.sendMessage(msg);
+                    } else if (resp.getCode() == RespCode.JWT_TOKEN_INVALID) {
+                        logoutHandler.sendMessage(new Message());
+                    }
+                } else {
+                    // TODO
+                }
+            });
+        } else {
+            LogoutUtils.doLogout(this);
         }
     }
 

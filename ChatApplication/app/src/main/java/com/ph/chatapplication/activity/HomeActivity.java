@@ -3,6 +3,7 @@ package com.ph.chatapplication.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -24,6 +25,8 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity {
 
     private final List<Fragment> fragments = new ArrayList<>();
+    private int currentPage = 0;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +37,6 @@ public class HomeActivity extends AppCompatActivity {
         // get navigation view
         BottomNavigationView navView = findViewById(R.id.nav_home);
         navView.setItemIconSize(100);
-        switchFragment(0);
         navView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_contact) {
                 switchFragment(0);
@@ -51,12 +53,17 @@ public class HomeActivity extends AppCompatActivity {
         fragments.add(new ContactFragment());
         fragments.add(new AddContactFragment());
         fragments.add(new MeFragment());
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.frag_container_home, fragments.get(2), "3").hide(fragments.get(2)).commit();
+        fragmentManager.beginTransaction().add(R.id.frag_container_home, fragments.get(1), "2").hide(fragments.get(1)).commit();
+        fragmentManager.beginTransaction().add(R.id.frag_container_home, fragments.get(0), "1").commit();
     }
 
-    private void switchFragment(int pos) {
-        getSupportFragmentManager()
+    private void switchFragment(int destination) {
+        fragmentManager
                 .beginTransaction()
-                .replace(R.id.frag_container_home, fragments.get(pos))
+                .hide(fragments.get(currentPage))
+                .show(fragments.get(destination))
                 .commit();
     }
 }

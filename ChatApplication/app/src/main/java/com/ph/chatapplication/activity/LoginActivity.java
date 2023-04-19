@@ -132,6 +132,8 @@ public class LoginActivity extends AppCompatActivity {
                 preference = getSharedPreferences(name, MODE_PRIVATE);
                 SharedPreferences.Editor editor = preference.edit();
                 editor.putString("token", token);
+                editor.putString("username", username);
+
                 editor.apply();
 
                 // 跳转到联系人列表

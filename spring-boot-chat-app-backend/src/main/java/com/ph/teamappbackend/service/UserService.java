@@ -63,16 +63,18 @@ public class UserService {
         if (!StringUtils.hasText(originalFilename)) {
             throw new RuntimeException("File name empty.");
         }
-        File file = new File("src/main/resources/portrait/" + currentUserId + originalFilename.substring(originalFilename.lastIndexOf(
-                ".")));
+        String portraitUrl = "src/main/resources/portrait/" + currentUserId + originalFilename.substring(originalFilename.lastIndexOf(
+                "."));
+        File file = new File(portraitUrl);
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
-            if (!file.createNewFile()) {
-                throw new RuntimeException();
-            }
             outputStream.write(mf.getBytes());
         } catch (Exception e) {
             throw new RuntimeException("File save error.");
         }
+        User user = new User();
+        user.setId(currentUserId);
+        user.setPortraitUrl(portraitUrl);
+        userMapper.updateById(user);
     }
 
     public void changeDetails(Integer currentUserId, User user) {
