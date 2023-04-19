@@ -47,25 +47,30 @@
 
             android:textSize="23dp" />
 
-    <RelativeLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/srl_add_contact">
 
-        <TextView
-                android:id="@+id/tv_no_request"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:textSize="20dp"
-                android:text="No request yet." />
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_contact_req"
+        <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                />
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:id="@+id/tv_no_request"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textSize="20dp"
+                    android:text="No request yet." />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_contact_req"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
 
 
-    </RelativeLayout>
-
+        </RelativeLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>
