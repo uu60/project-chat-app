@@ -9,14 +9,34 @@
 
     <ImageView
             android:id="@+id/im_portrait"
-            android:layout_width="60dp"
-            android:layout_height="60dp" />
+            android:background="@drawable/circle_style"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
 
     <TextView
             android:id="@+id/tv_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:textSize="23dp"
             android:layout_marginLeft="10dp"
             android:text="nickname" />
+
+    <RelativeLayout
+            android:id="@+id/rl_logout"
+            android:layout_width="match_parent"
+            android:layout_below="@id/rl_about"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="10dp">
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text=">"
+                android:textSize="30dp" />
+    </RelativeLayout>
 </LinearLayout>

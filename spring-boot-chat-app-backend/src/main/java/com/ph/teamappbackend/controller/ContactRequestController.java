@@ -1,6 +1,6 @@
 package com.ph.teamappbackend.controller;
 
-import com.ph.teamappbackend.constant.ErrorCodeConst;
+import com.ph.teamappbackend.constant.RespCode;
 import com.ph.teamappbackend.pojo.vo.RequestUserTo;
 import com.ph.teamappbackend.service.ContactRequestService;
 import com.ph.teamappbackend.utils.JwtUtils;
@@ -29,7 +29,7 @@ public class ContactRequestController {
             contactRequestService.requestContact(currentUserId, username);
             return Resp.ok();
         } catch (Exception e) {
-            return Resp.error(ErrorCodeConst.CONTACT_REQUEST_FAILED, e.getMessage());
+            return Resp.error(RespCode.CONTACT_REQUEST_FAILED, e.getMessage());
         }
     }
 
@@ -40,7 +40,7 @@ public class ContactRequestController {
             List<RequestUserTo> tos = contactRequestService.getContactRequest(currentUserId);
             return Resp.ok().setData(tos);
         } catch (Exception e) {
-            return Resp.error(ErrorCodeConst.CONTACT_REQUEST_FAILED, e.getMessage());
+            return Resp.error(RespCode.CONTACT_REQUEST_FAILED, e.getMessage());
         }
     }
 
@@ -51,7 +51,7 @@ public class ContactRequestController {
             contactRequestService.dealWithRequest(currentUserId, userId, isAgree == 0);
             return Resp.ok();
         } catch (Exception e) {
-            return Resp.error(ErrorCodeConst.CONTACT_REQUEST_FAILED, e.getMessage());
+            return Resp.error(RespCode.CONTACT_REQUEST_FAILED, e.getMessage());
         }
     }
 }

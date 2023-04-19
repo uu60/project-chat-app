@@ -1,18 +1,16 @@
 package com.ph.teamappbackend.controller;
 
-import com.ph.teamappbackend.constant.ErrorCodeConst;
+import com.ph.teamappbackend.constant.RespCode;
 import com.ph.teamappbackend.pojo.entity.User;
 import com.ph.teamappbackend.pojo.vo.AccountVo;
 import com.ph.teamappbackend.service.UserService;
 import com.ph.teamappbackend.utils.JwtUtils;
 import com.ph.teamappbackend.utils.Resp;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author octopus
@@ -31,7 +29,7 @@ public class UserController {
             return Resp.ok().setData(jwt);
         } catch (Exception e) {
             e.printStackTrace();
-            return Resp.error(ErrorCodeConst.LOGIN_FAILED, e.getMessage());
+            return Resp.error(RespCode.LOGIN_FAILED, e.getMessage());
         }
     }
 
@@ -42,7 +40,7 @@ public class UserController {
             return Resp.ok();
         } catch (Exception e) {
             e.printStackTrace();
-            return Resp.error(ErrorCodeConst.REGISTER_FAILED, e.getMessage());
+            return Resp.error(RespCode.REGISTER_FAILED, e.getMessage());
         }
     }
 
@@ -53,7 +51,7 @@ public class UserController {
             userService.savePortrait(currentUserId, file);
             return Resp.ok();
         } catch (Exception e) {
-            return Resp.error(ErrorCodeConst.PORTRAIT_CHANGE_FAILED, e.getMessage());
+            return Resp.error(RespCode.PORTRAIT_CHANGE_FAILED, e.getMessage());
         }
     }
 
@@ -64,7 +62,17 @@ public class UserController {
             userService.changeDetails(currentUserId, user);
             return Resp.ok();
         } catch (Exception e) {
-            return Resp.error(ErrorCodeConst.DETAILS_CHANGE_FAILED, e.getMessage());
+            return Resp.error(RespCode.DETAILS_CHANGE_FAILED, e.getMessage());
+        }
+    }
+
+    @GetMapping("/get_portrait/{userId}")
+    public Resp getPortrait(@PathVariable Integer userId, HttpServletResponse response) {
+        try {
+            userService.getPortrait(userId, response);
+            return Resp.ok();
+        } catch (Exception e) {
+            return Resp.error(RespCode.PORTRAIT_REQUEST_FAILED, e.getMessage());
         }
     }
 

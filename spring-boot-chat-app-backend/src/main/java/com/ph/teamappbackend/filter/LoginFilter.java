@@ -2,7 +2,7 @@ package com.ph.teamappbackend.filter;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
-import com.ph.teamappbackend.constant.ErrorCodeConst;
+import com.ph.teamappbackend.constant.RespCode;
 import com.ph.teamappbackend.utils.JwtUtils;
 import com.ph.teamappbackend.utils.Resp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class LoginFilter implements Filter {
             filterChain.doFilter(request, response);
             DECODED_JWT_THREADLOCAL.remove();
         } catch (Exception e) {
-            response.getOutputStream().write(gson.toJson(Resp.error(ErrorCodeConst.JWT_TOKEN_INVALID,
+            response.getOutputStream().write(gson.toJson(Resp.error(RespCode.JWT_TOKEN_INVALID,
                     e.getMessage())).getBytes());
         }
     }

@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        initHandler();
         // check token before login
         preference = getSharedPreferences("token", MODE_PRIVATE);
         AtomicReference<String> token = new AtomicReference<>(reload());
@@ -82,8 +82,6 @@ public class LoginActivity extends AppCompatActivity {
         btnReg = findViewById(R.id.btn_reg);
         etUsername = findViewById(R.id.et_username);
         etPwd = findViewById(R.id.et_pwd);
-        initHandler();
-
         btnLogin.setOnClickListener(v -> {
             doLogin();
         });
