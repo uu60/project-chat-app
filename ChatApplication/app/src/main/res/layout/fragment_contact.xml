@@ -14,11 +14,16 @@
             android:textSize="20dp"
             android:text="No contact yet. Go to add somebody!" />
 
-    <!-- TODO: Update blank fragment layout -->
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_contact_frag"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srl_contact"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"/>
+            android:layout_height="match_parent">
+        <!-- TODO: Update blank fragment layout -->
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_contact_frag"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

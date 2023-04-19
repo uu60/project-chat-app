@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -13,6 +14,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.os.Message;
@@ -23,9 +25,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ph.chatapplication.R;
-import com.ph.chatapplication.activity.adapter.AddContactFragmentAdapter;
 import com.ph.chatapplication.activity.adapter.ContactFragmentAdapter;
-import com.ph.chatapplication.utils.BitmapUtils;
 import com.ph.chatapplication.utils.Instances;
 import com.ph.chatapplication.utils.Requests;
 import com.ph.chatapplication.utils.Resp;
@@ -46,6 +46,10 @@ public class ContactFragment extends Fragment {
     private Handler recyclerHandler;
     private Handler wrongFormatHandler;
     private Handler updateRecyclerHandler;
+    private SwipeRefreshLayout srlContact;
+    private Handler refreshHandler = new Handler((m) -> {
+        return true;
+    });
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,7 +65,22 @@ public class ContactFragment extends Fragment {
                 LinearLayoutManager.VERTICAL, false));
 
         tvNoContact = inflate.findViewById(R.id.tv_no_contact);
-        initRecyclerHandler();
+        srlContact = inflate.findViewById(R.id.srl_contact);
+        srlContact.setColorSchemeColors(Color.parseColor("#FF6200EE"));
+        srlContact.setProgressBackgroundColorSchemeColor(Color.parseColor("#ECECEC"));
+        srlContact.setOnRefreshListener(() -> {
+            refreshHandler.postDelayed(() -> {
+                srlContact.setRefreshing(false);
+            }, 3_000);
+            refreshData();
+            srlContact.setRefreshing(false);
+        });
+        initHandler();
+        refreshData();
+        return inflate;
+    }
+
+    private void refreshData() {
         // search token to get user info
         SharedPreferences preference = getActivity().getSharedPreferences("token",
                 Activity.MODE_PRIVATE);
@@ -116,10 +135,9 @@ public class ContactFragment extends Fragment {
                 recyclerHandler.sendMessage(msg);
             });
         }
-        return inflate;
     }
 
-    private void initRecyclerHandler() {
+    private void initHandler() {
         this.recyclerHandler = new Handler(message -> {
             List<ContactFragmentAdapter.DataHolder> data =
                     (List<ContactFragmentAdapter.DataHolder>) message.obj;
@@ -127,9 +145,6 @@ public class ContactFragment extends Fragment {
                 rvContactFrag.setVisibility(View.VISIBLE);
                 tvNoContact.setVisibility(View.INVISIBLE);
                 rvContactFrag.setAdapter(new ContactFragmentAdapter(data, this));
-                // Inflate the layout for this fragment
-                rvContactFrag.addItemDecoration(new DividerItemDecoration(getContext(),
-                        DividerItemDecoration.VERTICAL));
             } else {
                 rvContactFrag.setAdapter(new ContactFragmentAdapter(new ArrayList<>(), this));
                 rvContactFrag.setVisibility(View.INVISIBLE);

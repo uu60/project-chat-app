@@ -2,6 +2,7 @@ package com.ph.chatapplication.activity.fragment;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.AddContactFragmentAdapter;
@@ -28,6 +30,7 @@ import com.ph.chatapplication.utils.LogoutUtils;
 import com.ph.chatapplication.utils.Requests;
 import com.ph.chatapplication.utils.Resp;
 import com.ph.chatapplication.utils.StringUtils;
+import com.ph.chatapplication.utils.TokenUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,6 +57,8 @@ public class AddContactFragment extends Fragment {
 
     private EditText etUsername;
     private Button btnAdd;
+    private SwipeRefreshLayout srlAddContactRefresh;
+    private Handler someHandler = new Handler();
 
 
     @Override
@@ -69,12 +74,23 @@ public class AddContactFragment extends Fragment {
         tvNoRequest = inflate.findViewById(R.id.tv_no_request);
         etUsername = inflate.findViewById(R.id.et_username);
         btnAdd = inflate.findViewById(R.id.btn_request);
+        srlAddContactRefresh = inflate.findViewById(R.id.srl_add_contact);
+        initHandler();
+
+        srlAddContactRefresh.setColorSchemeColors(Color.parseColor("#FF6200EE"));
+        srlAddContactRefresh.setProgressBackgroundColorSchemeColor(Color.parseColor("#ECECEC"));
+        srlAddContactRefresh.setOnRefreshListener(() -> {
+            someHandler.postDelayed(() -> {
+                srlAddContactRefresh.setRefreshing(false);
+            }, 3_000);
+            getRequestList(TokenUtils.currentToken(activity));
+            srlAddContactRefresh.setRefreshing(false);
+        });
 
         SharedPreferences preference = getActivity().getSharedPreferences("token",
                 Activity.MODE_PRIVATE);
         String tokenStr = preference.getString("token", null);
         AtomicReference<String> token = new AtomicReference<>(tokenStr);
-        initHandler();
         btnAdd.setOnClickListener(v -> {
             doRequest(tokenStr);
         });

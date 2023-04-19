@@ -31,7 +31,6 @@ public class HomeActivity extends AppCompatActivity {
     private final List<Fragment> fragments = new ArrayList<>();
     private int currentPage = 0;
     private FragmentManager fragmentManager;
-    private SwipeRefreshLayout srl_my_refresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +40,6 @@ public class HomeActivity extends AppCompatActivity {
         initFragments();
         // get navigation view
         BottomNavigationView navView = findViewById(R.id.nav_home);
-        srl_my_refresh = findViewById(R.id.srl_my_refresh);
-        srl_my_refresh.setColorSchemeColors(Color.parseColor("#ff0000"),Color.parseColor("#00ff00"));
-        srl_my_refresh.setProgressBackgroundColorSchemeColor(Color.parseColor("#0000ff"));
 
         navView.setItemIconSize(100);
         navView.setOnItemSelectedListener(item -> {
@@ -55,22 +51,6 @@ public class HomeActivity extends AppCompatActivity {
                 switchFragment(2);
             }
             return true;
-        });
-
-        //下拉框设置监听
-        srl_my_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Toast.makeText(HomeActivity.this,srl_my_refresh.isRefreshing()?"正在刷新":"刷新完成"
-                        , Toast.LENGTH_SHORT).show();
-                srl_my_refresh.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //关闭刷新
-                        srl_my_refresh.setRefreshing(false);
-                    }
-                },3000);
-            }
         });
     }
 
