@@ -76,4 +76,26 @@ public class UserController {
         }
     }
 
+    @GetMapping("/get_my_portrait")
+    public Resp getMyPortrait(HttpServletResponse response) {
+        Integer currentUserId = JwtUtils.getCurrentUserId();
+        try {
+            userService.getPortrait(currentUserId, response);
+            return Resp.ok();
+        } catch (Exception e) {
+            return Resp.error(RespCode.PORTRAIT_REQUEST_FAILED, e.getMessage());
+        }
+    }
+
+    @GetMapping("/get_my_nickname")
+    public Resp getMyNickname() {
+        Integer currentUserId = JwtUtils.getCurrentUserId();
+        try {
+            String nickname = userService.getNickName(currentUserId);
+            return Resp.ok().setData(nickname);
+        } catch (Exception e) {
+            return Resp.error(RespCode.PORTRAIT_REQUEST_FAILED, e.getMessage());
+        }
+    }
+
 }
