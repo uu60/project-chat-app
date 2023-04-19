@@ -1,7 +1,10 @@
 package com.ph.chatapplication.activity.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -20,11 +23,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ph.chatapplication.R;
+import com.ph.chatapplication.activity.adapter.AddContactFragmentAdapter;
 import com.ph.chatapplication.activity.adapter.ContactFragmentAdapter;
+import com.ph.chatapplication.utils.BitmapUtils;
 import com.ph.chatapplication.utils.Instances;
 import com.ph.chatapplication.utils.Requests;
 import com.ph.chatapplication.utils.Resp;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -39,6 +45,7 @@ public class ContactFragment extends Fragment {
     private TextView tvNoContact;
     private Handler recyclerHandler;
     private Handler wrongFormatHandler;
+    private Handler updateRecyclerHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,7 +105,8 @@ public class ContactFragment extends Fragment {
                             Log.e("ContactFragment", e.toString());
                             return;
                         }
-                        data.add(new ContactFragmentAdapter.DataHolder(id, null,
+                        String portraitUrl = (String) map.get("portraitUrl");
+                        data.add(new ContactFragmentAdapter.DataHolder(id, portraitUrl, null,
                                 nickname));
                     });
                     data.sort(Comparator.comparing(ContactFragmentAdapter.DataHolder::getNickName));
@@ -107,7 +115,6 @@ public class ContactFragment extends Fragment {
                 msg.obj = data;
                 recyclerHandler.sendMessage(msg);
             });
-
         }
         return inflate;
     }
@@ -119,7 +126,7 @@ public class ContactFragment extends Fragment {
             if (data != null && !data.isEmpty()) {
                 rvContactFrag.setVisibility(View.VISIBLE);
                 tvNoContact.setVisibility(View.INVISIBLE);
-                rvContactFrag.setAdapter(new ContactFragmentAdapter(data));
+                rvContactFrag.setAdapter(new ContactFragmentAdapter(data, this));
                 // Inflate the layout for this fragment
                 rvContactFrag.addItemDecoration(new DividerItemDecoration(getContext(),
                         DividerItemDecoration.VERTICAL));
@@ -127,6 +134,33 @@ public class ContactFragment extends Fragment {
                 rvContactFrag.setVisibility(View.INVISIBLE);
                 tvNoContact.setVisibility(View.VISIBLE);
             }
+
+            Instances.pool.execute(() -> {
+                //去加载头像
+                List<ContactFragmentAdapter.DataHolder> data1 =
+                        ((ContactFragmentAdapter) rvContactFrag.getAdapter()).getData();
+                for (int i = 0; i < data1.size(); i++) {
+                    ContactFragmentAdapter.DataHolder dataHolder = data1.get(i);
+                    String portraitUrl = dataHolder.getPortraitUrl();
+                    if (portraitUrl == null) {
+                        continue;
+                    }
+                    InputStream inputStream = Requests.getFile(Requests.SERVER_URL_PORT +
+                                    "/get_portrait/" + dataHolder.getUserId(),
+                            Requests.getTokenMap(getActivity().getSharedPreferences("token",
+                                    Context.MODE_PRIVATE).getString("token", null)));
+                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    dataHolder.setPortrait(bitmap);
+                    Message message1 = new Message();
+                    message1.obj = i;
+                    updateRecyclerHandler.sendMessage(message1);
+                }
+            });
+            return true;
+        });
+
+        updateRecyclerHandler = new Handler(m -> {
+            rvContactFrag.getAdapter().notifyItemChanged((Integer) m.obj);
             return true;
         });
 

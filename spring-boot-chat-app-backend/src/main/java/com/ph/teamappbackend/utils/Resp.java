@@ -1,10 +1,7 @@
 package com.ph.teamappbackend.utils;
 
-import com.ph.teamappbackend.constant.ErrorCodeConst;
+import com.ph.teamappbackend.constant.RespCode;
 import lombok.Data;
-import lombok.Setter;
-
-import java.io.Serializable;
 
 /**
  * @author octopus
@@ -12,7 +9,7 @@ import java.io.Serializable;
  */
 @Data
 public class Resp {
-    private Integer code = ErrorCodeConst.SUCCESS;
+    private Integer code = RespCode.SUCCESS;
     private String msg;
     private Object data;
 

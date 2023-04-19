@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFragmentAdapter.ViewHolder> {
 
-    private List<DataHolder> data = new ArrayList<>();
+    private List<DataHolder> data;
     private ButtonInterface buttonInterface;
 
     public AddContactFragmentAdapter(List<DataHolder> data) {

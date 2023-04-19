@@ -1,5 +1,6 @@
 package com.ph.teamappbackend.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ph.teamappbackend.mapper.UserMapper;
 import com.ph.teamappbackend.pojo.entity.User;
 import com.ph.teamappbackend.pojo.vo.AccountVo;
@@ -10,8 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * @author octopus
@@ -80,5 +84,24 @@ public class UserService {
     public void changeDetails(Integer currentUserId, User user) {
         user.setId(currentUserId);
         userMapper.updateById(user);
+    }
+
+    public void getPortrait(Integer userId, HttpServletResponse response) {
+        User user = userMapper.selectOne(new QueryWrapper<User>().eq("id", userId));
+        if (user == null) {
+            throw new RuntimeException("No such user.");
+        }
+        try {
+            InputStream inputStream = new BufferedInputStream(Files.newInputStream(Paths.get(user.getPortraitUrl())));
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = inputStream.read(buffer)) > 0) {
+                response.getOutputStream().write(buffer, 0, len);
+            }
+            response.getOutputStream().close();
+            inputStream.close();
+        } catch (Exception e) {
+            throw new RuntimeException("Portrait read failed.");
+        }
     }
 }

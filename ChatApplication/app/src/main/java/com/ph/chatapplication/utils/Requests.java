@@ -6,6 +6,7 @@ import com.ph.chatapplication.R;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -140,9 +141,25 @@ public class Requests {
         }
     }
 
+    public static InputStream getFile(String url, Map<String, String> headerMap) {
+        try {
+            Request.Builder builder = new Request.Builder().url(url).get();
+            if (headerMap != null && !headerMap.isEmpty()) {
+                headerMap.forEach(builder::header);
+            }
+            Request request = builder.build();
+            Response response = client.newCall(request).execute();
+            return response.body().byteStream();
+        } catch (Exception e) {
+            Log.e("http", e.toString());
+            return null;
+        }
+    }
+
     public static Map<String, String> getTokenMap(String token) {
         HashMap<String, String> map = new HashMap<>();
         map.put(TOKEN_KEY, token);
         return map;
     }
+
 }
