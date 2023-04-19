@@ -26,7 +26,7 @@
                 android:textSize="23dp" />
 
         <Button
-                android:id="@+id/btn_add"
+                android:id="@+id/btn_request"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@drawable/button"

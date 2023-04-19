@@ -61,23 +61,27 @@ public class ContactRequestService {
     }
 
     private void checkBeforeRequestWithException(Integer currentUserId, Integer userId) {
+        // 1 是否自己申请自己
+        if (Objects.equals(currentUserId, userId)) {
+            throw new RuntimeException("You cannot request yourself.");
+        }
 
-        // 1 是否申请过同一人
+        // 2 是否申请过同一人
         ContactRequest one = contactRequestMapper.selectOne(new QueryWrapper<ContactRequest>().eq("user_id", currentUserId).eq("contact_id", userId));
         if (one != null) {
             throw new RuntimeException("Already request this user.");
         }
 
-        // 2 对方是否申请自己
+        // 3 对方是否申请自己
         one = contactRequestMapper.selectOne(new QueryWrapper<ContactRequest>().eq("user_id", userId).eq("contact_id", currentUserId));
         if (one != null) {
             throw new RuntimeException("The user has sent request to you.");
         }
 
-        // 3 是否我请求我
-        one = contactRequestMapper.selectOne(new QueryWrapper<ContactRequest>().eq("user_id", currentUserId).eq("contact_id", currentUserId));
-        if (one != null) {
-            throw new RuntimeException("You cannot request yourself.");
+        // 4 是否已经好友
+        Contact contact = contactMapper.selectOne(new QueryWrapper<Contact>().eq("user_id", currentUserId).eq("contact_id", userId));
+        if (contact != null) {
+            throw new RuntimeException("You cannot request your friend.");
         }
     }
 
