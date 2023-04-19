@@ -22,6 +22,6 @@ public class ContactRequest {
     @TableField("request_time")
     Date requestTime;
     @TableLogic
-    @TableField("delete_status")
-    Integer deleteStatus;
+    @TableField(value = "delete_status")
+    Integer deleteStatus = 0;
 }

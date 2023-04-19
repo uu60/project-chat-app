@@ -20,6 +20,7 @@ public class Requests {
     private static final OkHttpClient client = new OkHttpClient();
     private static final Map<String, String> dummy = new HashMap<>();
     public static final String SERVER_URL_PORT = "http://192.168.1.102:8080";
+    public static final String TOKEN_KEY = "JWT-Token";
 
     static {
         dummy.put("", "");
@@ -45,15 +46,19 @@ public class Requests {
 
     public static Resp get(String url, Map<String, String> requestParamMap,
                            Map<String, String> headerMap) {
-        if (requestParamMap == null || requestParamMap.isEmpty()) {
+        boolean emptyParam = requestParamMap == null || requestParamMap.isEmpty();
+        boolean emptyHeader = headerMap == null || headerMap.isEmpty();
+        if (emptyHeader && emptyParam) {
             return get(url);
         }
-        StringBuilder builder = new StringBuilder(url);
-        builder.append("?");
-        requestParamMap.forEach((key, value) -> builder.append(key).append("=").append(value).append("&"));
-        // 去除最后一个&
-        builder.deleteCharAt(builder.length() - 1);
-        url = builder.toString();
+        if (!emptyParam) {
+            StringBuilder builder = new StringBuilder(url);
+            builder.append("?");
+            requestParamMap.forEach((key, value) -> builder.append(key).append("=").append(value).append("&"));
+            // 去除最后一个&
+            builder.deleteCharAt(builder.length() - 1);
+            url = builder.toString();
+        }
         return http(M.GET, url, dummy, headerMap);
     }
 
@@ -96,5 +101,11 @@ public class Requests {
             Log.e("http", e.toString());
         }
         return null;
+    }
+
+    public static Map<String, String> getTokenMap(String token) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put(TOKEN_KEY, token);
+        return map;
     }
 }

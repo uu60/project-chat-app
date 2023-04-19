@@ -43,6 +43,7 @@ public class UserService {
         String encryptPassword = bCryptPasswordEncoder.encode(to.getPassword());
         user = new User();
         user.setUsername(to.getUsername());
+        user.setNickname(to.getUsername());
         user.setPassword(encryptPassword);
         int insert = userMapper.insert(user);
         if (insert == 0) {

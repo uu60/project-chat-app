@@ -1,5 +1,7 @@
 package com.ph.chatapplication.utils;
 
+import android.annotation.SuppressLint;
+
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
@@ -24,6 +26,9 @@ public class Instances {
 
     public static final Gson gson = new Gson();
 
-    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+    public static final SimpleDateFormat simpleSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
             Locale.CHINA);
+
+    @SuppressLint("SimpleDateFormat")
+    public static final SimpleDateFormat UTCSdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 }

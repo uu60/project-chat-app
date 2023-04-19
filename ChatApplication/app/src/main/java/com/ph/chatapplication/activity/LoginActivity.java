@@ -4,17 +4,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ph.chatapplication.R;
-import com.ph.chatapplication.activity.fragment.ContactFragment;
-import com.ph.chatapplication.constant.ErrorCodeConst;
+import com.ph.chatapplication.constant.RespCode;
 import com.ph.chatapplication.utils.Instances;
 import com.ph.chatapplication.utils.Requests;
 import com.ph.chatapplication.utils.Resp;
@@ -31,8 +32,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnReg;
     private EditText etUsername;
     private EditText etPwd;
-    private Handler handler;
-
+    private Handler dialogHandler;
+    private Handler toastHandler;
 
 
     @Override
@@ -42,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         // check token before login
         preference = getSharedPreferences("token", MODE_PRIVATE);
         AtomicReference<String> token = new AtomicReference<>(reload());
-        if (token.get() != null){
+        if (token.get() != null) {
             String msg = "alive";
             Log.d("token", msg);
 
@@ -54,24 +55,27 @@ public class LoginActivity extends AppCompatActivity {
 
             Map<String, String> head = new HashMap<>();
             head.put("JWT-Token", token.get());
-            Instances.pool.execute(() ->{
+            Instances.pool.execute(() -> {
                 try {
                     Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact", params, head);
-                    if (resp.getCode() == ErrorCodeConst.SUCCESS){
+                    if (resp.getCode() == RespCode.SUCCESS) {
                         Intent intent = new Intent(this, HomeActivity.class);
+                        Message msg1 = new Message();
+                        msg1.obj = "Welcome back!";
+                        toastHandler.sendMessage(msg1);
                         startActivity(intent);
-                    }else {
-
+                    } else {
+                        // TODO: 错误暂时不根据响应错误码通用处理
+                        preference.edit().remove("token").apply();
+                        Message msg1 = new Message();
+                        msg1.obj = "Login failed!";
+                        toastHandler.sendMessage(msg1);
                     }
-                } catch (Exception e){
+                } catch (Exception e) {
                     Log.e("LoginActivity Token request", e.toString());
-                    return;
                 }
-
             });
-
         }
-
 
         setContentView(R.layout.activity_login);
         btnLogin = findViewById(R.id.btn_login);
@@ -85,12 +89,12 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         btnReg.setOnClickListener(v -> {
-            doRegister();
+            toRegister();
         });
 
     }
 
-    private void doRegister() {
+    private void toRegister() {
         Intent intent = new Intent(this, RegActivity.class);
         startActivity(intent);
     }
@@ -120,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                 String s = "null";
                 Log.d("connect", s);
                 sendToHandler("connect fail");
-            } else if (resp.getCode() == ErrorCodeConst.SUCCESS) {
+            } else if (resp.getCode() == RespCode.SUCCESS) {
                 String s = "success";
                 Log.d("login", s);
                 String token = (String) resp.getData();
@@ -130,11 +134,14 @@ public class LoginActivity extends AppCompatActivity {
                 editor.putString("token", token);
                 editor.apply();
 
-                // TODO: 跳转到联系人列表
+                // 跳转到联系人列表
                 Intent intent = new Intent(this, HomeActivity.class);
+                Message message = new Message();
+                message.obj = "Login successfully!";
+                toastHandler.sendMessage(message);
                 startActivity(intent);
 
-            } else if (resp.getCode() == ErrorCodeConst.LOGIN_FAILED) {
+            } else if (resp.getCode() == RespCode.LOGIN_FAILED) {
                 String s = "fail";
                 Log.d("login", s);
                 sendToHandler("wrong username or password");
@@ -143,23 +150,24 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initHandler() {
-        handler = new Handler((message) -> {
+        dialogHandler = new Handler((message) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Notice");
             builder.setMessage((String) message.obj);
 
             builder.setPositiveButton("OK",
                     (dialog, which) -> {
-//                            if (focus != null) {
-//                                focus.requestFocus();
-//                                InputMethodManager imm =
-//                                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                                imm.showSoftInput(focus, 0);
-//                            }
+                        // PASS
                     });
             //根据构建器创建一个对话框对象
             AlertDialog dialog = builder.create();
             dialog.show();
+            return true;
+        });
+
+        toastHandler = new Handler(m -> {
+            String message = (String) m.obj;
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             return true;
         });
     }
@@ -169,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
         if (token != null) {
             Log.d("token", token);
             return token;
-        }else {
+        } else {
             String s = "null";
             Log.d("token", s);
         }
@@ -179,6 +187,6 @@ public class LoginActivity extends AppCompatActivity {
     private void sendToHandler(String msg) {
         Message message = new Message();
         message.obj = msg;
-        handler.sendMessage(message);
+        dialogHandler.sendMessage(message);
     }
 }

@@ -21,11 +21,9 @@ import android.widget.TextView;
 
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.ContactFragmentAdapter;
-import com.ph.chatapplication.constant.ErrorCodeConst;
 import com.ph.chatapplication.utils.Instances;
 import com.ph.chatapplication.utils.Requests;
 import com.ph.chatapplication.utils.Resp;
-import com.ph.chatapplication.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -95,7 +93,7 @@ public class ContactFragment extends Fragment {
                         }
                         try {
                             Object idObj = map.get("id");
-                            id = Integer.parseInt(idObj.toString());
+                            id = (int) Double.parseDouble(idObj.toString());
                         } catch (Exception e) {
                             Log.e("ContactFragment", e.toString());
                             return;

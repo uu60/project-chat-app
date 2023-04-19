@@ -3,21 +3,17 @@ package com.ph.chatapplication.activity;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import android.view.Gravity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ph.chatapplication.R;
-import com.ph.chatapplication.constant.ErrorCodeConst;
+import com.ph.chatapplication.constant.RespCode;
 import com.ph.chatapplication.utils.Instances;
 import com.ph.chatapplication.utils.Requests;
 import com.ph.chatapplication.utils.Resp;
@@ -92,11 +88,11 @@ public class RegActivity extends AppCompatActivity {
             String getResp = "True";
             Log.d("getResp", getResp);
             try {
-                if (resp.getCode() == ErrorCodeConst.REGISTER_FAILED) {
+                if (resp.getCode() == RespCode.REGISTER_FAILED) {
                     String s = "failed";
                     Log.d("Register", s);
                     sendToWrongFormatHandler(resp.getMsg());
-                } else if (resp.getCode() == ErrorCodeConst.SUCCESS) {
+                } else if (resp.getCode() == RespCode.SUCCESS) {
                     registerSuccessHandler.sendMessage(new Message());
                 }
             } catch (Exception e){

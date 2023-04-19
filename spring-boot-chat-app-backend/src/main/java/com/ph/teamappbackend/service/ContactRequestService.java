@@ -111,7 +111,7 @@ public class ContactRequestService {
         if (agree) {
             contactService.addContact(currentUserId, userId);
         }
-        contactRequestMapper.delete(new QueryWrapper<ContactRequest>().eq("user_id", currentUserId).eq("contact_id", userId));
+        contactRequestMapper.delete(new QueryWrapper<ContactRequest>().eq("user_id", userId).eq("contact_id", currentUserId));
     }
 
     private void lock(Integer userId, Integer contactId) {

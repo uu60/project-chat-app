@@ -1,5 +1,6 @@
 package com.ph.chatapplication.activity.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,15 +17,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.AddContactFragmentAdapter;
-import com.ph.chatapplication.constant.ErrorCodeConst;
+import com.ph.chatapplication.constant.RespCode;
 import com.ph.chatapplication.utils.Instances;
+import com.ph.chatapplication.utils.LogoutUtils;
 import com.ph.chatapplication.utils.Requests;
 import com.ph.chatapplication.utils.Resp;
 import com.ph.chatapplication.utils.StringUtils;
@@ -38,16 +39,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
 
 public class AddContactFragment extends Fragment {
 
-    TextView tvHead;
-    RecyclerView rvContactReq;
-    TextView tvNoRequest;
-    Handler handler;
+    private TextView tvHead;
+    private RecyclerView rvContactReq;
+    private TextView tvNoRequest;
+    private Handler handler;
+    private Handler logoutHandler;
+    private Activity activity;
 
     private Handler testSuccessHandler;
     private Handler wrongFormatHandler;
+    private Handler changeRecyclerHandler;
+
     private EditText etUsername;
     private Button btnAdd;
 
@@ -56,7 +62,7 @@ public class AddContactFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.fragment_add_contact, container, false);
-        FragmentActivity activity = getActivity();
+        activity = getActivity();
         tvHead = activity.findViewById(R.id.tv_head);
         tvHead.setText("Add Contact");
         rvContactReq = inflate.findViewById(R.id.rv_contact_req);
@@ -72,142 +78,117 @@ public class AddContactFragment extends Fragment {
         AtomicReference<String> token = new AtomicReference<>(tokenStr);
         initHandler();
         btnAdd.setOnClickListener(v -> {
-            doAdd(tokenStr);
+            doRequest(tokenStr);
         });
 
-        getAddRequest(tokenStr);
+        getRequestList(tokenStr);
 
         return inflate;
     }
 
     //点击添加好友按钮后
-    private void doAdd(String token){
+    private void doRequest(String token) {
         String username = etUsername.getText().toString();
-        Map<String, String> params = new HashMap<>();
-        params.put("username", username);
         Map<String, String> head = new HashMap<>();
         head.put("JWT-Token", token);
 
-        Instances.pool.execute(() -> {
-            Message message = new Message();
-            if (StringUtils.isEmpty(username) || username.length() < 5) {
-                message.obj = "Username must longer than 4 characters.";
-                wrongFormatHandler.sendMessage(message);
-                return;
-            }
-            // 传送token
-            if (token != null){
-                //TODO 修改request请求的内容！
-                Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact_request", params, head);
-
-                List<Map<String, Object>> temp = null;
-                try {
-                    temp = (List) resp.getData();
-                } catch (Exception e){
-                    Message msg = new Message();
-                    String s = "connect failed!";
-
-                    Log.e("post add", String.valueOf(e));
+        // token验证通过之后再请求
+        if (token != null) {
+            Instances.pool.execute(() -> {
+                Message message = new Message();
+                if (StringUtils.isEmpty(username) || username.length() < 5) {
+                    message.obj = "Username must longer than 4 characters.";
+                    wrongFormatHandler.sendMessage(message);
+                    return;
                 }
-                if (temp != null){
-                    if (resp.getCode() == ErrorCodeConst.SUCCESS){
-                        message.obj = "Add Sent";
-                        testSuccessHandler.sendMessage(message);
-                    } else if (resp.getCode() == ErrorCodeConst.CONTACT_ADD_FAILED) {
-                        message.obj = "Send failed";
-                        wrongFormatHandler.sendMessage(message);
-                    }
-                }else {
-                    message.obj = "Connect Failed";
+                Resp resp =
+                        Requests.post(Requests.SERVER_URL_PORT + "/request_contact/" + username,
+                                null, head);
+
+                // 响应码成功状态再去处理
+                if (resp.getCode() == RespCode.SUCCESS) {
+                    message.obj = "Request sent successfully.";
+                    testSuccessHandler.sendMessage(message);
+                } else if (resp.getCode() == RespCode.CONTACT_REQUEST_FAILED) {
+                    message.obj = resp.getMsg();
+                    wrongFormatHandler.sendMessage(message);
+                } else if (resp.getCode() == RespCode.JWT_TOKEN_INVALID) {
+                    // 所有的请求之后，都要判断是不是JWT_TOKEN_INVALID
+                    logoutHandler.sendMessage(new Message());
+                } else {
+                    message.obj = "Unknown error, please retry.";
                     wrongFormatHandler.sendMessage(message);
                 }
-
-            }else {
-                message.setData(null);
-            }
-        });
+            });
+        } else {
+            LogoutUtils.doLogout(activity);
+        }
     }
 
-    //请求后台得到请求添加好友列表
-    private void getAddRequest(String token){
+    @SuppressWarnings("all")
+    private void getRequestList(String token) {
         List<AddContactFragmentAdapter.DataHolder> data = new ArrayList<>();
-
-        Map<String, String> params = new HashMap<>();
-        String name = "";
-        params.put("username", name);
-        Map<String, String> head = new HashMap<>();
-        head.put("JWT-Token", token);
-        SimpleDateFormat sdfUse = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-
+        SimpleDateFormat sdfUse = Instances.UTCSdf;
 
         initHandler();
         Instances.pool.execute(() -> {
             Message message = new Message();
             // 传送token
-            if (token != null){
-                Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact_request", params, head);
+            if (token != null) {
+                Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact_request", null,
+                        Requests.getTokenMap(token));
 
-                List<Map<String, Object>> temp = null;
-                try {
-                    temp = (List) resp.getData();
-                } catch (Exception e){
-                    Message msg = new Message();
-                    String s = "connect failed!";
-                    msg.obj = s;
-                    wrongFormatHandler.sendMessage(msg);
-                    Log.e("get request contact", String.valueOf(e));
+                if (resp.getCode() == RespCode.SUCCESS) {
+                    List<Map<String, Object>> temp = (List) resp.getData();
+                    temp.forEach(map -> {
+                        int id;
+                        String nickname = null;
+                        Object nicknameObj = map.get("nickname");
+
+
+                        if (nicknameObj != null) {
+                            nickname = nicknameObj.toString();
+                        }
+                        Date requestTime;
+                        try {
+                            Object idObj = map.get("id");
+                            id = Double.valueOf(idObj.toString()).intValue();
+                            requestTime = sdfUse.parse(map.get("requestTime").toString());
+
+                        } catch (Exception e) {
+                            Log.e("ContactFragment", e.toString());
+                            return;
+                        }
+                        data.add(new AddContactFragmentAdapter.DataHolder(id, nickname, null,
+                                requestTime));
+                    });
+                } else if (resp.getCode() == RespCode.CONTACT_ADD_FAILED) {
+                    Toast.makeText(getContext(), resp.getMsg(), Toast.LENGTH_LONG).show();
+                } else if (resp.getCode() == RespCode.JWT_TOKEN_INVALID) {
+                    LogoutUtils.doLogout(activity);
                 }
-                if (temp != null){
-                    if (resp.getCode() == ErrorCodeConst.SUCCESS){
-                        temp.forEach(map -> {
-                            int id;
-                            String nickname = null;
-                            Object nicknameObj = map.get("nickname");
-
-
-                            if (nicknameObj != null) {
-                                nickname = nicknameObj.toString();
-                            }
-                            Date requestTime;
-                            try {
-                                Object idObj = map.get("id");
-                                id = Double.valueOf(idObj.toString()).intValue();
-                                requestTime = sdfUse.parse(map.get("requestTime").toString());
-
-                            } catch (Exception e) {
-                                Log.e("ContactFragment", e.toString());
-                                return;
-                            }
-                            data.add(new AddContactFragmentAdapter.DataHolder(id, nickname,null,requestTime));
-                        });
-                    } else if (resp.getCode() == ErrorCodeConst.CONTACT_ADD_FAILED) {
-                        message.setData(null);
-                    }
-                }else {
-                    message.setData(null);
-                }
-
-            }else {
-                message.setData(null);
+            } else {
+                LogoutUtils.doLogout(activity);
             }
-            Map<String, List<AddContactFragmentAdapter.DataHolder>> m = new HashMap<String, List<AddContactFragmentAdapter.DataHolder>>();
-            m.put(String.valueOf(token),data);
+            Map<String, List<AddContactFragmentAdapter.DataHolder>> m = new HashMap<String,
+                    List<AddContactFragmentAdapter.DataHolder>>();
+            m.put(String.valueOf(token), data);
             message.obj = m;
             handler.sendMessage(message);
-
-
         });
     }
+
     private void initHandler() {
         handler = new Handler(m -> {
-            Map<String, List<AddContactFragmentAdapter.DataHolder>> map =
-                    (Map<String, List<AddContactFragmentAdapter.DataHolder>>) m.obj;
-            Set<Map.Entry<String, List<AddContactFragmentAdapter.DataHolder>>> entrySet = map.entrySet();
-            Iterator<Map.Entry<String, List<AddContactFragmentAdapter.DataHolder>>> kToken = entrySet.iterator();
+            Map<String, List<AddContactFragmentAdapter.DataHolder>> map = (Map<String,
+                    List<AddContactFragmentAdapter.DataHolder>>) m.obj;
+            Set<Map.Entry<String, List<AddContactFragmentAdapter.DataHolder>>> entrySet =
+                    map.entrySet();
+            Iterator<Map.Entry<String, List<AddContactFragmentAdapter.DataHolder>>> kToken =
+                    entrySet.iterator();
             Map.Entry<String, List<AddContactFragmentAdapter.DataHolder>> entry = kToken.next();
             String token = entry.getKey();
-            List<AddContactFragmentAdapter.DataHolder> data =
-                    (List<AddContactFragmentAdapter.DataHolder>) entry.getValue();
+            List<AddContactFragmentAdapter.DataHolder> data = entry.getValue();
             if (data != null && !data.isEmpty()) {
                 AddContactFragmentAdapter maindata = new AddContactFragmentAdapter(data);
                 rvContactReq.setAdapter(maindata);
@@ -218,11 +199,8 @@ public class AddContactFragment extends Fragment {
                 tvNoRequest.setVisibility(View.GONE);
                 maindata.buttonSetOnclick(new AddContactFragmentAdapter.ButtonInterface() {
                     @Override
-                    public void onclick(View view, int userId, int btn, int position) {
-                        Boolean out = postAdd(btn, userId, token);
-                        if (out){
-                            maindata.removeData(position);
-                        }
+                    public void onclick(View view, int userId, int isAgree, int position) {
+                        postAdd(isAgree, userId, token, position);
                     }
                 });
             } else {
@@ -233,11 +211,11 @@ public class AddContactFragment extends Fragment {
         });
 
         testSuccessHandler = new Handler((message) -> {
-            if (message.obj != null){
+            if (message.obj != null) {
                 Toast.makeText(getActivity(), message.obj.toString(), Toast.LENGTH_LONG).show();
                 return true;
             }
-            Toast.makeText(getActivity(), "Operation error!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Unknown error.", Toast.LENGTH_LONG).show();
             return true;
         });
 
@@ -254,40 +232,48 @@ public class AddContactFragment extends Fragment {
             return true;
         });
 
+        logoutHandler = new Handler(m -> {
+            LogoutUtils.doLogout(activity);
+            return true;
+        });
 
+        changeRecyclerHandler = new Handler(m -> {
+            AddContactFragmentAdapter adapter =
+                    (AddContactFragmentAdapter) rvContactReq.getAdapter();
+            adapter.removeData((Integer) m.obj);
+            if (adapter.getItemCount() == 0) {
+                rvContactReq.setVisibility(View.GONE);
+                tvNoRequest.setVisibility(View.VISIBLE);
+            }
+            return true;
+        });
     }
-    
-    private Boolean postAdd(int btn, int userId, String token){
-        AtomicReference<Boolean> out = new AtomicReference<>(false);
 
-        Toast.makeText(getActivity(), "add", Toast.LENGTH_LONG).show();
-        Map<String, String> params = new HashMap<>();
-        String id = String.valueOf(userId);
-        String name = "";
-        params.put("username", name);
-        String isAgree = String.valueOf(btn);
-        Map<String, String> head = new HashMap<>();
-        head.put("JWT-Token", token);
-
+    private void postAdd(int isAgree, int userId, String token, int position) {
         Instances.pool.execute(() -> {
             Message message = new Message();
-            if (token != null){
-                Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/deal/"+id+"/"+isAgree, params, head);
+            if (token != null) {
+                Resp resp =
+                        Requests.post(Requests.SERVER_URL_PORT + "/deal/" + userId + "/" + isAgree
+                                , null, Requests.getTokenMap(token));
                 try {
-                    if (resp == null || resp.getCode() == null || resp.getCode() == ErrorCodeConst.CONTACT_ADD_FAILED){
+                    if (resp == null || resp.getCode() == null || resp.getCode() == RespCode.CONTACT_ADD_FAILED) {
                         testSuccessHandler.sendMessage(new Message());
                         String s = "connect failed";
                         Log.e("postAdd", s);
-                    } else if (resp.getCode() == ErrorCodeConst.SUCCESS) {
-                        out.set(true);
+                    } else if (resp.getCode() == RespCode.SUCCESS) {
+                        Message message1 = new Message();
+                        message1.obj = position;
+                        changeRecyclerHandler.sendMessage(message1);
+                    } else if (resp.getCode() == RespCode.JWT_TOKEN_INVALID) {
+                        logoutHandler.sendMessage(new Message());
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     testSuccessHandler.sendMessage((new Message()));
                     Log.e("postAdd", String.valueOf(e));
                 }
             }
         });
-        return out.get();
     }
 
 }

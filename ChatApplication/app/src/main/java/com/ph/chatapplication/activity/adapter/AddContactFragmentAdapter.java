@@ -30,51 +30,34 @@ public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFr
 
     public AddContactFragmentAdapter(List<DataHolder> data) {
         this.data = data;
-        //setData(this.data);
     }
-
-//    public void setData(List<DataHolder> data) {
-////        this.data = data;
-//        // test data
-//        data.add(new DataHolder(1, "user1", null, new Date()));
-//        data.add(new DataHolder(1, "user1", null, new Date()));
-//        data.add(new DataHolder(1, "user1", null, new Date()));
-//        data.add(new DataHolder(1, "user1", null, new Date()));
-//        data.add(new DataHolder(1, "user1", null, new Date()));
-//        data.add(new DataHolder(1, "user1", null, new Date()));
-//        data.add(new DataHolder(1, "user1", null, new Date()));
-//        data.add(new DataHolder(1, "user1", null, new Date()));
-//        data.add(new DataHolder(1, "user1", null, new Date()));
-//        data.add(new DataHolder(1, "user1", null, new Date()));
-//        data.add(new DataHolder(1, "user1", null, new Date()));
-//        data.add(new DataHolder(1, "user1", null, new Date()));
-//        data.add(new DataHolder(1, "user1", null, new Date()));
-//        data.add(new DataHolder(1, "user1", null, new Date()));
-//    }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //创建ViewHolder，加载item布局
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_add_contact, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_add_contact,
+                parent, false);
         return new ViewHolder(view);
     }
 
-    public void buttonSetOnclick(ButtonInterface buttonInterface){
-        this.buttonInterface=buttonInterface;
+    public void buttonSetOnclick(ButtonInterface buttonInterface) {
+        this.buttonInterface = buttonInterface;
     }
 
-    public interface ButtonInterface{
-        public void onclick( View view,int userId, int btn, int position );
+    public interface ButtonInterface {
+        void onclick(View view, int userId, int isAgree, int position);
     }
+
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder,
+                                 @SuppressLint("RecyclerView") int position) {
         DataHolder dataHolder = data.get(position);
         Integer userId = dataHolder.userId;
         viewHolder.dataHolder = dataHolder;
         viewHolder.tvNickname.setText(dataHolder.nickName);
         try {
-            viewHolder.tvRequestTime.setText(Instances.sdf.format(dataHolder.requestTime));
+            viewHolder.tvRequestTime.setText(Instances.simpleSdf.format(dataHolder.requestTime));
         } catch (Throwable ignored) {
 
         }
@@ -86,32 +69,29 @@ public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFr
         //viewHolder.btnAdd.setText(data.get(position).toString());
         viewHolder.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 if (buttonInterface != null) {
-//                  接口实例化后的而对象，调用重写后的方法
-                    int btn = 0;
-                    buttonInterface.onclick(v, dataHolder.userId, btn, position);
+                    buttonInterface.onclick(v, dataHolder.userId, 1, position);
                 }
             }
         });
-        //viewHolder.btnRefuse.setText(data.get(position).toString());
         viewHolder.btnRefuse.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 if (buttonInterface != null) {
-//                  接口实例化后的而对象，调用重写后的方法
-                    int btn = 1;
-                    buttonInterface.onclick(v, dataHolder.userId, btn, position);
+                    buttonInterface.onclick(v, dataHolder.userId, 0, position);
                 }
             }
         });
     }
+
     public void removeData(int position) {
         data.remove(position);
         //删除动画
         notifyItemRemoved(position);
         notifyDataSetChanged();
     }
+
     @Override
     public int getItemCount() {
         return data.size();

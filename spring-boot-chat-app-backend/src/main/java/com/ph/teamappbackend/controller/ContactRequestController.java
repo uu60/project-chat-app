@@ -24,8 +24,7 @@ public class ContactRequestController {
     ContactRequestService contactRequestService;
 
     @PostMapping("/request_contact/{username}")
-    public Resp requestContact(@PathVariable String username) {
-        Integer currentUserId = JwtUtils.getCurrentUserId();
+    public Resp requestContact(@PathVariable String username) {Integer currentUserId = JwtUtils.getCurrentUserId();
         try {
             contactRequestService.requestContact(currentUserId, username);
             return Resp.ok();
