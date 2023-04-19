@@ -4,6 +4,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
 import com.ph.teamappbackend.constant.RespCode;
 import com.ph.teamappbackend.utils.JwtUtils;
+import com.ph.teamappbackend.utils.LoginManager;
 import com.ph.teamappbackend.utils.Resp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,11 +44,17 @@ public class LoginFilter implements Filter {
         String jwt = request.getHeader("JWT-Token");
         try {
             DECODED_JWT_THREADLOCAL.set(JwtUtils.verify(jwt));
-            filterChain.doFilter(request, response);
-            DECODED_JWT_THREADLOCAL.remove();
+            boolean newLogin = LoginManager.checkAndDealWithExistedLogin();
+            if (newLogin) {
+                filterChain.doFilter(request, response);
+            } else {
+                throw new RuntimeException();
+            }
         } catch (Exception e) {
             response.getOutputStream().write(gson.toJson(Resp.error(RespCode.JWT_TOKEN_INVALID,
                     e.getMessage())).getBytes());
+        } finally {
+            DECODED_JWT_THREADLOCAL.remove();
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.ph.teamappbackend.websocket.handler;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -22,8 +23,6 @@ public class ChatHandler {
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
-        // 做一些操作
-
     }
 
     @OnClose
