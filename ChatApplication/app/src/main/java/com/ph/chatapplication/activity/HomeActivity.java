@@ -53,14 +53,11 @@ public class HomeActivity extends AppCompatActivity {
             return true;
         });
 
-        int id = getIntent().getIntExtra("id", 0);
-        if (id == 3) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frag_container_home,new MeFragment())
-                    .addToBackStack(null)
-                    .commit();
-        }
+//        int id = getIntent().getIntExtra("id", 0);
+//        if (id == 3) {
+//            fragmentManager.beginTransaction().show(fragments.get(2))
+//                    .commit();
+//        }
     }
 
     private void initFragments() {
