@@ -1,6 +1,8 @@
 package com.ph.chatapplication.activity.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.ph.chatapplication.R;
+import com.ph.chatapplication.activity.VersionInfoActivity;
 import com.ph.chatapplication.constant.RespCode;
 import com.ph.chatapplication.utils.source.Instances;
 import com.ph.chatapplication.utils.handler.LogoutUtils;
@@ -49,6 +52,7 @@ public class MeFragment extends Fragment {
                 .skipMemoryCache(true)).into(myPortrait);
         return true;
     });
+    private TextView updateText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +65,16 @@ public class MeFragment extends Fragment {
         rlLogout = inflate.findViewById(R.id.rl_logout);
         myPortrait = inflate.findViewById(R.id.iv_my_portrait);
         myNickname = inflate.findViewById(R.id.tv_my_nickname);
+        updateText = inflate.findViewById(R.id.updateText);
+
+        updateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), VersionInfoActivity.class);
+                startActivity(intent);
+            }
+        });
+
         setLogoutOnRlLogout();
 
         Instances.pool.execute(() -> {
