@@ -225,8 +225,6 @@ public class AddContactFragment extends Fragment {
                 AddContactFragmentAdapter maindata = new AddContactFragmentAdapter(data);
                 rvContactReq.setAdapter(maindata);
                 // Inflate the layout for this fragment
-                rvContactReq.addItemDecoration(new DividerItemDecoration(getContext(),
-                        DividerItemDecoration.VERTICAL));
                 rvContactReq.setVisibility(View.VISIBLE);
                 tvNoRequest.setVisibility(View.GONE);
                 maindata.buttonSetOnclick(new AddContactFragmentAdapter.ButtonInterface() {
