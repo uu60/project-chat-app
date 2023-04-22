@@ -1,8 +1,8 @@
 package com.ph.teamappbackend.controller;
 
-import com.ph.teamappbackend.pojo.entity.User;
+import com.ph.teamappbackend.pojo.entity.UserEntity;
 import com.ph.teamappbackend.service.ContactService;
-import com.ph.teamappbackend.utils.JwtUtils;
+import com.ph.teamappbackend.utils.LoginManager;
 import com.ph.teamappbackend.utils.Resp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +21,8 @@ public class ContactController {
 
     @GetMapping("/contact")
     public Resp getAllContacts() {
-        Integer currentUserId = JwtUtils.getCurrentUserId();
-        List<User> contacts = contactService.getAllContactUsers(currentUserId);
+        Integer currentUserId = LoginManager.getCurrentUserId();
+        List<UserEntity> contacts = contactService.getAllContactUsers(currentUserId);
         return Resp.ok().setData(contacts);
     }
 

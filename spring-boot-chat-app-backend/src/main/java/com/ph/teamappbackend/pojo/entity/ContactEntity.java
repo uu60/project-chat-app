@@ -10,21 +10,17 @@ import java.util.Date;
 
 /**
  * @author octopus
- * @since 2023/4/15 20:36
+ * @since 2023/4/17 01:01
  */
 @Data
-@TableName("t_user")
-public class User {
+@TableName("t_contact")
+public class ContactEntity {
     @TableId(type = IdType.AUTO)
     Integer id;
-    String username;
-    String password;
-    String nickname;
-    String phone;
-    String email;
-    String address;
-    @TableField("portrait_url")
-    String portraitUrl;
-    @TableField("register_time")
-    Date registerTime;
+    @TableField("user_id")
+    Integer userId;
+    @TableField("contact_id")
+    Integer contactId;
+    @TableField("add_time")
+    Date addTime;
 }

@@ -13,7 +13,7 @@ import java.util.Date;
  */
 @Data
 @TableName("t_message")
-public class Message {
+public class MessageEntity {
     @TableId
     Integer id;
     String content;

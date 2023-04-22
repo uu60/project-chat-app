@@ -1,10 +1,10 @@
 package com.ph.teamappbackend.controller;
 
 import com.ph.teamappbackend.constant.RespCode;
-import com.ph.teamappbackend.pojo.entity.User;
+import com.ph.teamappbackend.pojo.entity.UserEntity;
 import com.ph.teamappbackend.pojo.vo.AccountVo;
 import com.ph.teamappbackend.service.UserService;
-import com.ph.teamappbackend.utils.JwtUtils;
+import com.ph.teamappbackend.utils.LoginManager;
 import com.ph.teamappbackend.utils.Resp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +46,7 @@ public class UserController {
 
     @PostMapping("/change_portrait")
     public Resp changePortrait(MultipartFile file) {
-        Integer currentUserId = JwtUtils.getCurrentUserId();
+        Integer currentUserId = LoginManager.getCurrentUserId();
         try {
             userService.savePortrait(currentUserId, file);
             return Resp.ok();
@@ -56,10 +56,10 @@ public class UserController {
     }
 
     @PostMapping("/change_details")
-    public Resp changeDetails(User user) {
-        Integer currentUserId = JwtUtils.getCurrentUserId();
+    public Resp changeDetails(UserEntity userEntity) {
+        Integer currentUserId = LoginManager.getCurrentUserId();
         try {
-            userService.changeDetails(currentUserId, user);
+            userService.changeDetails(currentUserId, userEntity);
             return Resp.ok();
         } catch (Exception e) {
             return Resp.error(RespCode.DETAILS_CHANGE_FAILED, e.getMessage());
@@ -78,7 +78,7 @@ public class UserController {
 
     @GetMapping("/get_my_portrait")
     public Resp getMyPortrait(HttpServletResponse response) {
-        Integer currentUserId = JwtUtils.getCurrentUserId();
+        Integer currentUserId = LoginManager.getCurrentUserId();
         try {
             userService.getPortrait(currentUserId, response);
             return Resp.ok();
@@ -89,7 +89,7 @@ public class UserController {
 
     @GetMapping("/get_my_nickname")
     public Resp getMyNickname() {
-        Integer currentUserId = JwtUtils.getCurrentUserId();
+        Integer currentUserId = LoginManager.getCurrentUserId();
         try {
             String nickname = userService.getNickName(currentUserId);
             return Resp.ok().setData(nickname);
@@ -100,7 +100,7 @@ public class UserController {
 
     @GetMapping("/get_nickname/{userId}")
     public Resp getMyNickname(@PathVariable Integer userId) {
-        Integer currentUserId = JwtUtils.getCurrentUserId();
+        Integer currentUserId = LoginManager.getCurrentUserId();
         try {
             String nickname = userService.getNickName(userId);
             return Resp.ok().setData(nickname);
