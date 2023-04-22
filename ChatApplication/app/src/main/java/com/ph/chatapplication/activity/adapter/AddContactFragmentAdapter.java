@@ -117,15 +117,21 @@ public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFr
     }
 
     public static class DataHolder {
-        Integer userId;
-        String nickName;
-        Bitmap portrait;
-        Date requestTime;
+        public Integer userId;
+        public String nickName;
+        public Bitmap portrait;
+        public Date requestTime;
 
         public DataHolder(Integer userId, String nickName, Bitmap portrait, Date requestTime) {
             this.userId = userId;
             this.nickName = nickName;
             this.portrait = portrait;
+            this.requestTime = requestTime;
+        }
+        public DataHolder() {
+            this.userId = userId;
+            this.nickName = nickName;
+            //this.portrait = portrait;
             this.requestTime = requestTime;
         }
     }

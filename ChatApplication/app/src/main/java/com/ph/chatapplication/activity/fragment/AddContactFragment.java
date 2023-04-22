@@ -1,6 +1,5 @@
 package com.ph.chatapplication.activity.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,12 +23,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.AddContactFragmentAdapter;
 import com.ph.chatapplication.constant.RespCode;
+import com.ph.chatapplication.database.ContactDBHelper;
 import com.ph.chatapplication.utils.Instances;
 import com.ph.chatapplication.utils.LogoutUtils;
 import com.ph.chatapplication.utils.Requests;
 import com.ph.chatapplication.utils.Resp;
 import com.ph.chatapplication.utils.StringUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiConsumer;
 
 public class AddContactFragment extends Fragment {
 
@@ -56,7 +56,7 @@ public class AddContactFragment extends Fragment {
 
     private EditText etUsername;
     private Button btnAdd;
-
+    private ContactDBHelper mHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,6 +72,16 @@ public class AddContactFragment extends Fragment {
         etUsername = inflate.findViewById(R.id.et_username);
         btnAdd = inflate.findViewById(R.id.btn_add);
 
+        // load database
+        String Table_Name = "contact_info";
+        List<AddContactFragmentAdapter.DataHolder> contact;
+        try {
+            contact = mHelper.queryAll();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        // search token
         SharedPreferences preference = getActivity().getSharedPreferences("token",
                 Activity.MODE_PRIVATE);
         String tokenStr = preference.getString("token", null);
@@ -81,9 +91,31 @@ public class AddContactFragment extends Fragment {
             doRequest(tokenStr);
         });
 
-        getRequestList(tokenStr);
+        // 判断需不需要发送token。 但似乎得实时更新信息
+        if (contact != null){
+            //pass还没写，
+        }else {
+            getRequestList(tokenStr);
+        }
+
 
         return inflate;
+    }
+
+    // 进入开启数据库
+    @Override
+    public void onStart() {
+        super.onStart();
+        mHelper = ContactDBHelper.getInstance(getActivity());
+        mHelper.openWriteLink();
+        mHelper.openReadLink();
+    }
+
+    // 离开关闭数据库
+    @Override
+    public void onStop() {
+        super.onStop();
+        mHelper.closeLink();
     }
 
     //点击添加好友按钮后

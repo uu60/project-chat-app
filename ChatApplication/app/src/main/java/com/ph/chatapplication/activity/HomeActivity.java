@@ -1,23 +1,17 @@
 package com.ph.chatapplication.activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.fragment.AddContactFragment;
 import com.ph.chatapplication.activity.fragment.ContactFragment;
 import com.ph.chatapplication.activity.fragment.MeFragment;
+import com.ph.chatapplication.database.ContactDBHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +22,9 @@ public class HomeActivity extends AppCompatActivity {
     private int currentPage = 0;
     private FragmentManager fragmentManager;
 
+    private String databaseName;
+    private ContactDBHelper mHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +34,11 @@ public class HomeActivity extends AppCompatActivity {
         // get navigation view
         BottomNavigationView navView = findViewById(R.id.nav_home);
         navView.setItemIconSize(100);
+
+        // load database
+        // 创建或者打开数据库
+
+
         navView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_contact) {
                 switchFragment(0);
@@ -47,6 +49,20 @@ public class HomeActivity extends AppCompatActivity {
             }
             return true;
         });
+    }
+
+
+    protected void onStart() {
+        super.onStart();
+        mHelper = ContactDBHelper.getInstance(this);
+        mHelper.openWriteLink();
+        mHelper.openReadLink();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mHelper.closeLink();
     }
 
     private void initFragments() {
