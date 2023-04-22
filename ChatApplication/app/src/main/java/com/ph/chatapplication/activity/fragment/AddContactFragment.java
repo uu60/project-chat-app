@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -25,12 +24,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.AddContactFragmentAdapter;
 import com.ph.chatapplication.constant.RespCode;
-import com.ph.chatapplication.utils.Instances;
-import com.ph.chatapplication.utils.LogoutUtils;
-import com.ph.chatapplication.utils.Requests;
-import com.ph.chatapplication.utils.Resp;
-import com.ph.chatapplication.utils.StringUtils;
-import com.ph.chatapplication.utils.TokenUtils;
+import com.ph.chatapplication.utils.source.Instances;
+import com.ph.chatapplication.utils.handler.LogoutUtils;
+import com.ph.chatapplication.utils.net.Requests;
+import com.ph.chatapplication.utils.net.Resp;
+import com.ph.chatapplication.utils.source.StringUtils;
+import com.ph.chatapplication.utils.net.TokenUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

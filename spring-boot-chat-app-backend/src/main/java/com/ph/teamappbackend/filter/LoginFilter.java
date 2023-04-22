@@ -29,11 +29,15 @@ public class LoginFilter implements Filter {
 
     public final static ThreadLocal<DecodedJWT> DECODED_JWT_THREADLOCAL = new ThreadLocal<>();
     private final static List<String> UNCHECK_URI_LIST = new ArrayList<>();
+
     static {
         UNCHECK_URI_LIST.addAll(Arrays.asList("/login", "/register"));
     }
 
+    public static final String TOKEN_KEY = "JWT-Token";
+
     @Override
+
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
@@ -41,7 +45,7 @@ public class LoginFilter implements Filter {
             filterChain.doFilter(request, response);
             return;
         }
-        String jwt = request.getHeader("JWT-Token");
+        String jwt = request.getHeader(LoginFilter.TOKEN_KEY);
         try {
             DECODED_JWT_THREADLOCAL.set(JwtUtils.verify(jwt));
             boolean newLogin = LoginManager.checkAndDealWithExistedLogin();
