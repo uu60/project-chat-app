@@ -1,54 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fragment_add_contact"
-        android:orientation="vertical"
-        tools:context=".activity.fragment.AddContactFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_add_contact"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.fragment.AddContactFragment">
 
     <View
-            android:id="@+id/top_split"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_alignParentTop="true"
-            android:background="#E9E9E9" />
+        android:id="@+id/top_split"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentTop="true"
+        android:background="#E9E9E9" />
+
     <LinearLayout
-            android:id="@+id/ll_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_below="@id/top_split"
-            android:background="#ECECEC"
-            android:orientation="horizontal">
+        android:id="@+id/ll_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_split"
+        android:background="#ECECEC"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <ImageView
-                android:id="@+id/iv_my_portrait"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:src="@drawable/ic_default_portrait" />
+            android:id="@+id/iv_my_portrait"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_default_portrait" />
 
         <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp">
 
             <TextView
-                    android:id="@+id/tv_my_nickname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="23dp"
-                    android:text="Nickname"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/black" />
+                android:id="@+id/tv_my_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Nickname"
+                android:textColor="@color/black"
+                android:textSize="23dp" />
 
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerInParent="true"
-                    android:textSize="35dp"
-                    android:text=">" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:text=">"
+                android:textSize="35dp" />
         </RelativeLayout>
 
 
@@ -56,102 +57,104 @@
 
 
     <RelativeLayout
-            android:id="@+id/rl_update"
-            android:layout_width="match_parent"
-            android:layout_below="@id/ll_info"
+        android:id="@+id/rl_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_info"
+        android:layout_marginTop="5dp"
+        android:background="#ECECEC"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#ECECEC"
-            android:layout_marginTop="5dp"
-            android:padding="10dp">
+            android:layout_centerVertical="true"
+            android:text="Check update"
+            android:textColor="@color/black"
+            android:textSize="23dp" />
 
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Check update"
-                android:textColor="@color/black"
-                android:layout_centerVertical="true"
-                android:textSize="23dp" />
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:text=">"
-                android:textSize="30dp" />
+            android:id="@+id/updateText"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text=">"
+            android:textSize="30dp" />
     </RelativeLayout>
 
     <View
-            android:id="@+id/split"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_alignBottom="@+id/rl_update"
-            android:background="#E9E9E9" />
+        android:id="@+id/split"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignBottom="@+id/rl_update"
+        android:background="#E9E9E9" />
 
     <RelativeLayout
-            android:id="@+id/rl_about"
-            android:layout_width="match_parent"
-            android:layout_below="@id/rl_update"
+        android:id="@+id/rl_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_update"
+        android:background="#ECECEC"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#ECECEC"
-            android:padding="10dp">
+            android:layout_centerVertical="true"
+            android:text="About"
+            android:textColor="@color/black"
+            android:textSize="23dp" />
 
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="About"
-                android:textColor="@color/black"
-                android:layout_centerVertical="true"
-                android:textSize="23dp" />
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:text=">"
-                android:textSize="30dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text=">"
+            android:textSize="30dp" />
     </RelativeLayout>
 
     <RelativeLayout
-            android:id="@+id/rl_logout"
-            android:layout_width="match_parent"
-            android:layout_below="@id/rl_about"
+        android:id="@+id/rl_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_about"
+        android:layout_marginTop="5dp"
+        android:background="#ECECEC"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="#ECECEC"
-            android:padding="10dp">
+            android:layout_centerVertical="true"
+            android:text="Log out"
+            android:textColor="@color/black"
+            android:textSize="23dp" />
 
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Log out"
-                android:textColor="@color/black"
-                android:layout_centerVertical="true"
-                android:textSize="23dp" />
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:text=">"
-                android:textSize="30dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text=">"
+            android:textSize="30dp" />
     </RelativeLayout>
 
     <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:padding="20dp"
-            android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="20dp"
-                android:text="Version: 0.01" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Version: 0.01"
+            android:textSize="20dp" />
 
     </LinearLayout>
 

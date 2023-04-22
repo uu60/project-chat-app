@@ -33,6 +33,7 @@
         <activity
                 android:name=".activity.HomeActivity"
                 android:exported="true" />
+
         <activity
                 android:name=".activity.RegActivity"
                 android:exported="false"
