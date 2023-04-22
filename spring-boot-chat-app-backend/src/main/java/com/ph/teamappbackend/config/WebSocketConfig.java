@@ -21,10 +21,12 @@ public class WebSocketConfig implements WebSocketConfigurer, WebSocketMessageBro
 
     @Autowired
     ChatHandshakeInterceptor chatHandshakeInterceptor;
+    @Autowired
+    ChatWebSocketHandler chatWebSocketHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new ChatWebSocketHandler(), "/ws").setAllowedOrigins("*").addInterceptors(chatHandshakeInterceptor);
+        registry.addHandler(chatWebSocketHandler, "/ws/chat").setAllowedOrigins("*").addInterceptors(chatHandshakeInterceptor);
     }
 
 

@@ -1,14 +1,17 @@
 package com.ph.chatapplication.utils.net;
 
+import android.app.Activity;
 import android.util.Log;
 
+import com.ph.chatapplication.activity.ChatActivity;
 import com.ph.chatapplication.utils.source.Instances;
-import com.ph.chatapplication.websocket.ChatWebSocketClient;
+import com.ph.chatapplication.websocket.ChatWebSocketListener;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.LockSupport;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -162,13 +165,23 @@ public class Requests {
         return map;
     }
 
-    public WebSocket websocket(String url, String token) {
+    public static WebSocket websocket(String url, String token, ChatActivity activity) {
         Request request = new Request.Builder()
                 .url(url)
                 .header(Requests.TOKEN_KEY, token)
                 .build();
 
-        return client.newWebSocket(request, new ChatWebSocketClient());
+        ChatWebSocketListener listener = new ChatWebSocketListener();
+        listener.setWaitingThread(Thread.currentThread(), activity);
+        WebSocket webSocket = client.newWebSocket(request, listener);
+
+        // 在这里线程挂起等待连接结果
+        LockSupport.park();
+
+        if (listener.connected()) {
+            return webSocket;
+        }
+        return null;
     }
 
 }

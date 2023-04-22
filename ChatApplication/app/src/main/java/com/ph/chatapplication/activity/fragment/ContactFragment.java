@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -96,43 +97,45 @@ public class ContactFragment extends Fragment {
 
             Map<String, String> head = new HashMap<>();
             head.put("JWT-Token", token.get());
-            Instances.pool.execute(() -> {
-                Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact", params, head);
-                List<Map<String, Object>> temp = null;
-                try {
-                    temp = (List) resp.getData();
-                } catch (Exception e) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Instances.pool.execute(() -> {
+                    Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact", params, head);
+                    List<Map<String, Object>> temp = null;
+                    try {
+                        temp = (List) resp.getData();
+                    } catch (Exception e) {
+                        Message msg = new Message();
+                        String s = "connect failed!";
+                        msg.obj = s;
+                        wrongFormatHandler.sendMessage(msg);
+                        Log.e("get contact", String.valueOf(e));
+                    }
+                    if (temp != null) {
+                        temp.forEach(map -> {
+                            int id;
+                            String nickname = null;
+                            Object nicknameObj = map.get("nickname");
+                            if (nicknameObj != null) {
+                                nickname = nicknameObj.toString();
+                            }
+                            try {
+                                Object idObj = map.get("id");
+                                id = (int) Double.parseDouble(idObj.toString());
+                            } catch (Exception e) {
+                                Log.e("ContactFragment", e.toString());
+                                return;
+                            }
+                            String portraitUrl = (String) map.get("portraitUrl");
+                            data.add(new ContactFragmentAdapter.DataHolder(id, portraitUrl, null,
+                                    nickname));
+                        });
+                        data.sort(Comparator.comparing(ContactFragmentAdapter.DataHolder::getNickName));
+                    }
                     Message msg = new Message();
-                    String s = "connect failed!";
-                    msg.obj = s;
-                    wrongFormatHandler.sendMessage(msg);
-                    Log.e("get contact", String.valueOf(e));
-                }
-                if (temp != null) {
-                    temp.forEach(map -> {
-                        int id;
-                        String nickname = null;
-                        Object nicknameObj = map.get("nickname");
-                        if (nicknameObj != null) {
-                            nickname = nicknameObj.toString();
-                        }
-                        try {
-                            Object idObj = map.get("id");
-                            id = (int) Double.parseDouble(idObj.toString());
-                        } catch (Exception e) {
-                            Log.e("ContactFragment", e.toString());
-                            return;
-                        }
-                        String portraitUrl = (String) map.get("portraitUrl");
-                        data.add(new ContactFragmentAdapter.DataHolder(id, portraitUrl, null,
-                                nickname));
-                    });
-                    data.sort(Comparator.comparing(ContactFragmentAdapter.DataHolder::getNickName));
-                }
-                Message msg = new Message();
-                msg.obj = data;
-                recyclerHandler.sendMessage(msg);
-            });
+                    msg.obj = data;
+                    recyclerHandler.sendMessage(msg);
+                });
+            }
         }
     }
 
@@ -150,27 +153,29 @@ public class ContactFragment extends Fragment {
                 tvNoContact.setVisibility(View.VISIBLE);
             }
 
-            Instances.pool.execute(() -> {
-                //去加载头像
-                List<ContactFragmentAdapter.DataHolder> data1 =
-                        ((ContactFragmentAdapter) rvContactFrag.getAdapter()).getData();
-                for (int i = 0; i < data1.size(); i++) {
-                    ContactFragmentAdapter.DataHolder dataHolder = data1.get(i);
-                    String portraitUrl = dataHolder.getPortraitUrl();
-                    if (portraitUrl == null) {
-                        continue;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Instances.pool.execute(() -> {
+                    //去加载头像
+                    List<ContactFragmentAdapter.DataHolder> data1 =
+                            ((ContactFragmentAdapter) rvContactFrag.getAdapter()).getData();
+                    for (int i = 0; i < data1.size(); i++) {
+                        ContactFragmentAdapter.DataHolder dataHolder = data1.get(i);
+                        String portraitUrl = dataHolder.getPortraitUrl();
+                        if (portraitUrl == null) {
+                            continue;
+                        }
+                        InputStream inputStream = Requests.getFile(Requests.SERVER_URL_PORT +
+                                        "/get_portrait/" + dataHolder.getUserId(),
+                                Requests.getTokenMap(getActivity().getSharedPreferences("token",
+                                        Context.MODE_PRIVATE).getString("token", null)));
+                        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                        dataHolder.setPortrait(bitmap);
+                        Message message1 = new Message();
+                        message1.obj = i;
+                        updateRecyclerHandler.sendMessage(message1);
                     }
-                    InputStream inputStream = Requests.getFile(Requests.SERVER_URL_PORT +
-                                    "/get_portrait/" + dataHolder.getUserId(),
-                            Requests.getTokenMap(getActivity().getSharedPreferences("token",
-                                    Context.MODE_PRIVATE).getString("token", null)));
-                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                    dataHolder.setPortrait(bitmap);
-                    Message message1 = new Message();
-                    message1.obj = i;
-                    updateRecyclerHandler.sendMessage(message1);
-                }
-            });
+                });
+            }
             return true;
         });
 

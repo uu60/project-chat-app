@@ -3,7 +3,7 @@ package com.ph.teamappbackend.controller;
 import com.ph.teamappbackend.constant.RespCode;
 import com.ph.teamappbackend.pojo.vo.RequestUserTo;
 import com.ph.teamappbackend.service.ContactRequestService;
-import com.ph.teamappbackend.utils.JwtUtils;
+import com.ph.teamappbackend.utils.LoginManager;
 import com.ph.teamappbackend.utils.Resp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +24,7 @@ public class ContactRequestController {
     ContactRequestService contactRequestService;
 
     @PostMapping("/request_contact/{username}")
-    public Resp requestContact(@PathVariable String username) {Integer currentUserId = JwtUtils.getCurrentUserId();
+    public Resp requestContact(@PathVariable String username) {Integer currentUserId = LoginManager.getCurrentUserId();
         try {
             contactRequestService.requestContact(currentUserId, username);
             return Resp.ok();
@@ -35,7 +35,7 @@ public class ContactRequestController {
 
     @GetMapping("/contact_request")
     public Resp getContactRequest() {
-        Integer currentUserId = JwtUtils.getCurrentUserId();
+        Integer currentUserId = LoginManager.getCurrentUserId();
         try {
             List<RequestUserTo> tos = contactRequestService.getContactRequest(currentUserId);
             return Resp.ok().setData(tos);
@@ -46,7 +46,7 @@ public class ContactRequestController {
 
     @PostMapping("/deal/{userId}/{isAgree}")
     public Resp dealWithRequest(@PathVariable Integer userId, @PathVariable Integer isAgree) {
-        Integer currentUserId = JwtUtils.getCurrentUserId();
+        Integer currentUserId = LoginManager.getCurrentUserId();
         try {
             contactRequestService.dealWithRequest(currentUserId, userId, isAgree == 1);
             return Resp.ok();

@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ph.teamappbackend.mapper.ContactMapper;
 import com.ph.teamappbackend.mapper.ContactRequestMapper;
 import com.ph.teamappbackend.mapper.UserMapper;
-import com.ph.teamappbackend.pojo.entity.Contact;
-import com.ph.teamappbackend.pojo.entity.ContactRequest;
-import com.ph.teamappbackend.pojo.entity.User;
+import com.ph.teamappbackend.pojo.entity.ContactEntity;
+import com.ph.teamappbackend.pojo.entity.ContactRequestEntity;
+import com.ph.teamappbackend.pojo.entity.UserEntity;
 import com.ph.teamappbackend.pojo.vo.RequestUserTo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,20 +41,20 @@ public class ContactRequestService {
     public synchronized void requestContact(Integer currentUserId, String username) {
         // 校验
         // 获取添加用户的userid
-        User user = userMapper.selectOne(new QueryWrapper<User>().eq("username", username));
-        if (user == null) {
+        UserEntity userEntity = userMapper.selectOne(new QueryWrapper<UserEntity>().eq("username", username));
+        if (userEntity == null) {
             throw new RuntimeException("The user you send request does not exist.");
         }
-        Integer userId = user.getId();
+        Integer userId = userEntity.getId();
         lock(currentUserId, userId);
         try {
             checkBeforeRequestWithException(currentUserId, userId);
 
-            ContactRequest contactRequest = new ContactRequest();
-            contactRequest.setUserId(currentUserId);
-            contactRequest.setContactId(userId);
-            contactRequest.setRequestTime(new Date());
-            contactRequestMapper.insert(contactRequest);
+            ContactRequestEntity contactRequestEntity = new ContactRequestEntity();
+            contactRequestEntity.setUserId(currentUserId);
+            contactRequestEntity.setContactId(userId);
+            contactRequestEntity.setRequestTime(new Date());
+            contactRequestMapper.insert(contactRequestEntity);
         } finally {
             unlock(currentUserId, userId);
         }
@@ -67,32 +67,32 @@ public class ContactRequestService {
         }
 
         // 2 是否申请过同一人
-        ContactRequest one = contactRequestMapper.selectOne(new QueryWrapper<ContactRequest>().eq("user_id", currentUserId).eq("contact_id", userId));
+        ContactRequestEntity one = contactRequestMapper.selectOne(new QueryWrapper<ContactRequestEntity>().eq("user_id", currentUserId).eq("contact_id", userId));
         if (one != null) {
             throw new RuntimeException("Already request this user.");
         }
 
         // 3 对方是否申请自己
-        one = contactRequestMapper.selectOne(new QueryWrapper<ContactRequest>().eq("user_id", userId).eq("contact_id", currentUserId));
+        one = contactRequestMapper.selectOne(new QueryWrapper<ContactRequestEntity>().eq("user_id", userId).eq("contact_id", currentUserId));
         if (one != null) {
             throw new RuntimeException("The user has sent request to you.");
         }
 
         // 4 是否已经好友
-        Contact contact = contactMapper.selectOne(new QueryWrapper<Contact>().eq("user_id", currentUserId).eq("contact_id", userId));
-        if (contact != null) {
+        ContactEntity contactEntity = contactMapper.selectOne(new QueryWrapper<ContactEntity>().eq("user_id", currentUserId).eq("contact_id", userId));
+        if (contactEntity != null) {
             throw new RuntimeException("You cannot request your friend.");
         }
     }
 
     public List<RequestUserTo> getContactRequest(Integer currentUserId) {
-        List<ContactRequest> contactRequests = contactRequestMapper.selectList(new QueryWrapper<ContactRequest>().eq("contact_id", currentUserId));
-        if (contactRequests == null || contactRequests.isEmpty()) {
+        List<ContactRequestEntity> contactRequestEntities = contactRequestMapper.selectList(new QueryWrapper<ContactRequestEntity>().eq("contact_id", currentUserId));
+        if (contactRequestEntities == null || contactRequestEntities.isEmpty()) {
             return new ArrayList<>();
         }
         Map<Integer, RequestUserTo> map = new HashMap<>();
         List<Integer> requesterIds = new ArrayList<>();
-        contactRequests.forEach(cr -> {
+        contactRequestEntities.forEach(cr -> {
             RequestUserTo to = new RequestUserTo();
             Integer userId = cr.getUserId();
             requesterIds.add(userId);
@@ -101,7 +101,7 @@ public class ContactRequestService {
             map.put(userId, to);
         });
 
-        userMapper.selectList(new QueryWrapper<User>().in("id", requesterIds)).forEach(user -> {
+        userMapper.selectList(new QueryWrapper<UserEntity>().in("id", requesterIds)).forEach(user -> {
             RequestUserTo to = map.get(user.getId());
             BeanUtils.copyProperties(user, to);
         });
@@ -115,7 +115,7 @@ public class ContactRequestService {
         if (agree) {
             contactService.addContact(currentUserId, userId);
         }
-        contactRequestMapper.delete(new QueryWrapper<ContactRequest>().eq("user_id", userId).eq("contact_id", currentUserId));
+        contactRequestMapper.delete(new QueryWrapper<ContactRequestEntity>().eq("user_id", userId).eq("contact_id", currentUserId));
     }
 
     private void lock(Integer userId, Integer contactId) {

@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Data
 @TableName("t_contact_request")
-public class ContactRequest {
+public class ContactRequestEntity {
 
     @TableId(type = IdType.AUTO)
     Integer id;

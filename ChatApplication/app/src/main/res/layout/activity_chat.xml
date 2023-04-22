@@ -28,11 +28,21 @@
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="23sp" />
+
+        <ImageView
+                android:id="@+id/iv_contact_info"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_info" />
     </RelativeLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/msg_recycler_view"
+            android:id="@+id/rv_message"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" />
@@ -45,7 +55,7 @@
             android:background="#ECECEC">
 
         <EditText
-                android:id="@+id/input_text"
+                android:id="@+id/et_text"
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -59,7 +69,7 @@
 
 
         <Button
-                android:id="@+id/send"
+                android:id="@+id/btn_send"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:text="Send"

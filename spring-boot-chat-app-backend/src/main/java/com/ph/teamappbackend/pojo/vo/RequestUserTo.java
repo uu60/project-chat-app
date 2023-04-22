@@ -1,9 +1,5 @@
 package com.ph.teamappbackend.pojo.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.ph.teamappbackend.pojo.entity.User;
 import lombok.Data;
 
 import java.util.Date;

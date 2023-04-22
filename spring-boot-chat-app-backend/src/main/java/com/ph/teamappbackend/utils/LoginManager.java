@@ -1,5 +1,6 @@
 package com.ph.teamappbackend.utils;
 
+import com.ph.teamappbackend.filter.LoginFilter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -16,19 +17,19 @@ public class LoginManager {
     public static final ConcurrentHashMap<Integer, Lock> USER_LOCK_MAP = new ConcurrentHashMap<>();
 
     public static boolean checkAndDealWithExistedLogin() {
-        Integer currentUserId = JwtUtils.getCurrentUserId();
+        Integer currentUserId = getCurrentUserId();
         lock(currentUserId);
         try {
             // 没登录过直接放行
             if (!LOGIN_USER_DEVICE_MAP.containsKey(currentUserId)) {
                 return true;
             }
-            String currentUserDeviceId = JwtUtils.getCurrentUserDeviceId();
+            String currentUserDeviceId = getCurrentUserDeviceId();
             // 旧token直接拒绝
             if (currentUserDeviceId == null) {
                 return false;
             }
-            Long currentUserLoginTimestamp = JwtUtils.getCurrentUserLoginTimestamp();
+            Long currentUserLoginTimestamp = getCurrentUserLoginTimestamp();
             DeviceInfo deviceInfo = LOGIN_USER_DEVICE_MAP.get(currentUserId);
             // 仍然是上一个设备登录，直接放行
             if (deviceInfo.id.equals(currentUserDeviceId)) {
@@ -36,7 +37,7 @@ public class LoginManager {
             } else {
                 // 当前登录新于已存在登录，修改信息并放行
                 if (deviceInfo.loginTimestamp < currentUserLoginTimestamp) {
-                    LOGIN_USER_DEVICE_MAP.put(currentUserId, new DeviceInfo(JwtUtils.getCurrentUserDeviceId(), JwtUtils.getCurrentUserLoginTimestamp()));
+                    LOGIN_USER_DEVICE_MAP.put(currentUserId, new DeviceInfo(getCurrentUserDeviceId(), getCurrentUserLoginTimestamp()));
                     return true;
                 }
                 // 当前为旧登录，拒绝访问
@@ -54,6 +55,18 @@ public class LoginManager {
 
     private static void unlock(Integer userId) {
         USER_LOCK_MAP.get(userId).unlock();
+    }
+
+    public static String getCurrentUserDeviceId() {
+        return LoginFilter.DECODED_JWT_THREADLOCAL.get().getClaim("deviceId").asString();
+    }
+
+    public static Integer getCurrentUserId() {
+        return LoginFilter.DECODED_JWT_THREADLOCAL.get().getClaim("userId").asInt();
+    }
+
+    public static Long getCurrentUserLoginTimestamp() {
+        return LoginFilter.DECODED_JWT_THREADLOCAL.get().getClaim("loginTimestamp").asLong();
     }
 
     @Data
