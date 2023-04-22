@@ -52,7 +52,8 @@ public class MeFragment extends Fragment {
                 .skipMemoryCache(true)).into(myPortrait);
         return true;
     });
-    private TextView updateText;
+    private RelativeLayout rlUpdate;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,9 +66,9 @@ public class MeFragment extends Fragment {
         rlLogout = inflate.findViewById(R.id.rl_logout);
         myPortrait = inflate.findViewById(R.id.iv_my_portrait);
         myNickname = inflate.findViewById(R.id.tv_my_nickname);
-        updateText = inflate.findViewById(R.id.updateText);
+        rlUpdate = inflate.findViewById(R.id.rl_update);
 
-        updateText.setOnClickListener(new View.OnClickListener() {
+        rlUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), VersionInfoActivity.class);
