@@ -1,4 +1,4 @@
-package com.ph.chatapplication.utils;
+package com.ph.chatapplication.utils.source;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

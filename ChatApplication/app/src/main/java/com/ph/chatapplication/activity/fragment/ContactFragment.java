@@ -11,7 +11,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -26,9 +25,9 @@ import android.widget.TextView;
 
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.ContactFragmentAdapter;
-import com.ph.chatapplication.utils.Instances;
-import com.ph.chatapplication.utils.Requests;
-import com.ph.chatapplication.utils.Resp;
+import com.ph.chatapplication.utils.source.Instances;
+import com.ph.chatapplication.utils.net.Requests;
+import com.ph.chatapplication.utils.net.Resp;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -144,9 +143,9 @@ public class ContactFragment extends Fragment {
             if (data != null && !data.isEmpty()) {
                 rvContactFrag.setVisibility(View.VISIBLE);
                 tvNoContact.setVisibility(View.INVISIBLE);
-                rvContactFrag.setAdapter(new ContactFragmentAdapter(data, this));
+                rvContactFrag.setAdapter(new ContactFragmentAdapter(data, this, getActivity()));
             } else {
-                rvContactFrag.setAdapter(new ContactFragmentAdapter(new ArrayList<>(), this));
+                rvContactFrag.setAdapter(new ContactFragmentAdapter(new ArrayList<>(), this, getActivity()));
                 rvContactFrag.setVisibility(View.INVISIBLE);
                 tvNoContact.setVisibility(View.VISIBLE);
             }

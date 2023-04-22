@@ -1,22 +1,22 @@
-package com.ph.chatapplication.utils;
+package com.ph.chatapplication.utils.net;
 
 import android.util.Log;
 
-import com.ph.chatapplication.R;
+import com.ph.chatapplication.utils.source.Instances;
+import com.ph.chatapplication.websocket.ChatWebSocketClient;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.WebSocket;
 
 /**
  * @author octopus
@@ -160,6 +160,15 @@ public class Requests {
         HashMap<String, String> map = new HashMap<>();
         map.put(TOKEN_KEY, token);
         return map;
+    }
+
+    public WebSocket websocket(String url, String token) {
+        Request request = new Request.Builder()
+                .url(url)
+                .header(Requests.TOKEN_KEY, token)
+                .build();
+
+        return client.newWebSocket(request, new ChatWebSocketClient());
     }
 
 }

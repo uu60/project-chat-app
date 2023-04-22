@@ -94,7 +94,18 @@ public class UserController {
             String nickname = userService.getNickName(currentUserId);
             return Resp.ok().setData(nickname);
         } catch (Exception e) {
-            return Resp.error(RespCode.PORTRAIT_REQUEST_FAILED, e.getMessage());
+            return Resp.error(RespCode.NICKNAME_REQUEST_FAILED, e.getMessage());
+        }
+    }
+
+    @GetMapping("/get_nickname/{userId}")
+    public Resp getMyNickname(@PathVariable Integer userId) {
+        Integer currentUserId = JwtUtils.getCurrentUserId();
+        try {
+            String nickname = userService.getNickName(userId);
+            return Resp.ok().setData(nickname);
+        } catch (Exception e) {
+            return Resp.error(RespCode.NICKNAME_REQUEST_FAILED, e.getMessage());
         }
     }
 

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Button;
@@ -16,10 +15,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.constant.RespCode;
-import com.ph.chatapplication.utils.Instances;
-import com.ph.chatapplication.utils.Requests;
-import com.ph.chatapplication.utils.Resp;
-import com.ph.chatapplication.utils.StringUtils;
+import com.ph.chatapplication.utils.source.Instances;
+import com.ph.chatapplication.utils.net.Requests;
+import com.ph.chatapplication.utils.net.Resp;
+import com.ph.chatapplication.utils.source.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;

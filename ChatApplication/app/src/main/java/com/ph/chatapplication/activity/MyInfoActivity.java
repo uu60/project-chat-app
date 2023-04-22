@@ -26,13 +26,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.constant.RespCode;
-import com.ph.chatapplication.utils.BitmapUtils;
-import com.ph.chatapplication.utils.CameraUtils;
+import com.ph.chatapplication.utils.source.BitmapUtils;
+import com.ph.chatapplication.utils.source.CameraUtils;
 
-import com.ph.chatapplication.utils.Instances;
-import com.ph.chatapplication.utils.LogoutUtils;
-import com.ph.chatapplication.utils.Requests;
-import com.ph.chatapplication.utils.Resp;
+import com.ph.chatapplication.utils.source.Instances;
+import com.ph.chatapplication.utils.handler.LogoutUtils;
+import com.ph.chatapplication.utils.net.Requests;
+import com.ph.chatapplication.utils.net.Resp;
 import com.tbruyelle.rxpermissions3.RxPermissions;
 
 import java.io.File;

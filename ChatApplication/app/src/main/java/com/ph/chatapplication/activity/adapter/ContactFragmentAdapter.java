@@ -1,11 +1,14 @@
 package com.ph.chatapplication.activity.adapter;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.ph.chatapplication.R;
+import com.ph.chatapplication.activity.ChatActivity;
 import com.ph.chatapplication.activity.fragment.ContactFragment;
 
 import java.util.List;
@@ -27,11 +31,13 @@ public class ContactFragmentAdapter extends RecyclerView.Adapter<ContactFragment
 
     private final List<DataHolder> data;
     private final ContactFragment fragment;
+    private final Activity activity;
 
 
-    public ContactFragmentAdapter(List<DataHolder> data, ContactFragment fragment) {
+    public ContactFragmentAdapter(List<DataHolder> data, ContactFragment fragment, Activity activity) {
         this.data = data;
         this.fragment = fragment;
+        this.activity = activity;
     }
 
     public List<DataHolder> getData() {
@@ -55,6 +61,12 @@ public class ContactFragmentAdapter extends RecyclerView.Adapter<ContactFragment
         Glide.with(fragment).load(dataHolder.portrait == null ? R.drawable.ic_default_portrait :
                 dataHolder.portrait).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE)//不做磁盘缓存
                 .skipMemoryCache(true)).into(holder.imPortrait);
+
+        holder.ll_item.setOnClickListener(v -> {
+            Intent intent = new Intent(activity, ChatActivity.class);
+            intent.putExtra("userId", dataHolder.userId);
+            activity.startActivity(intent);
+        });
     }
 
     @Override
@@ -64,12 +76,14 @@ public class ContactFragmentAdapter extends RecyclerView.Adapter<ContactFragment
 
     static class Holder extends RecyclerView.ViewHolder {
 
+        private LinearLayout ll_item;
         private ImageView imPortrait;
         private TextView tvNickname;
         private DataHolder dataHolder;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
+            ll_item = itemView.findViewById(R.id.ll_item);
             imPortrait = itemView.findViewById(R.id.im_portrait);
             tvNickname = itemView.findViewById(R.id.tv_nickname);
         }

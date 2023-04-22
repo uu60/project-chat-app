@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ph.chatapplication.R;
-import com.ph.chatapplication.utils.Instances;
+import com.ph.chatapplication.utils.source.Instances;
 
 import java.util.Date;
 import java.util.List;

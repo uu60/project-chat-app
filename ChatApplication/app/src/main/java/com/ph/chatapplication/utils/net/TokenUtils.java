@@ -1,4 +1,4 @@
-package com.ph.chatapplication.utils;
+package com.ph.chatapplication.utils.net;
 
 import android.content.Context;
 

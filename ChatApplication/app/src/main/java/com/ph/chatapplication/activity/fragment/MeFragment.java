@@ -20,11 +20,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.constant.RespCode;
-import com.ph.chatapplication.utils.Instances;
-import com.ph.chatapplication.utils.LogoutUtils;
-import com.ph.chatapplication.utils.Requests;
-import com.ph.chatapplication.utils.Resp;
-import com.ph.chatapplication.utils.TokenUtils;
+import com.ph.chatapplication.utils.source.Instances;
+import com.ph.chatapplication.utils.handler.LogoutUtils;
+import com.ph.chatapplication.utils.net.Requests;
+import com.ph.chatapplication.utils.net.Resp;
+import com.ph.chatapplication.utils.net.TokenUtils;
 
 import java.io.InputStream;
 
