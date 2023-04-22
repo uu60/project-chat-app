@@ -20,7 +20,7 @@ public class ContactController {
     ContactService contactService;
 
     @GetMapping("/contact")
-    public Resp getAllContactIds() {
+    public Resp getAllContacts() {
         Integer currentUserId = JwtUtils.getCurrentUserId();
         List<User> contacts = contactService.getAllContactUsers(currentUserId);
         return Resp.ok().setData(contacts);
