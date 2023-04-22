@@ -21,9 +21,7 @@ public class VersionInfoActivity extends AppCompatActivity {
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(VersionInfoActivity.this, HomeActivity.class);
-                intent.putExtra("id", 3);
-                startActivity(intent);
+                finish();
             }
         });
     }
