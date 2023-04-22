@@ -37,8 +37,5 @@ public class Instances {
             Locale.CHINA);
 
     @SuppressLint("SimpleDateFormat")
-    public static final SimpleDateFormat UTCSdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-    static {
-        UTCSdf.setTimeZone(TimeZone.getTimeZone(ZoneId.systemDefault()));
-    }
+    public static final SimpleDateFormat UTCSdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 }
