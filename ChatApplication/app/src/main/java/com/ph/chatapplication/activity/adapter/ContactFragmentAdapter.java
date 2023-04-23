@@ -90,10 +90,10 @@ public class ContactFragmentAdapter extends RecyclerView.Adapter<ContactFragment
     }
 
     public static class DataHolder {
-        Integer userId;
+        public Integer userId;
         String portraitUrl;
         Bitmap portrait;
-        String nickName;
+        public String nickName;
 
         public DataHolder(Integer userId, String portraitUrl, Bitmap portrait, String nickName) {
             this.userId = userId;

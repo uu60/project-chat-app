@@ -101,8 +101,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Holder> 
     }
 
     public static class DataHolder {
-        String time;
-        String text;
+        public String time;
+        public String text;
         boolean me;
 
         public void setTime(String time) {
