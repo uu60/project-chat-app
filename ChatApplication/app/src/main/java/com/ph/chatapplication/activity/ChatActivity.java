@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.MessageAdapter;
 import com.ph.chatapplication.constant.RespCode;
+import com.ph.chatapplication.database.ChatDBHelper;
 import com.ph.chatapplication.utils.handler.LogoutUtils;
 import com.ph.chatapplication.utils.net.WebSocketMessage;
 import com.ph.chatapplication.utils.source.Instances;
@@ -63,6 +65,7 @@ public class ChatActivity extends AppCompatActivity {
     public MessageAdapter adapter;
 
     private WebSocket webSocket;
+    private ChatDBHelper mHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +128,7 @@ public class ChatActivity extends AppCompatActivity {
         Instances.pool.execute(() -> {
             getAndSetPortrait();
         });
+
     }
 
     private void getAndSetPortrait() {
@@ -153,6 +157,7 @@ public class ChatActivity extends AppCompatActivity {
                     dataHolder.setTime(Instances.simpleSdf.format(Instances.UTCSdf.parse((String) map.get("sendTime"))));
                     dataHolder.setText((String) map.get("content"));
                     data.add(dataHolder);
+//                    mHelper.insert(dataHolder, String.valueOf(userId));
                 }
                 adapter.setData(data);
                 allUpdateHandler.sendMessage(new Message());
@@ -242,4 +247,21 @@ public class ChatActivity extends AppCompatActivity {
             return true;
         });
     }
+    //进入开启数据库
+    @Override
+    public void onStart() {
+        super.onStart();
+        mHelper = ChatDBHelper.getInstance(this);
+
+        mHelper.openWriteLink();
+        mHelper.openReadLink();
+    }
+
+    // 离开关闭数据库
+    @Override
+    public void onStop() {
+        super.onStop();
+        mHelper.closeLink();
+    }
+
 }
