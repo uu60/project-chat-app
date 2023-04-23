@@ -1,13 +1,14 @@
 package com.ph.chatapplication.activity.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.ph.chatapplication.R;
+import com.ph.chatapplication.activity.MyInfoActivity;
 import com.ph.chatapplication.activity.VersionInfoActivity;
 import com.ph.chatapplication.constant.RespCode;
 import com.ph.chatapplication.utils.source.Instances;
@@ -31,7 +33,7 @@ import com.ph.chatapplication.utils.net.TokenUtils;
 
 import java.io.InputStream;
 
-public class MeFragment extends Fragment {
+public class MeFragment extends Fragment implements View.OnClickListener {
 
     private TextView tvHead;
     private RelativeLayout rlLogout;
@@ -53,6 +55,8 @@ public class MeFragment extends Fragment {
         return true;
     });
     private RelativeLayout rlUpdate;
+    private RelativeLayout rlNickname;
+    private ProgressDialog dialog;
 
 
     @Override
@@ -67,14 +71,9 @@ public class MeFragment extends Fragment {
         myPortrait = inflate.findViewById(R.id.iv_my_portrait);
         myNickname = inflate.findViewById(R.id.tv_my_nickname);
         rlUpdate = inflate.findViewById(R.id.rl_update);
-
-        rlUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), VersionInfoActivity.class);
-                startActivity(intent);
-            }
-        });
+        rlNickname = inflate.findViewById(R.id.rl_nickname);
+        rlUpdate.setOnClickListener(this);
+        rlNickname.setOnClickListener(this);
 
         setLogoutOnRlLogout();
 
@@ -100,6 +99,17 @@ public class MeFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return inflate;
+    }
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.rl_nickname) {
+            Intent intent1 = new Intent(getActivity(), MyInfoActivity.class);
+            startActivity(intent1);
+        }
+        if (view.getId() == R.id.rl_update) {
+            Intent intent = new Intent(getActivity(), VersionInfoActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void setLogoutOnRlLogout() {

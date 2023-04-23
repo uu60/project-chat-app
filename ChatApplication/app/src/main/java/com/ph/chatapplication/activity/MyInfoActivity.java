@@ -16,6 +16,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class MyInfoActivity extends AppCompatActivity {
+public class MyInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
     private RxPermissions rxPermissions;
 
@@ -72,6 +73,7 @@ public class MyInfoActivity extends AppCompatActivity {
             .diskCacheStrategy(DiskCacheStrategy.NONE)//不做磁盘缓存
             .skipMemoryCache(true);//不做内存缓存
     private ImageButton ib_portrait;
+    private ImageView ivBackward;
 
 
     @Override
@@ -81,6 +83,8 @@ public class MyInfoActivity extends AppCompatActivity {
         checkVersion();
         initHandler();
         ib_portrait = findViewById(R.id.ib_portrait);
+        ivBackward = findViewById(R.id.iv_backward);
+        ivBackward.setOnClickListener(this);
     }
 
     private void initHandler() {
@@ -187,6 +191,7 @@ public class MyInfoActivity extends AppCompatActivity {
 
     /**
      * 返回到Activity
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -262,4 +267,10 @@ public class MyInfoActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.iv_backward) {
+            finish();
+        }
+    }
 }
