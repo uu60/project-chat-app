@@ -68,7 +68,8 @@ public class ContactDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String sql ="CREATE TABLE IF NOT EXISTS contact_info (" +
                 "userId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                "nickname VARCHAR NOT NULL);";
+                "portraitUrl VARCHAR(20)," +
+                "nickname VARCHAR(20));";
         db.execSQL(sql);
     }
 
@@ -80,15 +81,16 @@ public class ContactDBHelper extends SQLiteOpenHelper {
     // 插入指定id数据
     public long insert(DataHolder contact){
         ContentValues values = new ContentValues();
-        values.put("userId",contact.userId);
-        //values.put("potrait", contact.portrait.toString());
-        values.put("nickname",contact.nickName);
+        values.put("userId",contact.getUserId());
+        //values.put("portrait", contact.portrait.toString());
+        values.put("portraitUrl", contact.getPortraitUrl());
+        values.put("nickname",contact.getNickName());
         return mWDB.insert(Table_Name, null, values);
     }
 
     // 删除指定id数据
     public long deleteByName(String userId){
-        return mWDB.delete(Table_Name, "name=?", new String[]{userId});
+        return mWDB.delete(Table_Name, "userId=?", new String[]{userId});
     }
 
 
@@ -100,10 +102,11 @@ public class ContactDBHelper extends SQLiteOpenHelper {
     // 更新数据库
     public long update(DataHolder contact){
         ContentValues values = new ContentValues();
-        values.put("userId",contact.userId);
+        values.put("userId",contact.getUserId());
         //values.put("potrait", contact.portrait.toString());
-        values.put("nickname",contact.nickName);
-        return mWDB.update(Table_Name, values, "userId=?", new String[]{String.valueOf(contact.userId)});
+        values.put("portraitUrl", contact.getPortraitUrl());
+        values.put("nickname",contact.getNickName());
+        return mWDB.update(Table_Name, values, "userId=?", new String[]{String.valueOf(contact.getUserId())});
     }
 
     // 查询数据库全部数据
@@ -115,9 +118,10 @@ public class ContactDBHelper extends SQLiteOpenHelper {
         // 循环取出游标指向的每条记录
         while (cursor.moveToNext()){
             DataHolder contatc = new DataHolder();
-            contatc.userId = cursor.getInt(0);
+            contatc.setUsrId(cursor.getInt(0));
             //contatc.portrait = cursor.getInt(1);
-            contatc.nickName = cursor.getString(1);
+            contatc.setPortraitUrl(cursor.getString(1));
+            contatc.setNickName(cursor.getString(2));;
             list.add(contatc);
         }
 

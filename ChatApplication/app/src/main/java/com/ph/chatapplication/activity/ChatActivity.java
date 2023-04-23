@@ -158,6 +158,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     dataHolder.setTime(Instances.simpleSdf.format(Instances.UTCSdf.parse((String) map.get("sendTime"))));
                     dataHolder.setText((String) map.get("content"));
                     data.add(dataHolder);
+                    nHelper.insert(dataHolder, (int) ((Double) map.get("senderId")).doubleValue());
+                    nHelper.update(dataHolder, (int) ((Double) map.get("senderId")).doubleValue());
                 }
                 adapter.setData(data);
                 allUpdateHandler.sendMessage(new Message());
