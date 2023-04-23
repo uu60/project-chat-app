@@ -101,6 +101,12 @@ public class ContactFragmentAdapter extends RecyclerView.Adapter<ContactFragment
             this.portrait = portrait;
             this.nickName = nickName;
         }
+        public DataHolder() {
+            this.userId = userId;
+            this.portraitUrl = portraitUrl;
+            this.portrait = portrait;
+            this.nickName = nickName;
+        }
 
         public Integer getUserId() {
             return userId;
