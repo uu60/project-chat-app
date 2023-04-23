@@ -24,6 +24,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.AddContactFragmentAdapter;
 import com.ph.chatapplication.constant.RespCode;
+import com.ph.chatapplication.database.ChatDBHelper;
+import com.ph.chatapplication.database.ContactDBHelper;
 import com.ph.chatapplication.utils.source.Instances;
 import com.ph.chatapplication.utils.handler.LogoutUtils;
 import com.ph.chatapplication.utils.net.Requests;
@@ -287,5 +289,7 @@ public class AddContactFragment extends Fragment {
             }
         });
     }
+
+
 
 }
