@@ -25,6 +25,7 @@ import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.MessageAdapter;
 import com.ph.chatapplication.constant.RespCode;
 import com.ph.chatapplication.database.ChatDBHelper;
+import com.ph.chatapplication.database.ContactDBHelper;
 import com.ph.chatapplication.utils.handler.LogoutUtils;
 import com.ph.chatapplication.utils.net.WebSocketMessage;
 import com.ph.chatapplication.utils.source.Instances;
@@ -65,7 +66,7 @@ public class ChatActivity extends AppCompatActivity {
     public MessageAdapter adapter;
 
     private WebSocket webSocket;
-    private ChatDBHelper mHelper;
+    private ContactDBHelper mHelper;
 
     private ChatDBHelper nHelper;
 
@@ -131,7 +132,7 @@ public class ChatActivity extends AppCompatActivity {
             getAndSetPortrait();
         });
 
-        nHelper = ChatDBHelper.getInstance(this,String.valueOf(userId));
+        nHelper = ChatDBHelper.getInstance(this,"uerId"+String.valueOf(userId));
         nHelper.openWriteLink();
         nHelper.openReadLink();
 
@@ -163,7 +164,7 @@ public class ChatActivity extends AppCompatActivity {
                     dataHolder.setTime(Instances.simpleSdf.format(Instances.UTCSdf.parse((String) map.get("sendTime"))));
                     dataHolder.setText((String) map.get("content"));
                     data.add(dataHolder);
-//                    mHelper.insert(dataHolder, String.valueOf(userId));
+                    nHelper.insert(dataHolder);
                 }
                 adapter.setData(data);
                 allUpdateHandler.sendMessage(new Message());
@@ -254,20 +255,12 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
     //进入开启数据库
-    @Override
-    public void onStart() {
-        super.onStart();
-        mHelper = ChatDBHelper.getInstance(this,"2");
 
-        mHelper.openWriteLink();
-        mHelper.openReadLink();
-    }
 
     // 离开关闭数据库
     @Override
     public void onStop() {
         super.onStop();
-        mHelper.closeLink();
         nHelper.closeLink();
     }
 
