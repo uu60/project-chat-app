@@ -67,6 +67,8 @@ public class ChatActivity extends AppCompatActivity {
     private WebSocket webSocket;
     private ChatDBHelper mHelper;
 
+    private ChatDBHelper nHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +131,10 @@ public class ChatActivity extends AppCompatActivity {
             getAndSetPortrait();
         });
 
+        nHelper = ChatDBHelper.getInstance(this,String.valueOf(userId));
+        nHelper.openWriteLink();
+        nHelper.openReadLink();
+
     }
 
     private void getAndSetPortrait() {
@@ -146,7 +152,7 @@ public class ChatActivity extends AppCompatActivity {
     private void getAndSetHistory() {
         Resp resp1 = Requests.get(Requests.SERVER_URL_PORT + "/history/" + userId, null,
                 Requests.getTokenMap(TokenUtils.currentToken(this)));
-
+        //mHelper.selectTable("userId"+String.valueOf(userId));
         try {
             if (resp1.getCode() == RespCode.SUCCESS) {
                 List<Map<String, Object>> respData = (List) resp1.getData();
@@ -251,7 +257,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        mHelper = ChatDBHelper.getInstance(this);
+        mHelper = ChatDBHelper.getInstance(this,"2");
 
         mHelper.openWriteLink();
         mHelper.openReadLink();
@@ -262,6 +268,7 @@ public class ChatActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         mHelper.closeLink();
+        nHelper.closeLink();
     }
 
 }
