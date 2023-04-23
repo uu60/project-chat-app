@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.ContactFragmentAdapter;
+import com.ph.chatapplication.database.ContactDBHelper;
 import com.ph.chatapplication.utils.source.Instances;
 import com.ph.chatapplication.utils.net.Requests;
 import com.ph.chatapplication.utils.net.Resp;
@@ -50,6 +51,7 @@ public class ContactFragment extends Fragment {
     private Handler refreshHandler = new Handler((m) -> {
         return true;
     });
+    private ContactDBHelper mHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -196,5 +198,21 @@ public class ContactFragment extends Fragment {
             dialog.show();
             return true;
         });
+    }
+
+    //     进入开启数据库
+    @Override
+    public void onStart() {
+        super.onStart();
+        mHelper = ContactDBHelper.getInstance(getActivity());
+        mHelper.openWriteLink();
+        mHelper.openReadLink();
+    }
+
+    // 离开关闭数据库
+    @Override
+    public void onStop() {
+        super.onStop();
+        mHelper.closeLink();
     }
 }
