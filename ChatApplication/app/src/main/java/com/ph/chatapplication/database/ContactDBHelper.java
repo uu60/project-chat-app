@@ -117,7 +117,7 @@ public class ContactDBHelper extends SQLiteOpenHelper {
             DataHolder contatc = new DataHolder();
             contatc.userId = cursor.getInt(0);
             //contatc.portrait = cursor.getInt(1);
-            contatc.nickName = String.valueOf(cursor.getInt(1));
+            contatc.nickName = cursor.getString(1);
             list.add(contatc);
         }
 

@@ -86,7 +86,8 @@ public class ChatDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String sql ="CREATE TABLE IF NOT EXISTS history "  +
                 "(time varchar(20) primary key," +
-                "text varchar(40))";
+                "text varchar(40),"+
+                "userId integer)";
         db.execSQL(sql);
     }
 
@@ -108,17 +109,18 @@ public class ChatDBHelper extends SQLiteOpenHelper {
 //    }
 
     // 插入指定id数据
-    public void insert(DataHolder contact) throws ParseException {
+    public void insert(DataHolder contact, Integer userId) throws ParseException {
 //        ContentValues values = new ContentValues();
 //        values.put("time",contact.time);
 //        //values.put("potrait", contact.portrait.toString());
 //        values.put("text",contact.text);
         if (queryOne(contact.time)){
             SQLiteDatabase db = this.mHelper.getWritableDatabase();
-            Object[] objects = new Object[2];
+            Object[] objects = new Object[3];
             objects[0] = contact.time;
             objects[1] = contact.text;
-            String sql = "insert into history(time, text) values(?,?)";
+            objects[2] = userId;
+            String sql = "insert into history(time, text, userId) values(?,?,?)";
             try {
                 db.execSQL(sql, objects);
             }catch (Exception e){
@@ -140,11 +142,12 @@ public class ChatDBHelper extends SQLiteOpenHelper {
     }
 
     // 更新数据库
-    public long update(DataHolder contact){
+    public long update(DataHolder contact, Integer userId){
         ContentValues values = new ContentValues();
         values.put("time",contact.time);
         //values.put("potrait", contact.portrait.toString());
         values.put("text",contact.text);
+        values.put("userId", userId);
         return mWDB.update(Table_Name, values, "time=?", new String[]{String.valueOf(contact.time)});
     }
 
@@ -157,9 +160,9 @@ public class ChatDBHelper extends SQLiteOpenHelper {
         // 循环取出游标指向的每条记录
         while (cursor.moveToNext()){
             DataHolder contatc = new DataHolder();
-            contatc.time= String.valueOf(cursor.getInt(0));
+            contatc.time= cursor.getString(0);
             //contatc.portrait = cursor.getInt(1);
-            contatc.text = String.valueOf(cursor.getInt(1));
+            contatc.text = cursor.getString(1);
             list.add(contatc);
         }
 
@@ -169,19 +172,25 @@ public class ChatDBHelper extends SQLiteOpenHelper {
     public boolean queryOne(String time) throws ParseException {
         // 返回记录查询动作，返回结果集游标
         Cursor cursor = mRDB.query(Table_Name, null, null, null, null, null, null);
-        Boolean out = false;
+        Boolean out = true;
+        Boolean balance = true;
         // 循环取出游标指向的每条记录
-        while (cursor.moveToNext()){
-            DataHolder contatc = new DataHolder();
-            contatc.time= String.valueOf(cursor.getInt(0));
+        try {
+            while (cursor.moveToNext()) {
+                balance = false;
+                DataHolder contatc = new DataHolder();
+                contatc.time = cursor.getString(0);
 //            //contatc.portrait = cursor.getInt(1);
 //            contatc.text = String.valueOf(cursor.getInt(1));
 //            list.add(contatc);
-            if (contatc.time.equals(time)){
-                out = true;
+                if (contatc.time.equals(time)) {
+                    out = false;
+                }
             }
+        }catch (Exception e){
+            out = true;
+            Log.e("database", String.valueOf(e));
         }
-
-        return out;
+        return out || balance;
     }
 }

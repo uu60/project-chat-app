@@ -65,7 +65,6 @@ public class ChatActivity extends AppCompatActivity {
     public MessageAdapter adapter;
 
     private WebSocket webSocket;
-
     private ChatDBHelper nHelper;
 
     @Override
@@ -162,6 +161,7 @@ public class ChatActivity extends AppCompatActivity {
                     dataHolder.setTime(Instances.simpleSdf.format(Instances.UTCSdf.parse((String) map.get("sendTime"))));
                     dataHolder.setText((String) map.get("content"));
                     data.add(dataHolder);
+                    nHelper.insert(dataHolder, (int) ((Double) map.get("senderId")).doubleValue());
                 }
                 adapter.setData(data);
                 allUpdateHandler.sendMessage(new Message());
@@ -253,7 +253,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     //进入开启数据库
-//    @Override
 //    public void onStart() {
 //        super.onStart();
 //        nHelper = ChatDBHelper.getInstance(this);

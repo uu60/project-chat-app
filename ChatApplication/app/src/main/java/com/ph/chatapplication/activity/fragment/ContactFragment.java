@@ -132,6 +132,11 @@ public class ContactFragment extends Fragment {
                                     nickname));
                         });
                         data.sort(Comparator.comparing(ContactFragmentAdapter.DataHolder::getNickName));
+                        //存储数据
+                        for (ContactFragmentAdapter.DataHolder contact : data){
+                            mHelper.insert(contact);
+                            mHelper.update(contact);
+                        }
                     }
                     Message msg = new Message();
                     msg.obj = data;
