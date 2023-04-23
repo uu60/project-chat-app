@@ -42,7 +42,7 @@ import okhttp3.WebSocket;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 @SuppressWarnings("all")
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
 
     public int userId;
 
@@ -83,11 +83,9 @@ public class ChatActivity extends AppCompatActivity {
         initHandlers();
         tvNickname = findViewById(R.id.tv_nickname);
         ivBackward = findViewById(R.id.iv_backward);
-        ivBackward.setOnClickListener(v -> {
-            webSocket.close(1000, "Chat ends.");
-            finish();
-        });
+        ivBackward.setOnClickListener(this);
         ivContactInfo = findViewById(R.id.iv_contact_info);
+        ivContactInfo.setOnClickListener(this);
         btnSend = findViewById(R.id.btn_send);
         etText = findViewById(R.id.et_text);
         rvMessage = findViewById(R.id.rv_message);
@@ -265,5 +263,18 @@ public class ChatActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         nHelper.closeLink();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.iv_backward) {
+            webSocket.close(1000, "Chat ends.");
+            finish();
+        }
+        if (view.getId() == R.id.iv_contact_info) {
+            Intent intent = new Intent(ChatActivity.this, OthersInfoActivity.class);
+            intent.putExtra("userId", userId);
+            startActivity(intent);
+        }
     }
 }

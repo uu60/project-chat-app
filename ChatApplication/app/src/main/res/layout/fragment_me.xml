@@ -30,9 +30,11 @@
             android:src="@drawable/ic_default_portrait" />
 
         <RelativeLayout
+            android:id="@+id/rl_nickname"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp">
+            android:layout_marginLeft="10dp"
+            android:clickable="true">
 
             <TextView
                 android:id="@+id/tv_my_nickname"
