@@ -24,7 +24,6 @@ import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.MessageAdapter;
 import com.ph.chatapplication.constant.RespCode;
 import com.ph.chatapplication.database.ChatDBHelper;
-import com.ph.chatapplication.database.ContactDBHelper;
 import com.ph.chatapplication.utils.handler.LogoutUtils;
 import com.ph.chatapplication.utils.net.WebSocketMessage;
 import com.ph.chatapplication.utils.source.Instances;
@@ -52,6 +51,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnSend;
     private EditText etText;
     private RecyclerView rvMessage;
+    private ChatDBHelper nHelper;
 
     private Handler nicknameHandler;
     private Handler logoutHandler;
@@ -65,7 +65,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     public MessageAdapter adapter;
 
     private WebSocket webSocket;
-    private ChatDBHelper nHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +80,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         initHandlers();
+
         tvNickname = findViewById(R.id.tv_nickname);
         ivBackward = findViewById(R.id.iv_backward);
         ivBackward.setOnClickListener(this);
@@ -126,7 +126,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         Instances.pool.execute(() -> {
             getAndSetPortrait();
         });
-
         //打开数据库
         nHelper = ChatDBHelper.getInstance(this,"uerId"+String.valueOf(userId));
         nHelper.openWriteLink();
@@ -159,7 +158,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     dataHolder.setTime(Instances.simpleSdf.format(Instances.UTCSdf.parse((String) map.get("sendTime"))));
                     dataHolder.setText((String) map.get("content"));
                     data.add(dataHolder);
-                    nHelper.insert(dataHolder, (int) ((Double) map.get("senderId")).doubleValue());
                 }
                 adapter.setData(data);
                 allUpdateHandler.sendMessage(new Message());
@@ -249,22 +247,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         });
     }
-
-    //进入开启数据库
-//    public void onStart() {
-//        super.onStart();
-//        nHelper = ChatDBHelper.getInstance(this);
-//        nHelper.openWriteLink();
-//        nHelper.openReadLink();
-//    }
-
-    // 离开关闭数据库
     @Override
     public void onStop() {
         super.onStop();
         nHelper.closeLink();
     }
-
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.iv_backward) {
