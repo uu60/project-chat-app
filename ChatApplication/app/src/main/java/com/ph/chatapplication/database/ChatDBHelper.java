@@ -1,6 +1,6 @@
 package com.ph.chatapplication.database;
 
-import static com.ph.chatapplication.activity.adapter.MessageAdapter.*;
+import static com.ph.chatapplication.activity.adapter.MessageAdapter.DataHolder;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,10 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.ph.chatapplication.utils.source.Instances;
-
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
