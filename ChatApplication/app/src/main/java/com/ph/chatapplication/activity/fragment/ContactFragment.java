@@ -98,7 +98,7 @@ public class ContactFragment extends Fragment {
             Map<String, String> head = new HashMap<>();
             head.put("JWT-Token", token.get());
             Instances.pool.execute(() -> {
-                Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact", params, head);
+                Resp resp = Requests.get(Requests.SERVER_IP_PORT + "/contact", params, head);
                 List<Map<String, Object>> temp = null;
                 try {
                     temp = (List) resp.getData();
@@ -166,7 +166,7 @@ public class ContactFragment extends Fragment {
                     if (portraitUrl == null) {
                         continue;
                     }
-                    InputStream inputStream = Requests.getFile(Requests.SERVER_URL_PORT +
+                    InputStream inputStream = Requests.getFile(Requests.SERVER_IP_PORT +
                                     "/get_portrait/" + dataHolder.getUserId(),
                             Requests.getTokenMap(getActivity().getSharedPreferences("token",
                                     Context.MODE_PRIVATE).getString("token", null)));

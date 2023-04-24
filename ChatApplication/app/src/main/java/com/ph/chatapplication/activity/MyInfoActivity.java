@@ -100,7 +100,7 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
 
         //请求个人信息
         Instances.pool.execute(() -> {
-            Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/my_details/", null,
+            Resp resp = Requests.get(Requests.SERVER_IP_PORT + "/my_details/", null,
                     Requests.getTokenMap(TokenUtils.currentToken(this)));
             Map<String, Object> msg = (Map<String, Object>) resp.getData();
 
@@ -111,7 +111,7 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
             // 请求个人图像
             Object idObj = msg.get("id");
             int id = (int) Double.parseDouble(idObj.toString());
-            InputStream inputStream1 = Requests.getFile(Requests.SERVER_URL_PORT + "/get_portrait" +
+            InputStream inputStream1 = Requests.getFile(Requests.SERVER_IP_PORT + "/get_portrait" +
                     "/" + id, Requests.getTokenMap(TokenUtils.currentToken(this)));
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream1);
             Map<String, Object> attr = new HashMap<>();
@@ -272,7 +272,7 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
 
         if (token != null) {
             Instances.pool.execute(() -> {
-                Resp resp = Requests.postFile(Requests.SERVER_URL_PORT + "/change_portrait",
+                Resp resp = Requests.postFile(Requests.SERVER_IP_PORT + "/change_portrait",
                         file.getPath(), Requests.getTokenMap(token));
                 if (resp != null) {
                     if (resp.getCode() == RespCode.SUCCESS) {

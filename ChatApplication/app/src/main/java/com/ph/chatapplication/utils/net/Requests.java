@@ -25,7 +25,11 @@ import okhttp3.WebSocket;
  * @date 2023/4/15 17:11
  */
 public class Requests {
-    public static final String SERVER_URL_PORT = "http://10.68.31.109:8080";
+    public static final String SERVER_IP_PORT;
+    public static final String SERVER_IP = "10.68.31.109";
+    static {
+        SERVER_IP_PORT = "http://" + SERVER_IP + ":8080";
+    }
     public static final String TOKEN_KEY = "JWT-Token";
     public static final Resp CONNECTED_FAILED_RESP = new Resp();
     private static final OkHttpClient client = new OkHttpClient();

@@ -115,7 +115,7 @@ public class AddContactFragment extends Fragment {
                     return;
                 }
                 Resp resp =
-                        Requests.post(Requests.SERVER_URL_PORT + "/request_contact/" + username,
+                        Requests.post(Requests.SERVER_IP_PORT + "/request_contact/" + username,
                                 null, head);
 
                 // 响应码成功状态再去处理
@@ -149,7 +149,7 @@ public class AddContactFragment extends Fragment {
             Message message = new Message();
             // 传送token
             if (token != null) {
-                Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact_request", null,
+                Resp resp = Requests.get(Requests.SERVER_IP_PORT + "/contact_request", null,
                         Requests.getTokenMap(token));
 
                 if (resp.getCode() == RespCode.SUCCESS) {
@@ -268,7 +268,7 @@ public class AddContactFragment extends Fragment {
         Instances.pool.execute(() -> {
             if (token != null) {
                 Resp resp =
-                        Requests.post(Requests.SERVER_URL_PORT + "/deal/" + userId + "/" + isAgree
+                        Requests.post(Requests.SERVER_IP_PORT + "/deal/" + userId + "/" + isAgree
                                 , null, Requests.getTokenMap(token));
                 try {
                     if (resp == null || resp.getCode() == null || resp.getCode() == RespCode.CONTACT_ADD_FAILED) {
