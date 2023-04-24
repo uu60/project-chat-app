@@ -5,10 +5,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -40,6 +41,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     private Activity activity;
     private ImageView myPortrait;
     private TextView myNickname;
+    private SwipeRefreshLayout srlMe;
     private Handler nicknameHandler = new Handler(m -> {
         myNickname.setText((String) m.obj);
         return true;
@@ -57,6 +59,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     private RelativeLayout rlUpdate;
     private RelativeLayout rlNickname;
     private ProgressDialog dialog;
+    private Handler refreshHandler = new Handler();
 
 
     @Override
@@ -74,9 +77,26 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         rlNickname = inflate.findViewById(R.id.rl_nickname);
         rlUpdate.setOnClickListener(this);
         rlNickname.setOnClickListener(this);
+        srlMe = inflate.findViewById(R.id.srl_me);
+        srlMe.setColorSchemeColors(Color.parseColor("#FF6200EE"));
+        srlMe.setProgressBackgroundColorSchemeColor(Color.parseColor("#ECECEC"));
+        srlMe.setOnRefreshListener(() -> {
+            refreshHandler.postDelayed(() -> {
+                srlMe.setRefreshing(false);
+            }, 3_000);
+            refreshData();
+            srlMe.setRefreshing(false);
+        });
 
         setLogoutOnRlLogout();
 
+        refreshData();
+
+        // Inflate the layout for this fragment
+        return inflate;
+    }
+
+    private void refreshData() {
         Instances.pool.execute(() -> {
             //加载自己头像
             InputStream inputStream = Requests.getFile(Requests.SERVER_URL_PORT +
@@ -96,10 +116,8 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 // TODO
             }
         });
-
-        // Inflate the layout for this fragment
-        return inflate;
     }
+
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.rl_nickname) {

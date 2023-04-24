@@ -63,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                         msg1.obj = "Welcome back!";
                         toastHandler.sendMessage(msg1);
                         startActivity(intent);
+                        this.finish();
                     } else {
                         // TODO: 错误暂时不根据响应错误码通用处理
                         preference.edit().remove("token").apply();
