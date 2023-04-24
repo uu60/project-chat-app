@@ -31,6 +31,7 @@
                     android:id="@+id/iv_my_portrait"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
+                    android:duplicateParentState="true"
                     android:src="@drawable/ic_default_portrait" />
 
             <RelativeLayout
@@ -38,7 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
-                    android:clickable="true">
+                    android:duplicateParentState="true">
 
                 <TextView
                         android:id="@+id/tv_my_nickname"
@@ -46,6 +47,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="Nickname"
+                        android:duplicateParentState="true"
                         android:textColor="@color/black"
                         android:textSize="23dp" />
 
@@ -55,6 +57,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
                         android:text=">"
+                        android:duplicateParentState="true"
                         android:textSize="35dp" />
             </RelativeLayout>
 
