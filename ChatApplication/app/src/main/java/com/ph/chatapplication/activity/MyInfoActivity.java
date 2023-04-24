@@ -299,7 +299,7 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
                         imagePath = CameraUtils.getImageBeforeKitKatPath(data, this);
                         displayImage(imagePath);
                     }
-              //      uploadPortrait(imagePath);
+                    uploadPortrait(imagePath);
                 }
                 break;
             default:
