@@ -27,6 +27,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.constant.RespCode;
+import com.ph.chatapplication.utils.handler.MessageUtils;
+import com.ph.chatapplication.utils.net.TokenUtils;
 import com.ph.chatapplication.utils.source.BitmapUtils;
 import com.ph.chatapplication.utils.source.CameraUtils;
 
@@ -39,6 +41,7 @@ import com.tbruyelle.rxpermissions3.RxPermissions;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 
 public class MyInfoActivity extends AppCompatActivity implements View.OnClickListener {
@@ -74,6 +77,14 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
             .skipMemoryCache(true);//不做内存缓存
     private ImageButton ib_portrait;
     private ImageView ivBackward;
+    private Handler detailsHandler;
+
+    private TextView txtNickName;
+    private TextView txtUserName;
+    private TextView txtPhone;
+    private TextView txtAddress;
+    private TextView txtEmail;
+    private TextView txtRegister;
 
 
     @Override
@@ -85,6 +96,21 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
         ib_portrait = findViewById(R.id.ib_portrait);
         ivBackward = findViewById(R.id.iv_backward);
         ivBackward.setOnClickListener(this);
+        txtNickName = findViewById(R.id.my_nickname);
+        txtUserName = findViewById(R.id.my_username);
+        txtPhone = findViewById(R.id.my_phone);
+        txtAddress = findViewById(R.id.my_address);
+        txtEmail = findViewById(R.id.my_email);
+        txtRegister = findViewById(R.id.my_register);
+
+        //请求nickname
+        Instances.pool.execute(() -> {
+            Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/my_details/", null,
+                    Requests.getTokenMap(TokenUtils.currentToken(this)));
+            if (resp.getCode() == RespCode.SUCCESS) {
+                detailsHandler.sendMessage(MessageUtils.get(resp.getData()));
+            }
+        });
     }
 
     private void initHandler() {
@@ -97,6 +123,34 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
 
         logoutHandler = new Handler(m -> {
             LogoutUtils.doLogout(this);
+            return true;
+        });
+
+        detailsHandler = new Handler(m -> {
+            Map<String, Object> map = (Map) m.obj;
+            txtNickName.setText((CharSequence) map.get("nickname"));
+            txtUserName.setText((CharSequence) map.get("username"));
+            try{
+                txtPhone.setText((CharSequence) map.get("phone"));
+            }catch (Exception e){
+                txtPhone.setText("null");
+            }
+            try{
+                txtEmail.setText((CharSequence) map.get("email"));
+            }catch (Exception e){
+                txtEmail.setText("null");
+            }
+            try{
+                txtAddress.setText((CharSequence) map.get("address"));
+            }catch (Exception e){
+                txtAddress.setText("null");
+            }
+            try{
+                txtRegister.setText((CharSequence) map.get("registerTime"));
+            }catch (Exception e){
+                txtRegister.setText("null");
+            }
+
             return true;
         });
     }
