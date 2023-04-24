@@ -33,8 +33,6 @@ import com.ph.chatapplication.R;
 import com.ph.chatapplication.constant.RespCode;
 import com.ph.chatapplication.utils.handler.MessageUtils;
 import com.ph.chatapplication.utils.net.TokenUtils;
-import com.ph.chatapplication.utils.source.BitmapUtils;
-import com.ph.chatapplication.utils.source.CameraUtils;
 
 import com.ph.chatapplication.utils.source.Instances;
 import com.ph.chatapplication.utils.handler.LogoutUtils;
