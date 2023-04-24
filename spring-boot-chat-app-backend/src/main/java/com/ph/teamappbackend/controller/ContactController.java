@@ -40,4 +40,15 @@ public class ContactController {
             return Resp.error(RespCode.DETAILS_REQUEST_FAILED, e.getMessage());
         }
     }
+
+    @GetMapping("/my_details")
+    public Resp getMyDetails() {
+        Integer currentUserId = LoginManager.getCurrentUserId();
+        try {
+            UserEntity user = userService.getDetails(currentUserId, currentUserId);
+            return Resp.ok().setData(user);
+        } catch (Exception e) {
+            return Resp.error(RespCode.DETAILS_REQUEST_FAILED, e.getMessage());
+        }
+    }
 }
