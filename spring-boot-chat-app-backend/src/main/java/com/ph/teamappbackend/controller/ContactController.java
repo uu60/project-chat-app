@@ -51,4 +51,15 @@ public class ContactController {
             return Resp.error(RespCode.DETAILS_REQUEST_FAILED, e.getMessage());
         }
     }
+
+    @PostMapping("/delete/{userId}")
+    public Resp delete(@PathVariable Integer userId) {
+        Integer currentUserId = LoginManager.getCurrentUserId();
+        try {
+            userService.deleteContact(currentUserId, userId);
+            return Resp.ok();
+        } catch (Exception e) {
+            return Resp.error(RespCode.DEFAULT_ERROR, e.getMessage());
+        }
+    }
 }

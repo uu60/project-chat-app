@@ -14,7 +14,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -121,7 +124,8 @@ public class UserService {
         // 判断是不是联系人
         boolean pass = Objects.equals(currentUserId, userId);
         if (!pass) {
-            ContactEntity contactEntity = contactMapper.selectOne(new QueryWrapper<ContactEntity>().eq("user_id", currentUserId).eq("contact_id", userId));
+            ContactEntity contactEntity = contactMapper.selectOne(new QueryWrapper<ContactEntity>().eq("user_id",
+                    currentUserId).eq("contact_id", userId));
             if (contactEntity == null) {
                 throw new RuntimeException("Not contact.");
             }
@@ -129,5 +133,13 @@ public class UserService {
         UserEntity userEntity = userMapper.selectById(userId);
         userEntity.setPassword(null);
         return userEntity;
+    }
+
+    public void deleteContact(Integer currentUserId, Integer userId) {
+        contactMapper.delete(new QueryWrapper<ContactEntity>().and(q -> {
+            q.eq("user_id", currentUserId).eq("contact_id", userId);
+        }).or(q -> {
+            q.eq("user_id", userId).eq("contact_id", currentUserId);
+        }));
     }
 }
