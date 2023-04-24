@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     private Activity activity;
     private ImageView myPortrait;
     private TextView myNickname;
+    private LinearLayout llInfo;
     private SwipeRefreshLayout srlMe;
     private Handler nicknameHandler = new Handler(m -> {
         myNickname.setText((String) m.obj);
@@ -74,9 +76,11 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         myPortrait = inflate.findViewById(R.id.iv_my_portrait);
         myNickname = inflate.findViewById(R.id.tv_my_nickname);
         rlUpdate = inflate.findViewById(R.id.rl_update);
-        rlNickname = inflate.findViewById(R.id.rl_nickname);
+//        rlNickname = inflate.findViewById(R.id.rl_nickname);
         rlUpdate.setOnClickListener(this);
-        rlNickname.setOnClickListener(this);
+//        rlNickname.setOnClickListener(this);
+        llInfo = inflate.findViewById(R.id.ll_info);
+        llInfo.setOnClickListener(this);
         srlMe = inflate.findViewById(R.id.srl_me);
         srlMe.setColorSchemeColors(Color.parseColor("#FF6200EE"));
         srlMe.setProgressBackgroundColorSchemeColor(Color.parseColor("#ECECEC"));
@@ -120,7 +124,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.rl_nickname) {
+        if (view.getId() == R.id.ll_info) {
             Intent intent1 = new Intent(getActivity(), MyInfoActivity.class);
             startActivity(intent1);
         }
