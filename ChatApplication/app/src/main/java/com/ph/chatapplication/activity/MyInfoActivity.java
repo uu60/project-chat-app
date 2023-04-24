@@ -118,8 +118,10 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
             }
 
             // 请求个人图像
+            Object idObj = msg.get("id");
+            int id = (int) Double.parseDouble(idObj.toString());
             InputStream inputStream1 = Requests.getFile(Requests.SERVER_URL_PORT +
-                    "/get_portrait/"+ msg.get("id"), Requests.getTokenMap(TokenUtils.currentToken(this)));
+                    "/get_portrait/"+ id, Requests.getTokenMap(TokenUtils.currentToken(this)));
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream1);
             Map<String, Object> attr = new HashMap<>();
             attr.put("bitmap", bitmap);
@@ -299,7 +301,7 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
                         imagePath = CameraUtils.getImageBeforeKitKatPath(data, this);
                         displayImage(imagePath);
                     }
-              //      uploadPortrait(imagePath);
+                    uploadPortrait(imagePath);
                 }
                 break;
             default:
