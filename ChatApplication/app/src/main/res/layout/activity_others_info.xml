@@ -30,7 +30,7 @@
             android:layout_weight="1"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:text="Nickname"
+            android:text="Details"
             android:textColor="@android:color/black"
             android:textSize="23dp" />
 
@@ -141,6 +141,7 @@
                 android:textSize="23dp" />
 
             <TextView
+                android:id="@+id/txt_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="11111111要改"
@@ -169,6 +170,7 @@
                 android:textSize="23dp" />
 
             <TextView
+                android:id="@+id/txt_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="11111111要改"
@@ -197,6 +199,7 @@
                 android:textSize="23dp" />
 
             <TextView
+                android:id="@+id/txt_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="11111111要改"
@@ -226,6 +229,7 @@
                 android:textSize="23dp" />
 
             <TextView
+                android:id="@+id/txt_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="11111111要改"

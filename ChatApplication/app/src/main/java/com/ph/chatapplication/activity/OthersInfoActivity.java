@@ -36,6 +36,10 @@ public class OthersInfoActivity extends AppCompatActivity implements View.OnClic
     private Handler detailsHandler;
     private TextView txtNickName;
     private TextView txtUserName;
+    private TextView txtPhone;
+    private TextView txtAddress;
+    private TextView txtEmail;
+    private TextView txtRegister;
 
 
     @Override
@@ -47,6 +51,10 @@ public class OthersInfoActivity extends AppCompatActivity implements View.OnClic
         ivBack.setOnClickListener(this);
         txtNickName = findViewById(R.id.txt_nickname);
         txtUserName = findViewById(R.id.txt_username);
+        txtPhone = findViewById(R.id.txt_phone);
+        txtAddress = findViewById(R.id.txt_address);
+        txtEmail = findViewById(R.id.txt_email);
+        txtRegister = findViewById(R.id.txt_register);
 
         Intent intent = getIntent();
         Integer userId = intent.getIntExtra("userId", -1);
@@ -100,6 +108,27 @@ public class OthersInfoActivity extends AppCompatActivity implements View.OnClic
         detailsHandler = new Handler(m -> {
             Map<String, Object> map = (Map) m.obj;
             txtNickName.setText((CharSequence) map.get("nickname"));
+            txtUserName.setText((CharSequence) map.get("username"));
+            try{
+                txtPhone.setText((CharSequence) map.get("phone"));
+            }catch (Exception e){
+                txtPhone.setText("null");
+            }
+            try{
+                txtEmail.setText((CharSequence) map.get("email"));
+            }catch (Exception e){
+                txtEmail.setText("null");
+            }
+            try{
+                txtAddress.setText((CharSequence) map.get("address"));
+            }catch (Exception e){
+                txtAddress.setText("null");
+            }
+            try{
+                txtRegister.setText((CharSequence) map.get("registerTime"));
+            }catch (Exception e){
+                txtRegister.setText("null");
+            }
 
             return true;
         });

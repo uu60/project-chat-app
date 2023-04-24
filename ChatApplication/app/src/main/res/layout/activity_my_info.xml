@@ -102,6 +102,7 @@
                     android:textSize="23dp" />
 
             <TextView
+                    android:id="@+id/my_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="11111111要改"
@@ -134,6 +135,7 @@
                     android:textSize="23dp" />
 
             <TextView
+                    android:id="@+id/my_nickname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="11111111要改"
@@ -164,6 +166,7 @@
                     android:textSize="23dp" />
 
             <TextView
+                    android:id="@+id/my_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="11111111要改"
@@ -192,6 +195,7 @@
                     android:textSize="23dp" />
 
             <TextView
+                    android:id="@+id/my_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="11111111要改"
@@ -220,6 +224,7 @@
                     android:textSize="23dp" />
 
             <TextView
+                    android:id="@+id/my_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="11111111要改"
@@ -249,6 +254,7 @@
                     android:textSize="23dp" />
 
             <TextView
+                    android:id="@+id/my_register"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="11111111要改"
