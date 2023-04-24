@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             head.put("JWT-Token", token.get());
             Instances.pool.execute(() -> {
                 try {
-                    Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact", params, head);
+                    Resp resp = Requests.get(Requests.SERVER_IP_PORT + "/contact", params, head);
                     if (resp.getCode() == RespCode.SUCCESS) {
                         Intent intent = new Intent(this, HomeActivity.class);
                         Message msg1 = new Message();
@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
         params.put("username", username);
         params.put("password", password);
         Instances.pool.execute(() -> {
-            Resp resp = Requests.post(Requests.SERVER_URL_PORT + "/login", params);
+            Resp resp = Requests.post(Requests.SERVER_IP_PORT + "/login", params);
 
             if (resp == null || resp.getCode() == null) {
                 String s = "null";

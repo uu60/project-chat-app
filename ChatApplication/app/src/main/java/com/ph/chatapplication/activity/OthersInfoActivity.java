@@ -69,7 +69,7 @@ public class OthersInfoActivity extends AppCompatActivity implements View.OnClic
 
         //请求头像
         Instances.pool.execute(() -> {
-            InputStream inputStream1 = Requests.getFile(Requests.SERVER_URL_PORT +
+            InputStream inputStream1 = Requests.getFile(Requests.SERVER_IP_PORT +
                     "/get_portrait/" + userId, Requests.getTokenMap(TokenUtils.currentToken(this)));
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream1);
             Map<String, Object> attr = new HashMap<>();
@@ -80,7 +80,7 @@ public class OthersInfoActivity extends AppCompatActivity implements View.OnClic
 
         //请求nickname
         Instances.pool.execute(() -> {
-            Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/details/" + userId, null,
+            Resp resp = Requests.get(Requests.SERVER_IP_PORT + "/details/" + userId, null,
                     Requests.getTokenMap(TokenUtils.currentToken(this)));
             if (resp.getCode() == RespCode.SUCCESS) {
                 detailsHandler.sendMessage(MessageUtils.get(resp.getData()));

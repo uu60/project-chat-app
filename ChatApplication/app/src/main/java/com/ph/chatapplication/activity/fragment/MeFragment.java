@@ -103,13 +103,13 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     private void refreshData() {
         Instances.pool.execute(() -> {
             //加载自己头像
-            InputStream inputStream = Requests.getFile(Requests.SERVER_URL_PORT +
+            InputStream inputStream = Requests.getFile(Requests.SERVER_IP_PORT +
                     "/get_my_portrait", Requests.getTokenMap(TokenUtils.currentToken(activity)));
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
             Message message1 = new Message();
             message1.obj = bitmap;
             portraitHandler.sendMessage(message1);
-            Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/get_my_nickname", null,
+            Resp resp = Requests.get(Requests.SERVER_IP_PORT + "/get_my_nickname", null,
                     Requests.getTokenMap(TokenUtils.currentToken(activity)));
             if (resp.getCode() == RespCode.SUCCESS) {
                 Message message = new Message();

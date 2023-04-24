@@ -84,7 +84,7 @@ public class RegActivity extends AppCompatActivity {
         params.put("password", password);
 
         Instances.pool.execute(() -> {
-            Resp resp = Requests.post(Requests.SERVER_URL_PORT + "/register", params);
+            Resp resp = Requests.post(Requests.SERVER_IP_PORT + "/register", params);
             String getResp = "True";
             Log.d("getResp", getResp);
             try {

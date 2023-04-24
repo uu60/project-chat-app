@@ -98,7 +98,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             public boolean onTouch(View v, MotionEvent event) {
                 Instances.pool.execute(() -> {
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(300);
                     } catch (InterruptedException ignore) {
                     }
                     scrollToBottomHandler.sendMessage(new Message());
@@ -127,17 +127,17 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private void getAndSetPortrait() {
         //加载对方头像
-        InputStream inputStream = Requests.getFile(Requests.SERVER_URL_PORT +
+        InputStream inputStream = Requests.getFile(Requests.SERVER_IP_PORT +
                 "/get_my_portrait", Requests.getTokenMap(TokenUtils.currentToken(this)));
         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-        InputStream inputStream1 = Requests.getFile(Requests.SERVER_URL_PORT +
+        InputStream inputStream1 = Requests.getFile(Requests.SERVER_IP_PORT +
                 "/get_portrait/" + userId, Requests.getTokenMap(TokenUtils.currentToken(this)));
         Bitmap bitmap1 = BitmapFactory.decodeStream(inputStream1);
         portraitHandler.sendMessage(MessageUtils.get(new Bitmap[]{bitmap, bitmap1}));
     }
 
     private void getAndSetHistory() {
-        Resp resp1 = Requests.get(Requests.SERVER_URL_PORT + "/history/" + userId, null,
+        Resp resp1 = Requests.get(Requests.SERVER_IP_PORT + "/history/" + userId, null,
                 Requests.getTokenMap(TokenUtils.currentToken(this)));
 
         try {
@@ -166,14 +166,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getAndSetNickname() {
-        Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/get_nickname/" + userId, null,
+        Resp resp = Requests.get(Requests.SERVER_IP_PORT + "/get_nickname/" + userId, null,
                 Requests.getTokenMap(TokenUtils.currentToken(this)));
         if (resp.getCode() == RespCode.SUCCESS) {
             String nickname = (String) resp.getData();
             nicknameHandler.sendMessage(MessageUtils.get(nickname));
 
             // 开始建立websocket
-            WebSocket ws = Requests.websocket("ws://10.68.31.109:8080/ws/chat",
+            WebSocket ws = Requests.websocket("ws://" + Requests.SERVER_IP + ":8080/ws/chat",
                     TokenUtils.currentToken(this), this);
             if (ws != null) {
                 webSocket = ws;

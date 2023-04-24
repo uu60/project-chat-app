@@ -41,17 +41,6 @@ public class ContactController {
         }
     }
 
-    @GetMapping("/my_details")
-    public Resp getMyDetails() {
-        Integer currentUserId = LoginManager.getCurrentUserId();
-        try {
-            UserEntity user = userService.getDetails(currentUserId, currentUserId);
-            return Resp.ok().setData(user);
-        } catch (Exception e) {
-            return Resp.error(RespCode.DETAILS_REQUEST_FAILED, e.getMessage());
-        }
-    }
-
     @PostMapping("/delete/{userId}")
     public Resp delete(@PathVariable Integer userId) {
         Integer currentUserId = LoginManager.getCurrentUserId();

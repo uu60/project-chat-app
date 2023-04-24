@@ -55,8 +55,19 @@ public class UserController {
         }
     }
 
+    @GetMapping("/my_details")
+    public Resp getMyDetails() {
+        Integer currentUserId = LoginManager.getCurrentUserId();
+        try {
+            UserEntity user = userService.getDetails(currentUserId, currentUserId);
+            return Resp.ok().setData(user);
+        } catch (Exception e) {
+            return Resp.error(RespCode.DETAILS_REQUEST_FAILED, e.getMessage());
+        }
+    }
+
     @PostMapping("/change_details")
-    public Resp changeDetails(UserEntity userEntity) {
+    public Resp changeDetails(@RequestBody UserEntity userEntity) {
         Integer currentUserId = LoginManager.getCurrentUserId();
         try {
             userService.changeDetails(currentUserId, userEntity);
