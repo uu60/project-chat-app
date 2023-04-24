@@ -136,6 +136,7 @@ public class AddContactFragment extends Fragment {
         } else {
             LogoutUtils.doLogout(activity);
         }
+        etUsername.setText("");
     }
 
     @SuppressWarnings("all")
