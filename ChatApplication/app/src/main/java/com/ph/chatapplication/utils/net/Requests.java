@@ -28,7 +28,7 @@ import okhttp3.WebSocket;
 public class Requests {
     private static final OkHttpClient client = new OkHttpClient();
     private static final Map<String, String> dummy = new HashMap<>();
-    public static final String SERVER_URL_PORT = "http://192.168.1.102:8080";
+    public static final String SERVER_URL_PORT = "http://10.68.31.109:8080";
     public static final String TOKEN_KEY = "JWT-Token";
     public static final Resp CONNECTED_FAILED_RESP = new Resp();
     {
