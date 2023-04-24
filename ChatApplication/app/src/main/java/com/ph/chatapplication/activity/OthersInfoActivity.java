@@ -33,10 +33,10 @@ public class OthersInfoActivity extends AppCompatActivity implements View.OnClic
     private ImageView ivBack;
     private ImageButton protrait;
     private Handler protraitHandler;
-    private Handler nicknameHandler;
-    private TextView txt_nickName;
-    private Handler usernameHandler;
-    private TextView txt_userName;
+    private Handler detailsHandler;
+    private TextView txtNickName;
+    private TextView txtUserName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +45,8 @@ public class OthersInfoActivity extends AppCompatActivity implements View.OnClic
         protrait = findViewById(R.id.ib_portrait);
         ivBack = findViewById(R.id.iv_backward);
         ivBack.setOnClickListener(this);
-        txt_nickName = findViewById(R.id.txt_nickname);
-        txt_userName = findViewById(R.id.txt_username);
+        txtNickName = findViewById(R.id.txt_nickname);
+        txtUserName = findViewById(R.id.txt_username);
 
         Intent intent = getIntent();
         Integer userId = intent.getIntExtra("userId", -1);
@@ -72,25 +72,12 @@ public class OthersInfoActivity extends AppCompatActivity implements View.OnClic
 
         //请求nickname
         Instances.pool.execute(() -> {
-            Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/get_nickname/" + userId, null,
+            Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/details/" + userId, null,
                     Requests.getTokenMap(TokenUtils.currentToken(this)));
             if (resp.getCode() == RespCode.SUCCESS) {
-                String nickname = (String) resp.getData();
-                nicknameHandler.sendMessage(MessageUtils.get(nickname));
+                detailsHandler.sendMessage(MessageUtils.get(resp.getData()));
             }
-
-
         });
-
-        //请求username
-//        Instances.pool.execute(() -> {
-//            Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/get_username/" + userId, null,
-//                    Requests.getTokenMap(TokenUtils.currentToken(this)));
-//            if (resp.getCode() == RespCode.SUCCESS) {
-//                String username = (String) resp.getData();
-//                usernameHandler.sendMessage(MessageUtils.get(username));
-//            }
-//        });
     }
 
     @Override
@@ -110,9 +97,10 @@ public class OthersInfoActivity extends AppCompatActivity implements View.OnClic
             return true;
         });
 
-        nicknameHandler = new Handler(m -> {
-            String nickName = (String) m.obj;
-            txt_nickName.setText(nickName);
+        detailsHandler = new Handler(m -> {
+            Map<String, Object> map = (Map) m.obj;
+            txtNickName.setText((CharSequence) map.get("nickname"));
+
             return true;
         });
 

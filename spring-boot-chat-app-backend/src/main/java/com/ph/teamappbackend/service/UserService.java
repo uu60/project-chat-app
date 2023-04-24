@@ -1,7 +1,9 @@
 package com.ph.teamappbackend.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ph.teamappbackend.mapper.ContactMapper;
 import com.ph.teamappbackend.mapper.UserMapper;
+import com.ph.teamappbackend.pojo.entity.ContactEntity;
 import com.ph.teamappbackend.pojo.entity.UserEntity;
 import com.ph.teamappbackend.pojo.vo.AccountVo;
 import com.ph.teamappbackend.utils.JwtUtils;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 /**
  * @author octopus
@@ -25,6 +28,8 @@ public class UserService {
 
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    ContactMapper contactMapper;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -110,5 +115,19 @@ public class UserService {
             throw new RuntimeException("Account does not exist.");
         }
         return userEntity.getNickname();
+    }
+
+    public UserEntity getDetails(Integer currentUserId, Integer userId) {
+        // 判断是不是联系人
+        boolean pass = Objects.equals(currentUserId, userId);
+        if (!pass) {
+            ContactEntity contactEntity = contactMapper.selectOne(new QueryWrapper<ContactEntity>().eq("user_id", currentUserId).eq("contact_id", userId));
+            if (contactEntity == null) {
+                throw new RuntimeException("Not contact.");
+            }
+        }
+        UserEntity userEntity = userMapper.selectById(userId);
+        userEntity.setPassword(null);
+        return userEntity;
     }
 }
