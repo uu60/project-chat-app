@@ -26,7 +26,7 @@ public class ChatDBHelper extends SQLiteOpenHelper {
 //        super(context, DB_Name, null, DB_Version);
 //    }
 
-    public ChatDBHelper(Context context, String DB_Name){
+    public ChatDBHelper(Context context, String DB_Name) {
         super(context, DB_Name, null, DB_Version);
     }
 
@@ -38,29 +38,28 @@ public class ChatDBHelper extends SQLiteOpenHelper {
 //        return mHelper;
 //    }
 
-    public static ChatDBHelper getInstance(Context context, String DB_Name){
-        if (mHelper == null){
+    public static ChatDBHelper getInstance(Context context, String DB_Name) {
+        if (mHelper == null) {
             mHelper = new ChatDBHelper(context, DB_Name);
         }
         return mHelper;
     }
 
 
-
     // 打开数据库的读链接
-    public SQLiteDatabase openReadLink(){
-        if (mRDB == null || !mRDB.isOpen()){
+    public SQLiteDatabase openReadLink() {
+        if (mRDB == null || !mRDB.isOpen()) {
             mRDB = mHelper.getReadableDatabase();
         }
         return mRDB;
     }
 
     // 打开数据库的写链接
-    public SQLiteDatabase openWriteLink(){
-        if (mWDB == null || !mWDB.isOpen()){
+    public SQLiteDatabase openWriteLink() {
+        if (mWDB == null || !mWDB.isOpen()) {
             try {
                 mWDB = mHelper.getWritableDatabase();
-            }catch (Exception e){
+            } catch (Exception e) {
                 Log.e("mWDB", String.valueOf(e));
             }
 
@@ -69,13 +68,13 @@ public class ChatDBHelper extends SQLiteOpenHelper {
     }
 
     // 关闭数据库
-    public void closeLink(){
-        if (mRDB != null && mRDB.isOpen()){
+    public void closeLink() {
+        if (mRDB != null && mRDB.isOpen()) {
             mRDB.close();
             mRDB = null;
         }
 
-        if (mWDB != null && mWDB.isOpen()){
+        if (mWDB != null && mWDB.isOpen()) {
             mWDB.close();
             mWDB = null;
         }
@@ -84,9 +83,9 @@ public class ChatDBHelper extends SQLiteOpenHelper {
     // 创建数据库，执行建表语句
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql ="CREATE TABLE IF NOT EXISTS history "  +
+        String sql = "CREATE TABLE IF NOT EXISTS history " +
                 "(time varchar(20) primary key," +
-                "text varchar(40),"+
+                "text varchar(40)," +
                 "userId integer)";
         db.execSQL(sql);
     }
@@ -114,8 +113,8 @@ public class ChatDBHelper extends SQLiteOpenHelper {
 //        values.put("time",contact.time);
 //        //values.put("potrait", contact.portrait.toString());
 //        values.put("text",contact.text);
-        if (queryOne(contact.time)){
-            SQLiteDatabase db = this.mHelper.getWritableDatabase();
+        if (queryOne(contact.time)) {
+            SQLiteDatabase db = mHelper.getWritableDatabase();
             Object[] objects = new Object[3];
             objects[0] = contact.time;
             objects[1] = contact.text;
@@ -123,7 +122,7 @@ public class ChatDBHelper extends SQLiteOpenHelper {
             String sql = "insert into history(time, text, userId) values(?,?,?)";
             try {
                 db.execSQL(sql, objects);
-            }catch (Exception e){
+            } catch (Exception e) {
                 Log.e("databaseinsert", String.valueOf(e));
             }
         }
@@ -131,24 +130,25 @@ public class ChatDBHelper extends SQLiteOpenHelper {
     }
 
     // 删除指定id数据
-    public long deleteByName(String userId){
+    public long deleteByName(String userId) {
         return mWDB.delete(Table_Name, "name=?", new String[]{userId});
     }
 
 
     // 删除全部数据
-    public long deleteAll(String Table_Name){
+    public long deleteAll(String Table_Name) {
         return mWDB.delete(Table_Name, "1=1", null);
     }
 
     // 更新数据库
-    public long update(DataHolder contact, Integer userId){
+    public long update(DataHolder contact, Integer userId) {
         ContentValues values = new ContentValues();
-        values.put("time",contact.time);
+        values.put("time", contact.time);
         //values.put("potrait", contact.portrait.toString());
-        values.put("text",contact.text);
+        values.put("text", contact.text);
         values.put("userId", userId);
-        return mWDB.update(Table_Name, values, "time=?", new String[]{String.valueOf(contact.time)});
+        return mWDB.update(Table_Name, values, "time=?",
+                new String[]{String.valueOf(contact.time)});
     }
 
     // 查询数据库全部数据
@@ -158,9 +158,9 @@ public class ChatDBHelper extends SQLiteOpenHelper {
         Cursor cursor = mRDB.query(Table_Name, null, null, null, null, null, null);
 
         // 循环取出游标指向的每条记录
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             DataHolder contatc = new DataHolder();
-            contatc.time= cursor.getString(0);
+            contatc.time = cursor.getString(0);
             //contatc.portrait = cursor.getInt(1);
             contatc.text = cursor.getString(1);
             list.add(contatc);
@@ -187,7 +187,7 @@ public class ChatDBHelper extends SQLiteOpenHelper {
                     out = false;
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             out = true;
             Log.e("database", String.valueOf(e));
         }

@@ -1,7 +1,6 @@
 package com.ph.chatapplication.activity.adapter;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -34,7 +33,8 @@ public class ContactFragmentAdapter extends RecyclerView.Adapter<ContactFragment
     private final Activity activity;
 
 
-    public ContactFragmentAdapter(List<DataHolder> data, ContactFragment fragment, Activity activity) {
+    public ContactFragmentAdapter(List<DataHolder> data, ContactFragment fragment,
+                                  Activity activity) {
         this.data = data;
         this.fragment = fragment;
         this.activity = activity;
@@ -76,9 +76,9 @@ public class ContactFragmentAdapter extends RecyclerView.Adapter<ContactFragment
 
     static class Holder extends RecyclerView.ViewHolder {
 
-        private LinearLayout ll_item;
-        private ImageView imPortrait;
-        private TextView tvNickname;
+        private final LinearLayout ll_item;
+        private final ImageView imPortrait;
+        private final TextView tvNickname;
         private DataHolder dataHolder;
 
         public Holder(@NonNull View itemView) {
@@ -101,6 +101,7 @@ public class ContactFragmentAdapter extends RecyclerView.Adapter<ContactFragment
             this.portrait = portrait;
             this.nickName = nickName;
         }
+
         public DataHolder() {
             this.userId = userId;
             this.portraitUrl = portraitUrl;
@@ -116,21 +117,28 @@ public class ContactFragmentAdapter extends RecyclerView.Adapter<ContactFragment
             return portrait;
         }
 
+        public void setPortrait(Bitmap bitmap) {
+            this.portrait = bitmap;
+        }
+
         public String getNickName() {
             return nickName;
+        }
+
+        public void setNickName(String nickName) {
+            this.nickName = nickName;
         }
 
         public String getPortraitUrl() {
             return portraitUrl;
         }
 
-        public void setPortrait(Bitmap bitmap) {
-            this.portrait = bitmap;
+        public void setPortraitUrl(String portraitUrl) {
+            this.portraitUrl = portraitUrl;
         }
 
-        public void setUsrId(Integer userId){this.userId = userId;}
-
-        public void setNickName(String nickName){this.nickName = nickName;}
-        public void setPortraitUrl(String portraitUrl){this.portraitUrl = portraitUrl;}
+        public void setUsrId(Integer userId) {
+            this.userId = userId;
+        }
     }
 }

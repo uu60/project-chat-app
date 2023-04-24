@@ -27,11 +27,11 @@ import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.MyInfoActivity;
 import com.ph.chatapplication.activity.VersionInfoActivity;
 import com.ph.chatapplication.constant.RespCode;
-import com.ph.chatapplication.utils.source.Instances;
 import com.ph.chatapplication.utils.handler.LogoutUtils;
 import com.ph.chatapplication.utils.net.Requests;
 import com.ph.chatapplication.utils.net.Resp;
 import com.ph.chatapplication.utils.net.TokenUtils;
+import com.ph.chatapplication.utils.source.Instances;
 
 import java.io.InputStream;
 
@@ -44,15 +44,15 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     private TextView myNickname;
     private LinearLayout llInfo;
     private SwipeRefreshLayout srlMe;
-    private Handler nicknameHandler = new Handler(m -> {
+    private final Handler nicknameHandler = new Handler(m -> {
         myNickname.setText((String) m.obj);
         return true;
     });
-    private Handler logoutHandler = new Handler(m -> {
+    private final Handler logoutHandler = new Handler(m -> {
         LogoutUtils.doLogout(activity);
         return true;
     });
-    private Handler portraitHandler = new Handler(m -> {
+    private final Handler portraitHandler = new Handler(m -> {
         Bitmap bitmap = (Bitmap) m.obj;
         Glide.with(this).load(bitmap == null ? R.drawable.ic_default_portrait : bitmap).apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE)//不做磁盘缓存
                 .skipMemoryCache(true)).into(myPortrait);
@@ -61,7 +61,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     private RelativeLayout rlUpdate;
     private RelativeLayout rlNickname;
     private ProgressDialog dialog;
-    private Handler refreshHandler = new Handler();
+    private final Handler refreshHandler = new Handler();
 
 
     @Override
@@ -109,7 +109,8 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             Message message1 = new Message();
             message1.obj = bitmap;
             portraitHandler.sendMessage(message1);
-            Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/get_my_nickname", null, Requests.getTokenMap(TokenUtils.currentToken(activity)));
+            Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/get_my_nickname", null,
+                    Requests.getTokenMap(TokenUtils.currentToken(activity)));
             if (resp.getCode() == RespCode.SUCCESS) {
                 Message message = new Message();
                 message.obj = resp.getData();

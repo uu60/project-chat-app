@@ -1,10 +1,7 @@
 package com.ph.chatapplication.websocket;
 
-import android.os.Build;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.ph.chatapplication.activity.ChatActivity;
 import com.ph.chatapplication.activity.adapter.MessageAdapter;
@@ -12,7 +9,6 @@ import com.ph.chatapplication.utils.handler.MessageUtils;
 import com.ph.chatapplication.utils.net.WebSocketMessage;
 import com.ph.chatapplication.utils.source.Instances;
 
-import java.util.Date;
 import java.util.concurrent.locks.LockSupport;
 
 import okhttp3.Response;
@@ -53,7 +49,6 @@ public class ChatWebSocketListener extends WebSocketListener {
         activity.errorHandler.sendMessage(MessageUtils.get("Connection interrupted."));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public synchronized void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
         WebSocketMessage webSocketMessage = Instances.gson.fromJson(text, WebSocketMessage.class);

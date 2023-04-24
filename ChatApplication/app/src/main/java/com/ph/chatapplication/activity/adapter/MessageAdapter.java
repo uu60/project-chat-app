@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextClock;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,19 +28,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Holder> 
     private Bitmap oppositePortrait;
     private Bitmap myPortrait;
     private List<DataHolder> data;
-    private Activity activity;
+    private final Activity activity;
 
     public MessageAdapter(List<DataHolder> data, Activity activity) {
         this.data = data;
         this.activity = activity;
     }
 
-    public void setData(List<DataHolder> data) {
-        this.data = data;
-    }
-
     public List<DataHolder> getData() {
         return data;
+    }
+
+    public void setData(List<DataHolder> data) {
+        this.data = data;
     }
 
     public void setOppositePortrait(Bitmap oppositePortrait) {
@@ -66,10 +65,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Holder> 
         holder.tvTime.setText(dataHolder.time);
         holder.tvContent.setText(dataHolder.text);
         Glide.with(activity)
-                .load(dataHolder.me ? (myPortrait == null ? R.drawable.ic_default_portrait : myPortrait) :
-                (oppositePortrait == null ? R.drawable.ic_default_portrait : oppositePortrait))
+                .load(dataHolder.me ? (myPortrait == null ? R.drawable.ic_default_portrait :
+                        myPortrait) :
+                        (oppositePortrait == null ? R.drawable.ic_default_portrait :
+                                oppositePortrait))
                 .apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE)//不做磁盘缓存
-                .skipMemoryCache(true)).into(holder.ivPortrait);
+                        .skipMemoryCache(true)).into(holder.ivPortrait);
         holder.llItem.setLayoutDirection(dataHolder.me ? View.LAYOUT_DIRECTION_RTL :
                 View.LAYOUT_DIRECTION_LTR);
         if (!dataHolder.me) {
@@ -86,10 +87,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Holder> 
     }
 
     protected static class Holder extends RecyclerView.ViewHolder {
-        private LinearLayout llItem;
-        private ImageView ivPortrait;
-        private TextView tvTime;
-        private TextView tvContent;
+        private final LinearLayout llItem;
+        private final ImageView ivPortrait;
+        private final TextView tvTime;
+        private final TextView tvContent;
 
         public Holder(@NonNull View itemView) {
             super(itemView);

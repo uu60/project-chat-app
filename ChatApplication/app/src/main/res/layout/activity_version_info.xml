@@ -1,94 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:orientation="vertical"
-    tools:context=".activity.VersionInfoActivity">
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        tools:context=".activity.VersionInfoActivity">
 
     <RelativeLayout
-        android:id="@+id/layout_titlebar"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="#ECECEC">
+            android:id="@+id/layout_titlebar"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="#ECECEC">
 
         <ImageView
-            android:id="@+id/iv_backward"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginStart="10dp"
-            android:ellipsize="none"
-            android:singleLine="true"
-            android:src="@drawable/ic_back" />
+                android:id="@+id/iv_backward"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:src="@drawable/ic_back" />
 
         <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_weight="1"
-            android:text="Version Information"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="23dp" />
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_weight="1"
+                android:text="Version Information"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="23dp" />
 
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#F5F5F5"
-        android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#F5F5F5"
+            android:orientation="vertical">
 
         <!--Logo-->
         <ImageView
-            android:id="@+id/LogoImage"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginTop="100dp"
-            android:src="@drawable/logo" />
+                android:id="@+id/LogoImage"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="100dp"
+                android:src="@drawable/logo" />
 
         <!--标题-->
         <TextView
-            android:id="@+id/TitleText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="25dp"
-            android:gravity="center"
-            android:text="Chat App"
-            android:textColor="@color/black"
-            android:textSize="30dp"
-            android:textStyle="italic" />
+                android:id="@+id/TitleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginRight="25dp"
+                android:gravity="center"
+                android:text="Chat App"
+                android:textColor="@color/black"
+                android:textSize="30dp"
+                android:textStyle="italic" />
 
         <TextView
-            android:id="@+id/VersionText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:gravity="center"
-            android:text="Version 0.0.1"
-            android:textColor="@color/black"
-            android:textSize="25dp"
-            android:textStyle="italic" />
+                android:id="@+id/VersionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="Version 0.0.1"
+                android:textColor="@color/black"
+                android:textSize="25dp"
+                android:textStyle="italic" />
 
         <TextView
-            android:id="@+id/HintText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center"
-            android:text="You have the lastest version and do not need to updete."
-            android:textColor="@color/black"
-            android:textSize="16dp"
-            android:textStyle="italic" />
+                android:id="@+id/HintText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="You have the lastest version and do not need to updete."
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                android:textStyle="italic" />
     </LinearLayout>
 
 </LinearLayout>

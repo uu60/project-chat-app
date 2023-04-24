@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.animation.Animation;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,7 +21,7 @@ import com.ph.chatapplication.R;
 public class LoadingDialog extends Dialog {
     private ObjectAnimator objectAnimator = null;
     private AppCompatImageView circle;
-    private long duration = 10000;
+    private final long duration = 10000;
 
     public LoadingDialog(@NonNull Context context) {
         super(context);
@@ -32,7 +31,8 @@ public class LoadingDialog extends Dialog {
         super(context, themeResId);
     }
 
-    protected LoadingDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
+    protected LoadingDialog(@NonNull Context context, boolean cancelable,
+                            @Nullable OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
 

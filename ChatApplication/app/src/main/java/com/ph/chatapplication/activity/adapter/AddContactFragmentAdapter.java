@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFragmentAdapter.ViewHolder> {
 
-    private List<DataHolder> data;
+    private final List<DataHolder> data;
     private ButtonInterface buttonInterface;
 
     public AddContactFragmentAdapter(List<DataHolder> data) {
@@ -42,10 +42,6 @@ public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFr
 
     public void buttonSetOnclick(ButtonInterface buttonInterface) {
         this.buttonInterface = buttonInterface;
-    }
-
-    public interface ButtonInterface {
-        void onclick(View view, int userId, int isAgree, int position);
     }
 
     @Override
@@ -94,6 +90,10 @@ public class AddContactFragmentAdapter extends RecyclerView.Adapter<AddContactFr
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public interface ButtonInterface {
+        void onclick(View view, int userId, int isAgree, int position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
