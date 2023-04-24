@@ -1,17 +1,8 @@
 package com.ph.chatapplication.utils.net;
 
-import android.os.Build;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.ph.chatapplication.utils.source.Instances;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * @author octopus
@@ -33,7 +24,6 @@ public class WebSocketMessage {
         this.content = content;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @NonNull
     @Override
     public String toString() {

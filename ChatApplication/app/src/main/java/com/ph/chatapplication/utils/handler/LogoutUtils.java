@@ -3,7 +3,6 @@ package com.ph.chatapplication.utils.handler;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -23,7 +22,7 @@ public class LogoutUtils {
         edit.remove("token");
         edit.apply();
         Intent intent = new Intent(activity, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
         Toast.makeText(activity, "You have logged out.", Toast.LENGTH_LONG).show();
         activity.finish();

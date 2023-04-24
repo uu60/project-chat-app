@@ -1,7 +1,5 @@
 package com.ph.chatapplication.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +10,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -109,24 +109,24 @@ public class OthersInfoActivity extends AppCompatActivity implements View.OnClic
             Map<String, Object> map = (Map) m.obj;
             txtNickName.setText((CharSequence) map.get("nickname"));
             txtUserName.setText((CharSequence) map.get("username"));
-            try{
+            try {
                 txtPhone.setText((CharSequence) map.get("phone"));
-            }catch (Exception e){
+            } catch (Exception e) {
                 txtPhone.setText("null");
             }
-            try{
+            try {
                 txtEmail.setText((CharSequence) map.get("email"));
-            }catch (Exception e){
+            } catch (Exception e) {
                 txtEmail.setText("null");
             }
-            try{
+            try {
                 txtAddress.setText((CharSequence) map.get("address"));
-            }catch (Exception e){
+            } catch (Exception e) {
                 txtAddress.setText("null");
             }
-            try{
+            try {
                 txtRegister.setText((CharSequence) map.get("registerTime"));
-            }catch (Exception e){
+            } catch (Exception e) {
                 txtRegister.setText("null");
             }
 

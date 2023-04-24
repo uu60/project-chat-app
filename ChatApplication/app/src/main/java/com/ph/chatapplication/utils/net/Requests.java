@@ -1,6 +1,5 @@
 package com.ph.chatapplication.utils.net;
 
-import android.app.Activity;
 import android.util.Log;
 
 import com.ph.chatapplication.activity.ChatActivity;
@@ -26,27 +25,18 @@ import okhttp3.WebSocket;
  * @date 2023/4/15 17:11
  */
 public class Requests {
-    private static final OkHttpClient client = new OkHttpClient();
-    private static final Map<String, String> dummy = new HashMap<>();
     public static final String SERVER_URL_PORT = "http://10.68.31.109:8080";
     public static final String TOKEN_KEY = "JWT-Token";
     public static final Resp CONNECTED_FAILED_RESP = new Resp();
-    {
-        CONNECTED_FAILED_RESP.setCode(-1);
-    }
+    private static final OkHttpClient client = new OkHttpClient();
+    private static final Map<String, String> dummy = new HashMap<>();
 
     static {
         dummy.put("", "");
     }
 
-    public enum M {
-        GET("GET"), POST("POST"), PUT("PUT"), DELETE("DELETE");
-
-        private final String value;
-
-        M(String value) {
-            this.value = value;
-        }
+    {
+        CONNECTED_FAILED_RESP.setCode(-1);
     }
 
     public static Resp get(String url) {
@@ -119,7 +109,7 @@ public class Requests {
     public static Resp postFile(String url, String filePath, Map<String, String> headerMap) {
         try {
             File file = new File(filePath);
-            RequestBody requestBody= null;
+            RequestBody requestBody = null;
             //声明请求体的类型为文件表单类型
             MediaType mediaType = MediaType.parse("multipart/form-data");
             //通过静态方法创建请求体
@@ -127,7 +117,7 @@ public class Requests {
             requestBody = RequestBody.create(file, mediaType);
             //创建文件表单的请求体，把文件请求体、文本参数放入表单中
             MultipartBody multipartBody = new MultipartBody.Builder()
-                    .addFormDataPart("file",file.getName(),requestBody)
+                    .addFormDataPart("file", file.getName(), requestBody)
                     .build();
             Request.Builder builder = new Request.Builder().url(url)
                     .post(multipartBody);
@@ -182,6 +172,16 @@ public class Requests {
             return webSocket;
         }
         return null;
+    }
+
+    public enum M {
+        GET("GET"), POST("POST"), PUT("PUT"), DELETE("DELETE");
+
+        private final String value;
+
+        M(String value) {
+            this.value = value;
+        }
     }
 
 }

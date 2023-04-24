@@ -24,14 +24,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.AddContactFragmentAdapter;
 import com.ph.chatapplication.constant.RespCode;
-import com.ph.chatapplication.database.ChatDBHelper;
-import com.ph.chatapplication.database.ContactDBHelper;
-import com.ph.chatapplication.utils.source.Instances;
 import com.ph.chatapplication.utils.handler.LogoutUtils;
 import com.ph.chatapplication.utils.net.Requests;
 import com.ph.chatapplication.utils.net.Resp;
-import com.ph.chatapplication.utils.source.StringUtils;
 import com.ph.chatapplication.utils.net.TokenUtils;
+import com.ph.chatapplication.utils.source.Instances;
+import com.ph.chatapplication.utils.source.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,7 +57,7 @@ public class AddContactFragment extends Fragment {
     private EditText etUsername;
     private Button btnAdd;
     private SwipeRefreshLayout srlAddContactRefresh;
-    private Handler someHandler = new Handler();
+    private final Handler someHandler = new Handler();
 
 
     @Override
@@ -260,7 +258,8 @@ public class AddContactFragment extends Fragment {
                 rvContactReq.setVisibility(View.GONE);
                 tvNoRequest.setVisibility(View.VISIBLE);
             }
-            Toast.makeText(activity, posAndAgree[1] == 1 ? "Agreed." : "Refused.", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, posAndAgree[1] == 1 ? "Agreed." : "Refused.",
+                    Toast.LENGTH_LONG).show();
             return true;
         });
     }
@@ -290,7 +289,5 @@ public class AddContactFragment extends Fragment {
             }
         });
     }
-
-
 
 }

@@ -1,28 +1,23 @@
 package com.ph.chatapplication.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -31,23 +26,18 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.constant.RespCode;
-import com.ph.chatapplication.utils.handler.MessageUtils;
-import com.ph.chatapplication.utils.net.TokenUtils;
-
-import com.ph.chatapplication.utils.source.Instances;
 import com.ph.chatapplication.utils.handler.LogoutUtils;
+import com.ph.chatapplication.utils.handler.MessageUtils;
 import com.ph.chatapplication.utils.net.Requests;
 import com.ph.chatapplication.utils.net.Resp;
+import com.ph.chatapplication.utils.net.TokenUtils;
+import com.ph.chatapplication.utils.source.Instances;
 import com.tbruyelle.rxpermissions3.RxPermissions;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -55,22 +45,19 @@ import java.util.UUID;
 
 public class MyInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private RxPermissions rxPermissions;
-
-    //是否拥有权限
-    private boolean hasPermissions = false;
-
-    //底部弹窗
-    private BottomSheetDialog bottomSheetDialog;
-    //弹窗视图
-    private View bottomView;
     //存储拍完照后的图片
 //    private File outputImagePath;
     //启动相机标识
     public static final int TAKE_PHOTO = 1;
     //启动相册标识
     public static final int SELECT_PHOTO = 2;
-
+    private RxPermissions rxPermissions;
+    //是否拥有权限
+    private boolean hasPermissions = false;
+    //底部弹窗
+    private BottomSheetDialog bottomSheetDialog;
+    //弹窗视图
+    private View bottomView;
     //图片控件
     private ShapeableImageView ivHead;
     //Base64
@@ -79,9 +66,9 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
     private Handler logoutHandler;
 
     //Glide请求图片选项配置
-    private RequestOptions requestOptions =
+    private final RequestOptions requestOptions =
             RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE)//不做磁盘缓存
-            .skipMemoryCache(true);//不做内存缓存
+                    .skipMemoryCache(true);//不做内存缓存
     private ImageButton ib_portrait;
     private ImageView ivBackward;
     private Handler detailsHandler;
@@ -188,7 +175,7 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[],
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 555) {
@@ -286,7 +273,7 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
         if (token != null) {
             Instances.pool.execute(() -> {
                 Resp resp = Requests.postFile(Requests.SERVER_URL_PORT + "/change_portrait",
-                       file.getPath() , Requests.getTokenMap(token));
+                        file.getPath(), Requests.getTokenMap(token));
                 if (resp != null) {
                     if (resp.getCode() == RespCode.SUCCESS) {
                         Message msg = new Message();

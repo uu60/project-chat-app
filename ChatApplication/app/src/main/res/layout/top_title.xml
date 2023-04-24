@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
 
-        <!-- <RelativeLayout
-             android:layout_width="wrap_content"
-             android:layout_height="50dp"
-             android:layout_marginTop="25dp"
-             android:gravity="center_vertical"
-             >-->
+    <!-- <RelativeLayout
+         android:layout_width="wrap_content"
+         android:layout_height="50dp"
+         android:layout_marginTop="25dp"
+         android:gravity="center_vertical"
+         >-->
 
-        <TextView
+    <TextView
             android:id="@+id/back"
             android:layout_width="30dp"
             android:layout_height="35dp"
@@ -20,18 +19,18 @@
             android:layout_alignParentLeft="true"
             android:padding="5dp"
             android:clickable="true"
-            android:background="@drawable/back_normal"/>
-        <!--
-                <View
-                    android:id="@+id/divider"
-                    android:layout_width="1dp"
-                    android:layout_height="30dp"
-                    android:layout_toEndOf="@+id/back"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:background="#ffffff" />-->
+            android:background="@drawable/back_normal" />
+    <!--
+            <View
+                android:id="@+id/divider"
+                android:layout_width="1dp"
+                android:layout_height="30dp"
+                android:layout_toEndOf="@+id/back"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="#ffffff" />-->
 
-        <TextView
+    <TextView
             android:id="@+id/textChat"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
@@ -39,9 +38,9 @@
             android:layout_toEndOf="@+id/back"
             android:text="title"
             android:textColor="#ffffff"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
-        <ImageView
+    <ImageView
             android:id="@+id/imgAccount"
             android:layout_width="50dp"
             android:layout_height="35dp"
@@ -53,8 +52,8 @@
             android:maxWidth="50sp"
             android:src="@drawable/account_normal"
             android:padding="5dp"
-            android:background="@drawable/img_selector"/>
+            android:background="@drawable/img_selector" />
 
-        <!--  </RelativeLayout>-->
+    <!--  </RelativeLayout>-->
 
 </RelativeLayout>

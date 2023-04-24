@@ -6,16 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -24,12 +15,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.ContactFragmentAdapter;
 import com.ph.chatapplication.database.ContactDBHelper;
-import com.ph.chatapplication.utils.source.Instances;
 import com.ph.chatapplication.utils.net.Requests;
 import com.ph.chatapplication.utils.net.Resp;
+import com.ph.chatapplication.utils.source.Instances;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -48,7 +46,7 @@ public class ContactFragment extends Fragment {
     private Handler wrongFormatHandler;
     private Handler updateRecyclerHandler;
     private SwipeRefreshLayout srlContact;
-    private Handler refreshHandler = new Handler((m) -> {
+    private final Handler refreshHandler = new Handler((m) -> {
         return true;
     });
     private ContactDBHelper mHelper;
@@ -99,50 +97,48 @@ public class ContactFragment extends Fragment {
 
             Map<String, String> head = new HashMap<>();
             head.put("JWT-Token", token.get());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Instances.pool.execute(() -> {
-                    Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact", params, head);
-                    List<Map<String, Object>> temp = null;
-                    try {
-                        temp = (List) resp.getData();
-                    } catch (Exception e) {
-                        Message msg = new Message();
-                        String s = "connect failed!";
-                        msg.obj = s;
-                        wrongFormatHandler.sendMessage(msg);
-                        Log.e("get contact", String.valueOf(e));
-                    }
-                    if (temp != null) {
-                        temp.forEach(map -> {
-                            int id;
-                            String nickname = null;
-                            Object nicknameObj = map.get("nickname");
-                            if (nicknameObj != null) {
-                                nickname = nicknameObj.toString();
-                            }
-                            try {
-                                Object idObj = map.get("id");
-                                id = (int) Double.parseDouble(idObj.toString());
-                            } catch (Exception e) {
-                                Log.e("ContactFragment", e.toString());
-                                return;
-                            }
-                            String portraitUrl = (String) map.get("portraitUrl");
-                            data.add(new ContactFragmentAdapter.DataHolder(id, portraitUrl, null,
-                                    nickname));
-                        });
-                        data.sort(Comparator.comparing(ContactFragmentAdapter.DataHolder::getNickName));
-                        //存储数据
-                        for (ContactFragmentAdapter.DataHolder contact : data){
-                            mHelper.insert(contact);
-                            mHelper.update(contact);
-                        }
-                    }
+            Instances.pool.execute(() -> {
+                Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/contact", params, head);
+                List<Map<String, Object>> temp = null;
+                try {
+                    temp = (List) resp.getData();
+                } catch (Exception e) {
                     Message msg = new Message();
-                    msg.obj = data;
-                    recyclerHandler.sendMessage(msg);
-                });
-            }
+                    String s = "connect failed!";
+                    msg.obj = s;
+                    wrongFormatHandler.sendMessage(msg);
+                    Log.e("get contact", String.valueOf(e));
+                }
+                if (temp != null) {
+                    temp.forEach(map -> {
+                        int id;
+                        String nickname = null;
+                        Object nicknameObj = map.get("nickname");
+                        if (nicknameObj != null) {
+                            nickname = nicknameObj.toString();
+                        }
+                        try {
+                            Object idObj = map.get("id");
+                            id = (int) Double.parseDouble(idObj.toString());
+                        } catch (Exception e) {
+                            Log.e("ContactFragment", e.toString());
+                            return;
+                        }
+                        String portraitUrl = (String) map.get("portraitUrl");
+                        data.add(new ContactFragmentAdapter.DataHolder(id, portraitUrl, null,
+                                nickname));
+                    });
+                    data.sort(Comparator.comparing(ContactFragmentAdapter.DataHolder::getNickName));
+                    //存储数据
+                    for (ContactFragmentAdapter.DataHolder contact : data) {
+                        mHelper.insert(contact);
+                        mHelper.update(contact);
+                    }
+                }
+                Message msg = new Message();
+                msg.obj = data;
+                recyclerHandler.sendMessage(msg);
+            });
         }
     }
 
@@ -155,34 +151,32 @@ public class ContactFragment extends Fragment {
                 tvNoContact.setVisibility(View.INVISIBLE);
                 rvContactFrag.setAdapter(new ContactFragmentAdapter(data, this, getActivity()));
             } else {
-                rvContactFrag.setAdapter(new ContactFragmentAdapter(new ArrayList<>(), this, getActivity()));
+                rvContactFrag.setAdapter(new ContactFragmentAdapter(new ArrayList<>(), this,
+                        getActivity()));
                 rvContactFrag.setVisibility(View.INVISIBLE);
                 tvNoContact.setVisibility(View.VISIBLE);
             }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Instances.pool.execute(() -> {
-                    //去加载头像
-                    List<ContactFragmentAdapter.DataHolder> data1 =
-                            ((ContactFragmentAdapter) rvContactFrag.getAdapter()).getData();
-                    for (int i = 0; i < data1.size(); i++) {
-                        ContactFragmentAdapter.DataHolder dataHolder = data1.get(i);
-                        String portraitUrl = dataHolder.getPortraitUrl();
-                        if (portraitUrl == null) {
-                            continue;
-                        }
-                        InputStream inputStream = Requests.getFile(Requests.SERVER_URL_PORT +
-                                        "/get_portrait/" + dataHolder.getUserId(),
-                                Requests.getTokenMap(getActivity().getSharedPreferences("token",
-                                        Context.MODE_PRIVATE).getString("token", null)));
-                        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                        dataHolder.setPortrait(bitmap);
-                        Message message1 = new Message();
-                        message1.obj = i;
-                        updateRecyclerHandler.sendMessage(message1);
+            Instances.pool.execute(() -> {
+                //去加载头像
+                List<ContactFragmentAdapter.DataHolder> data1 =
+                        ((ContactFragmentAdapter) rvContactFrag.getAdapter()).getData();
+                for (int i = 0; i < data1.size(); i++) {
+                    ContactFragmentAdapter.DataHolder dataHolder = data1.get(i);
+                    String portraitUrl = dataHolder.getPortraitUrl();
+                    if (portraitUrl == null) {
+                        continue;
                     }
-                });
-            }
+                    InputStream inputStream = Requests.getFile(Requests.SERVER_URL_PORT +
+                                    "/get_portrait/" + dataHolder.getUserId(),
+                            Requests.getTokenMap(getActivity().getSharedPreferences("token",
+                                    Context.MODE_PRIVATE).getString("token", null)));
+                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    dataHolder.setPortrait(bitmap);
+                    Message message1 = new Message();
+                    message1.obj = i;
+                    updateRecyclerHandler.sendMessage(message1);
+                }
+            });
             return true;
         });
 

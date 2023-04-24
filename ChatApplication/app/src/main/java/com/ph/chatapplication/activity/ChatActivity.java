@@ -1,14 +1,8 @@
 package com.ph.chatapplication.activity;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,17 +14,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.MessageAdapter;
 import com.ph.chatapplication.constant.RespCode;
 import com.ph.chatapplication.database.ChatDBHelper;
 import com.ph.chatapplication.utils.handler.LogoutUtils;
-import com.ph.chatapplication.utils.net.WebSocketMessage;
-import com.ph.chatapplication.utils.source.Instances;
 import com.ph.chatapplication.utils.handler.MessageUtils;
 import com.ph.chatapplication.utils.net.Requests;
 import com.ph.chatapplication.utils.net.Resp;
 import com.ph.chatapplication.utils.net.TokenUtils;
+import com.ph.chatapplication.utils.net.WebSocketMessage;
+import com.ph.chatapplication.utils.source.Instances;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -39,12 +37,13 @@ import java.util.Map;
 
 import okhttp3.WebSocket;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 @SuppressWarnings("all")
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
 
     public int userId;
-
+    public Handler errorHandler;
+    public Handler certainUpdateHandler;
+    public MessageAdapter adapter;
     private TextView tvNickname;
     private ImageView ivBackward;
     private ImageView ivContactInfo;
@@ -52,18 +51,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private EditText etText;
     private RecyclerView rvMessage;
     private ChatDBHelper nHelper;
-
     private Handler nicknameHandler;
     private Handler logoutHandler;
-    public Handler errorHandler;
     private Handler websocketHandler;
     private Handler allUpdateHandler;
-    public Handler certainUpdateHandler;
     private Handler portraitHandler;
     private Handler scrollToBottomHandler;
-
-    public MessageAdapter adapter;
-
     private WebSocket webSocket;
 
     @Override
@@ -127,7 +120,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             getAndSetPortrait();
         });
         //打开数据库
-        nHelper = ChatDBHelper.getInstance(this,"uerId"+String.valueOf(userId));
+        nHelper = ChatDBHelper.getInstance(this, "uerId" + String.valueOf(userId));
         nHelper.openWriteLink();
         nHelper.openReadLink();
     }
@@ -143,7 +136,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         portraitHandler.sendMessage(MessageUtils.get(new Bitmap[]{bitmap, bitmap1}));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void getAndSetHistory() {
         Resp resp1 = Requests.get(Requests.SERVER_URL_PORT + "/history/" + userId, null,
                 Requests.getTokenMap(TokenUtils.currentToken(this)));
@@ -181,7 +173,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             nicknameHandler.sendMessage(MessageUtils.get(nickname));
 
             // 开始建立websocket
-            WebSocket ws = Requests.websocket("ws://192.168.1.102:8080/ws/chat",
+            WebSocket ws = Requests.websocket("ws://10.68.31.109:8080/ws/chat",
                     TokenUtils.currentToken(this), this);
             if (ws != null) {
                 webSocket = ws;
@@ -249,11 +241,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         });
     }
+
     @Override
     public void onStop() {
         super.onStop();
         nHelper.closeLink();
     }
+
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.iv_backward) {

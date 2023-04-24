@@ -1,23 +1,12 @@
 package com.ph.chatapplication.activity;
 
-import androidx.annotation.NonNull;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.fragment.AddContactFragment;
 import com.ph.chatapplication.activity.fragment.ContactFragment;
@@ -52,12 +41,6 @@ public class HomeActivity extends AppCompatActivity {
             }
             return true;
         });
-
-//        int id = getIntent().getIntExtra("id", 0);
-//        if (id == 3) {
-//            fragmentManager.beginTransaction().show(fragments.get(2))
-//                    .commit();
-//        }
     }
 
     private void initFragments() {

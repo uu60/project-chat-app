@@ -73,9 +73,10 @@
                     android:layout_centerInParent="true" />
         </RelativeLayout>
     </LinearLayout>
+
     <View
             android:layout_width="fill_parent"
             android:layout_height="2dp"
             android:background="#ECECEC"
-            android:layout_alignBottom="@+id/ll_item"/>
+            android:layout_alignBottom="@+id/ll_item" />
 </RelativeLayout>
