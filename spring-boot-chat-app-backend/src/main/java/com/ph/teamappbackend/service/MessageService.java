@@ -40,4 +40,12 @@ public class MessageService {
                     q.eq("sender_id", userId).eq("receiver_id", currentUserId);
                 })).stream().sorted(Comparator.comparing(MessageEntity::getSendTime)).collect(Collectors.toList());
     }
+
+    public Integer newest(Integer currentUserId, Integer userId) {
+        Integer id = messageMapper.selectMaxMessageId(currentUserId, userId);
+        if (id == null) {
+            return -1;
+        }
+        return id;
+    }
 }

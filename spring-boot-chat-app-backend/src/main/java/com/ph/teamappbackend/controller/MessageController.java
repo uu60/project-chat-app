@@ -32,4 +32,15 @@ public class MessageController {
             return Resp.error(RespCode.CONTACT_REQUEST_FAILED, e.getMessage());
         }
     }
+
+    @GetMapping("/current/{userId}/{messageId}")
+    public Resp newest(@PathVariable Integer userId) {
+        Integer currentUserId = LoginManager.getCurrentUserId();
+        try {
+            Integer newest = messageService.newest(currentUserId, userId);
+            return Resp.ok().setData(newest);
+        } catch (Exception e) {
+            return Resp.error(RespCode.DEFAULT_ERROR, e.getMessage());
+        }
+    }
 }
