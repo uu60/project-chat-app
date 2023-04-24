@@ -269,10 +269,12 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
                     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
                         //4.4及以上系统使用这个方法处理图片
                         imagePath = CameraUtils.getImageOnKitKatPath(data, this);
+                        displayImage(imagePath);
                     } else {
                         imagePath = CameraUtils.getImageBeforeKitKatPath(data, this);
+                        displayImage(imagePath);
                     }
-                    uploadPortrait(imagePath);
+              //      uploadPortrait(imagePath);
                 }
                 break;
             default:
@@ -328,3 +330,5 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 }
+
+
