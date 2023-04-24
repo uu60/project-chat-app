@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -39,8 +40,10 @@ import com.ph.chatapplication.utils.net.Resp;
 import com.tbruyelle.rxpermissions3.RxPermissions;
 
 import java.io.File;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -85,6 +88,7 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
     private TextView txtAddress;
     private TextView txtEmail;
     private TextView txtRegister;
+    private Handler protraitHandler;
 
 
     @Override
@@ -103,14 +107,27 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
         txtEmail = findViewById(R.id.my_email);
         txtRegister = findViewById(R.id.my_register);
 
-        //请求nickname
+        //请求个人信息
         Instances.pool.execute(() -> {
             Resp resp = Requests.get(Requests.SERVER_URL_PORT + "/my_details/", null,
                     Requests.getTokenMap(TokenUtils.currentToken(this)));
+            Map<String, Object> msg = (Map<String, Object>) resp.getData();
+
             if (resp.getCode() == RespCode.SUCCESS) {
                 detailsHandler.sendMessage(MessageUtils.get(resp.getData()));
             }
+
+            // 请求个人图像
+            InputStream inputStream1 = Requests.getFile(Requests.SERVER_URL_PORT +
+                    "/get_portrait/"+ msg.get("id"), Requests.getTokenMap(TokenUtils.currentToken(this)));
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream1);
+            Map<String, Object> attr = new HashMap<>();
+            attr.put("bitmap", bitmap);
+            attr.put("requestOptions", requestOptions);
+            protraitHandler.sendMessage(MessageUtils.get(attr));
         });
+
+
     }
 
     private void initHandler() {
@@ -151,6 +168,14 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
                 txtRegister.setText("null");
             }
 
+            return true;
+        });
+
+        protraitHandler = new Handler(m -> {
+            Map<String, Object> attr = (Map) m.obj;
+            Bitmap bitmap = (Bitmap) attr.get("bitmap");
+            RequestOptions requestOptions = (RequestOptions) attr.get("requestOptions");
+            Glide.with(this).load(bitmap == null ? R.drawable.ic_default_portrait : bitmap).apply(requestOptions).into(ib_portrait);
             return true;
         });
     }
