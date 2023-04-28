@@ -5,12 +5,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -40,6 +44,9 @@ public class OthersInfoActivity extends AppCompatActivity implements View.OnClic
     private TextView txtAddress;
     private TextView txtEmail;
     private TextView txtRegister;
+    private Handler toastHandler;
+    private Integer UserId;
+    private Button btnDelete;
 
 
     @Override
@@ -55,9 +62,13 @@ public class OthersInfoActivity extends AppCompatActivity implements View.OnClic
         txtAddress = findViewById(R.id.txt_address);
         txtEmail = findViewById(R.id.txt_email);
         txtRegister = findViewById(R.id.txt_register);
+        btnDelete = findViewById(R.id.btn_delete);
+        btnDelete.setOnClickListener(this);
+
 
         Intent intent = getIntent();
         Integer userId = intent.getIntExtra("userId", -1);
+        UserId = userId;
         if (userId == -1) {
             Toast.makeText(this, "Unknown error.", Toast.LENGTH_LONG).show();
             finish();
@@ -93,6 +104,50 @@ public class OthersInfoActivity extends AppCompatActivity implements View.OnClic
         if (view.getId() == R.id.iv_backward) {
             finish();
         }
+        if (view.getId() == R.id.btn_delete){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Notice");
+            builder.setMessage("Still delete or not?");
+
+            builder.setPositiveButton("OK",
+                    (dialog, which) -> {
+                        delete();
+                    });
+            builder.setNegativeButton("NO",
+                    (dialog, which) -> {
+                        //pass
+                    });
+            //根据构建器创建一个对话框对象
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        }
+    }
+    private void delete(){
+        Instances.pool.execute(() -> {
+            Resp resp = Requests.post(Requests.SERVER_IP_PORT + "/delete/" + UserId, null,
+                    Requests.getTokenMap(TokenUtils.currentToken(this)));
+            try{
+                if (resp.getCode() == RespCode.SUCCESS) {
+                    Intent intent = new Intent(this, HomeActivity.class);
+                    Message msg1 = new Message();
+                    msg1.obj = "Delete success!";
+                    toastHandler.sendMessage(msg1);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                } else {
+                    Message msg1 = new Message();
+                    msg1.obj = "Delete failed!";
+                    toastHandler.sendMessage(msg1);
+                }
+            }catch (Exception e){
+                Log.e("delete", String.valueOf(e));
+                Message msg1 = new Message();
+                msg1.obj = "Delete failed!";
+                toastHandler.sendMessage(msg1);
+            }
+
+        });
     }
 
     @SuppressWarnings("all")
@@ -130,6 +185,11 @@ public class OthersInfoActivity extends AppCompatActivity implements View.OnClic
                 txtRegister.setText("null");
             }
 
+            return true;
+        });
+        toastHandler = new Handler(m -> {
+            String message = (String) m.obj;
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             return true;
         });
 
