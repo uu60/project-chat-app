@@ -26,7 +26,7 @@ import okhttp3.WebSocket;
  */
 public class Requests {
     public static final String SERVER_IP_PORT;
-    public static final String SERVER_IP = "10.68.31.109";
+    public static final String SERVER_IP = "192.168.1.103";
     static {
         SERVER_IP_PORT = "http://" + SERVER_IP + ":8080";
     }
