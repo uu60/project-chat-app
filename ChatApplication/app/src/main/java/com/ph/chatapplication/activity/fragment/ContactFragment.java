@@ -24,7 +24,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.ContactFragmentAdapter;
-import com.ph.chatapplication.database.ContactDBHelper;
 import com.ph.chatapplication.utils.net.Requests;
 import com.ph.chatapplication.utils.net.Resp;
 import com.ph.chatapplication.utils.source.Instances;
@@ -49,7 +48,6 @@ public class ContactFragment extends Fragment {
     private final Handler refreshHandler = new Handler((m) -> {
         return true;
     });
-    private ContactDBHelper mHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -129,11 +127,6 @@ public class ContactFragment extends Fragment {
                                 nickname));
                     });
                     data.sort(Comparator.comparing(ContactFragmentAdapter.DataHolder::getNickName));
-                    //存储数据
-                    for (ContactFragmentAdapter.DataHolder contact : data) {
-                        mHelper.insert(contact);
-                        mHelper.update(contact);
-                    }
                 }
                 Message msg = new Message();
                 msg.obj = data;
@@ -197,21 +190,5 @@ public class ContactFragment extends Fragment {
             dialog.show();
             return true;
         });
-    }
-
-    //     进入开启数据库
-    @Override
-    public void onStart() {
-        super.onStart();
-        mHelper = ContactDBHelper.getInstance(getActivity());
-        mHelper.openWriteLink();
-        mHelper.openReadLink();
-    }
-
-    // 离开关闭数据库
-    @Override
-    public void onStop() {
-        super.onStop();
-        mHelper.closeLink();
     }
 }

@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.MessageAdapter;
 import com.ph.chatapplication.constant.RespCode;
-import com.ph.chatapplication.database.ChatDBHelper;
 import com.ph.chatapplication.utils.handler.LogoutUtils;
 import com.ph.chatapplication.utils.handler.MessageUtils;
 import com.ph.chatapplication.utils.net.Requests;
@@ -50,7 +49,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnSend;
     private EditText etText;
     private RecyclerView rvMessage;
-    private ChatDBHelper nHelper;
     private Handler nicknameHandler;
     private Handler logoutHandler;
     private Handler websocketHandler;
@@ -119,10 +117,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         Instances.pool.execute(() -> {
             getAndSetPortrait();
         });
-        //打开数据库
-        nHelper = ChatDBHelper.getInstance(this, "uerId" + String.valueOf(userId));
-        nHelper.openWriteLink();
-        nHelper.openReadLink();
     }
 
     private void getAndSetPortrait() {
@@ -150,8 +144,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     dataHolder.setTime(Instances.simpleSdf.format(Instances.UTCSdf.parse((String) map.get("sendTime"))));
                     dataHolder.setText((String) map.get("content"));
                     data.add(dataHolder);
-                    nHelper.insert(dataHolder, (int) ((Double) map.get("senderId")).doubleValue());
-                    nHelper.update(dataHolder, (int) ((Double) map.get("senderId")).doubleValue());
                 }
                 adapter.setData(data);
                 allUpdateHandler.sendMessage(new Message());
@@ -240,12 +232,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             ((LinearLayoutManager) rvMessage.getLayoutManager()).scrollToPositionWithOffset(adapter.getItemCount() - 1, Integer.MIN_VALUE);
             return true;
         });
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        nHelper.closeLink();
     }
 
     @Override
