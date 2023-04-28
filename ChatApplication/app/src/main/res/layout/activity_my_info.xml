@@ -34,7 +34,7 @@
                 android:textSize="23dp" />
 
         <TextView
-                android:id="@+id/tv_forward"
+                android:id="@+id/tv_modify"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
@@ -66,15 +66,13 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp">
 
+
             <ImageButton
                     android:id="@+id/ib_portrait"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:layout_centerInParent="true"
                     android:background="@color/white"
-                    android:onClick="changeAvatar"
                     android:src="@drawable/circle_style" />
-
 
             <ImageView
                     android:layout_width="30dp"
@@ -90,193 +88,144 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:layout_marginVertical="10dp"
                 android:orientation="horizontal">
 
             <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Username: "
+                    android:text="Username"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/my_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:textSize="23dp" />
 
 
         </LinearLayout>
 
-        <View
-
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="#aa000000" />
-
         <!--Nickname-->
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
                 android:orientation="horizontal">
 
             <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Nickname: "
+                    android:text="Nickname"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/my_nickname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:textSize="23dp" />
 
         </LinearLayout>
 
-
-        <View
-
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="#aa000000" />
-
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
                 android:orientation="horizontal">
 
             <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Phone: "
+                    android:text="Phone"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/my_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:textSize="23dp" />
 
         </LinearLayout>
 
-        <View
-
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="#aa000000" />
-
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
                 android:orientation="horizontal">
 
             <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Email: "
+                    android:text="Email"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/my_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:textSize="23dp" />
 
         </LinearLayout>
 
-        <View
-
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="#aa000000" />
-
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
                 android:orientation="horizontal">
 
             <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Address: "
+                    android:text="Address"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/my_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
-                    android:maxLines="5"
+                    android:maxLines="3"
                     android:textSize="23dp" />
 
         </LinearLayout>
 
-        <View
-
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="#aa000000" />
-
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
                 android:orientation="horizontal">
 
             <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Register: "
+                    android:text="Register"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/my_register"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:textSize="23dp" />
 
         </LinearLayout>
 
-        <View
-
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="#aa000000" />
     </LinearLayout>
 
 

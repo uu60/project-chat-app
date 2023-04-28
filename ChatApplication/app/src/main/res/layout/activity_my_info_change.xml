@@ -43,30 +43,27 @@
             android:paddingTop="50dp"
             android:paddingRight="5dp">
 
-        <!--每一项都要从数据库里取出来先填进去，然后用户可修改-->
-        <!--账号-->
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
 
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
             <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Username: "
-                    android:textSize="19dp" />
-
+                    android:text="Nickname"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="23dp" />
 
             <EditText
+                    android:id="@+id/et_nickname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter username"
-                    android:inputType="phone"
-                    android:maxLength="11" />
-
+                    android:hint="Enter nickname" />
         </LinearLayout>
 
         <!--密码-->
@@ -81,10 +78,13 @@
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Password: "
-                    android:textSize="19dp" />
+                    android:text="Password"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="23dp" />
 
             <EditText
+                    android:id="@+id/et_pwd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Enter password"
@@ -103,18 +103,19 @@
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Confirm: "
-                    android:textSize="19dp" />
+                    android:text="Confirm"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="23dp" />
 
             <EditText
+                    android:id="@+id/et_pwd_confirm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Enter password again"
                     android:inputType="textPassword" />
         </LinearLayout>
 
-
-        <!--个人邮箱-->
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -125,58 +126,87 @@
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Email: "
-                    android:textSize="19dp" />
+                    android:text="Phone"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="23dp" />
 
 
             <EditText
+                    android:id="@+id/et_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter phone"
+                    android:inputType="phone"
+                    android:maxLength="11" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Email"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="23dp" />
+
+
+            <EditText
+                    android:id="@+id/et_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Enter email"
                     android:inputType="phone"
                     android:maxLength="11" />
-
-
         </LinearLayout>
-
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_gravity="center"
-                android:text="Confirm change"
-                android:background="@drawable/button"
-                android:textSize="20sp" />
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
-            <LinearLayout
+            <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Address"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="23dp" />
+
+
+            <EditText
+                    android:id="@+id/et_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-
-                <TextView
-
-                        android:layout_width="250dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:clickable="true"
-                        android:textSize="18dp"
-                        android:text="Return information center" />
-
-            </LinearLayout>
-
+                    android:hint="Enter address"
+                    android:maxLength="30"
+                    android:maxLines="3" />
         </LinearLayout>
 
-
+        <Button
+                android:id="@+id/btn_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:paddingHorizontal="15dp"
+                android:layout_gravity="center"
+                android:text="Confirm change"
+                android:textColor="@color/white"
+                android:background="@drawable/button"
+                android:textSize="23dp" />
     </LinearLayout>
 
 
 </LinearLayout>
+
+
 
 

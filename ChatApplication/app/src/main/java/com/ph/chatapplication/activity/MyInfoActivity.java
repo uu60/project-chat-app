@@ -5,12 +5,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,8 +20,6 @@ import androidx.core.app.ActivityCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.imageview.ShapeableImageView;
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.constant.RespCode;
 import com.ph.chatapplication.utils.handler.LogoutUtils;
@@ -32,7 +28,7 @@ import com.ph.chatapplication.utils.net.Requests;
 import com.ph.chatapplication.utils.net.Resp;
 import com.ph.chatapplication.utils.net.TokenUtils;
 import com.ph.chatapplication.utils.source.Instances;
-import com.tbruyelle.rxpermissions3.RxPermissions;
+import com.ph.chatapplication.utils.source.StringUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,34 +39,17 @@ import java.util.Map;
 import java.util.UUID;
 
 
-public class MyInfoActivity extends AppCompatActivity implements View.OnClickListener {
-
-    //存储拍完照后的图片
-//    private File outputImagePath;
-    //启动相机标识
-    public static final int TAKE_PHOTO = 1;
-    //启动相册标识
-    public static final int SELECT_PHOTO = 2;
-    private RxPermissions rxPermissions;
-    //是否拥有权限
+public class MyInfoActivity extends AppCompatActivity {
     private boolean hasPermissions = false;
-    //底部弹窗
-    private BottomSheetDialog bottomSheetDialog;
-    //弹窗视图
-    private View bottomView;
+    private ImageButton ibPortrait;
     //图片控件
-    private ShapeableImageView ivHead;
-    //Base64
-    private String base64Pic;
     private Handler uploadSuccessHandler;
     private Handler logoutHandler;
 
     //Glide请求图片选项配置
-    private final RequestOptions requestOptions =
+    private static final RequestOptions REQUEST_OPTIONS =
             RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE)//不做磁盘缓存
                     .skipMemoryCache(true);//不做内存缓存
-    private ImageButton ib_portrait;
-    private ImageView ivBackward;
     private Handler detailsHandler;
 
     private TextView txtNickName;
@@ -79,8 +58,11 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
     private TextView txtAddress;
     private TextView txtEmail;
     private TextView txtRegister;
-    private Handler protraitHandler;
+    private TextView tvModify;
+    private Handler portraitHandler;
 
+    private static final int TO_ALBUM = 1;
+    private static final int TO_MODIFY = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,17 +70,33 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_my_info);
         checkVersion();
         initHandler();
-        ib_portrait = findViewById(R.id.ib_portrait);
-        ivBackward = findViewById(R.id.iv_backward);
-        ivBackward.setOnClickListener(this);
+        ibPortrait = findViewById(R.id.ib_portrait);
+        ImageView ivBackward = findViewById(R.id.iv_backward);
+        ivBackward.setOnClickListener(v -> {
+            finish();
+        });
         txtNickName = findViewById(R.id.my_nickname);
         txtUserName = findViewById(R.id.my_username);
         txtPhone = findViewById(R.id.my_phone);
         txtAddress = findViewById(R.id.my_address);
         txtEmail = findViewById(R.id.my_email);
         txtRegister = findViewById(R.id.my_register);
+        tvModify = findViewById(R.id.tv_modify);
+        tvModify.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MyInfoChangeActivity.class);
+            startActivityForResult(intent, TO_MODIFY);
+        });
 
         //请求个人信息
+        updateDetailsAsync();
+
+        ibPortrait.setOnClickListener(v -> {
+            selectPictureFromAlbum();
+        });
+
+    }
+
+    private void updateDetailsAsync() {
         Instances.pool.execute(() -> {
             Resp resp = Requests.get(Requests.SERVER_IP_PORT + "/my_details/", null,
                     Requests.getTokenMap(TokenUtils.currentToken(this)));
@@ -116,12 +114,11 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream1);
             Map<String, Object> attr = new HashMap<>();
             attr.put("bitmap", bitmap);
-            attr.put("requestOptions", requestOptions);
-            protraitHandler.sendMessage(MessageUtils.get(attr));
+            attr.put("requestOptions", REQUEST_OPTIONS);
+            portraitHandler.sendMessage(MessageUtils.get(attr));
         });
-
-
     }
+
 
     private void initHandler() {
         uploadSuccessHandler = new Handler(m -> {
@@ -141,35 +138,24 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
             Map<String, Object> map = (Map) m.obj;
             txtNickName.setText((CharSequence) map.get("nickname"));
             txtUserName.setText((CharSequence) map.get("username"));
-            try {
-                txtPhone.setText((CharSequence) map.get("phone"));
-            } catch (Exception e) {
-                txtPhone.setText("null");
-            }
-            try {
-                txtEmail.setText((CharSequence) map.get("email"));
-            } catch (Exception e) {
-                txtEmail.setText("null");
-            }
-            try {
-                txtAddress.setText((CharSequence) map.get("address"));
-            } catch (Exception e) {
-                txtAddress.setText("null");
-            }
-            try {
-                txtRegister.setText((CharSequence) map.get("registerTime"));
-            } catch (Exception e) {
-                txtRegister.setText("null");
-            }
+            String notGiven = "Not given yet.";
+            String phone = (String) map.get("phone");
+            txtPhone.setText(StringUtils.isEmpty(phone) ? notGiven : phone);
+            String email = (String) map.get("email");
+            txtEmail.setText(StringUtils.isEmpty(email) ? notGiven : email);
+            String address = (String) map.get("address");
+            txtAddress.setText(StringUtils.isEmpty(address) ? notGiven : address);
+            String registerTime = (String) map.get("registerTime");
+            txtRegister.setText(StringUtils.isEmpty(registerTime) ? notGiven : registerTime);
 
             return true;
         });
 
-        protraitHandler = new Handler(m -> {
+        portraitHandler = new Handler(m -> {
             Map<String, Object> attr = (Map) m.obj;
             Bitmap bitmap = (Bitmap) attr.get("bitmap");
             RequestOptions requestOptions = (RequestOptions) attr.get("requestOptions");
-            Glide.with(this).load(bitmap == null ? R.drawable.ic_default_portrait : bitmap).apply(requestOptions).into(ib_portrait);
+            Glide.with(this).load(bitmap == null ? R.drawable.ic_default_portrait : bitmap).apply(requestOptions).into(ibPortrait);
             return true;
         });
     }
@@ -197,31 +183,7 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, 555);
     }
 
-    public void changeAvatar(View view) {
-        bottomSheetDialog = new BottomSheetDialog(this);
-        bottomView = getLayoutInflater().inflate(R.layout.dialog_bottom, null);
-        bottomSheetDialog.setContentView(bottomView);
-        bottomSheetDialog.getWindow().findViewById(com.google.android.material.R.id.design_bottom_sheet).setBackgroundColor(Color.TRANSPARENT);
-        TextView tvOpenAlbum = bottomView.findViewById(R.id.tv_open_album);
-        TextView tvCancel = bottomView.findViewById(R.id.tv_cancel);
-
-        //打开相册
-        tvOpenAlbum.setOnClickListener(v -> {
-            openAlbum();
-            showMsg("打开相册");
-            bottomSheetDialog.cancel();
-        });
-        //取消
-        tvCancel.setOnClickListener(v -> {
-            bottomSheetDialog.cancel();
-        });
-        bottomSheetDialog.show();
-    }
-
-    /**
-     * 打开相册
-     */
-    private void openAlbum() {
+    private void selectPictureFromAlbum() {
         if (!hasPermissions) {
             showMsg("未获取到权限");
 //            checkVersion();
@@ -229,7 +191,7 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
         }
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
         intent.setType("image/*");
-        startActivityForResult(intent, SELECT_PHOTO);
+        startActivityForResult(intent, TO_ALBUM);
     }
 
     @Override
@@ -237,17 +199,24 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),
-                        data.getData());
-                uploadPortrait(bitmap);
-            } catch (Exception ignored) {
+            switch (requestCode) {
+                case TO_ALBUM:
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),
+                                data.getData());
+                        uploadPortrait(bitmap);
+                    } catch (Exception ignored) {
+                    }
+                    break;
+                case TO_MODIFY:
+                    updateDetailsAsync();
+                    break;
             }
         }
     }
 
     private void displayImage(Bitmap bitmap) {
-        Glide.with(this).load(bitmap == null ? R.drawable.ic_default_portrait : bitmap).apply(requestOptions).into(ib_portrait);
+        Glide.with(this).load(bitmap == null ? R.drawable.ic_default_portrait : bitmap).apply(REQUEST_OPTIONS).into(ibPortrait);
     }
 
     private void uploadPortrait(Bitmap bitmap) {
@@ -288,13 +257,6 @@ public class MyInfoActivity extends AppCompatActivity implements View.OnClickLis
             });
         } else {
             LogoutUtils.doLogout(this);
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.iv_backward) {
-            finish();
         }
     }
 }
