@@ -90,21 +90,21 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:orientation="horizontal">
 
             <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Username: "
+                    android:text="Username"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/my_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:textSize="23dp" />
 
 
@@ -130,14 +130,15 @@
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Nickname: "
+                    android:text="Nickname"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/my_nickname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:textSize="23dp" />
 
         </LinearLayout>
@@ -162,14 +163,15 @@
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Phone: "
+                    android:text="Phone"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/my_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:textSize="23dp" />
 
         </LinearLayout>
@@ -193,14 +195,15 @@
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Email: "
+                    android:text="Email"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/my_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:textSize="23dp" />
 
         </LinearLayout>
@@ -224,14 +227,15 @@
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Address: "
+                    android:text="Address"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/my_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:maxLines="5"
                     android:textSize="23dp" />
 
@@ -256,14 +260,15 @@
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Register: "
+                    android:text="Register"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/my_register"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:textSize="23dp" />
 
         </LinearLayout>
