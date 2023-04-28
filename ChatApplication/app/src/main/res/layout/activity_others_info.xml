@@ -65,198 +65,149 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:layout_marginVertical="10dp"
                 android:orientation="horizontal">
 
             <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Username: "
+                    android:text="Username"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/txt_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:textSize="23dp" />
-
-
         </LinearLayout>
-
-        <View
-
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="#aa000000" />
 
         <!--Nickname-->
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
                 android:orientation="horizontal">
 
             <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Nickname: "
+                    android:text="Nickname"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/txt_nickname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:textSize="23dp" />
 
         </LinearLayout>
 
-
-        <View
-
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="#aa000000" />
-
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
                 android:orientation="horizontal">
 
             <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Phone: "
+                    android:text="Phone"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/txt_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:textSize="23dp" />
 
         </LinearLayout>
 
-        <View
-
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="#aa000000" />
-
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
                 android:orientation="horizontal">
 
             <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Email: "
+                    android:text="Email"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/txt_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:textSize="23dp" />
 
         </LinearLayout>
 
-        <View
-
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="#aa000000" />
-
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
                 android:orientation="horizontal">
 
             <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Address: "
+                    android:text="Address"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/txt_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:maxLines="5"
                     android:textSize="23dp" />
 
         </LinearLayout>
 
-        <View
-
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="#aa000000" />
-
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
                 android:orientation="horizontal">
 
             <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Register: "
+                    android:text="Register"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:textSize="23dp" />
 
             <TextView
                     android:id="@+id/txt_register"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="11111111要改"
                     android:textSize="23dp" />
 
         </LinearLayout>
 
-        <View
-
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="#aa000000" />
-
         <Button
                 android:id="@+id/btn_delete"
-                android:layout_width="match_parent"
+                android:paddingHorizontal="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:background="@drawable/red_button"
                 android:text="Delete"
                 android:textColor="@color/white"
