@@ -62,4 +62,5 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation 'io.github.medyo:android-about-page:2.0.0'
 }

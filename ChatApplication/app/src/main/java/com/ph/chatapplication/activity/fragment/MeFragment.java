@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.ph.chatapplication.R;
+import com.ph.chatapplication.activity.AboutActivity;
 import com.ph.chatapplication.activity.MyInfoActivity;
 import com.ph.chatapplication.activity.VersionInfoActivity;
 import com.ph.chatapplication.constant.RespCode;
@@ -60,6 +61,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     private RelativeLayout rlNickname;
     private ProgressDialog dialog;
     private final Handler refreshHandler = new Handler();
+    private RelativeLayout rlAbout;
 
 
     @Override
@@ -72,6 +74,8 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         myPortrait = inflate.findViewById(R.id.iv_my_portrait);
         myNickname = inflate.findViewById(R.id.tv_my_nickname);
         rlUpdate = inflate.findViewById(R.id.rl_update);
+        rlAbout = inflate.findViewById(R.id.rl_about);
+        rlAbout.setOnClickListener(this);
 //        rlNickname = inflate.findViewById(R.id.rl_nickname);
         rlUpdate.setOnClickListener(this);
 //        rlNickname.setOnClickListener(this);
@@ -127,6 +131,10 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         }
         if (view.getId() == R.id.rl_update) {
             Intent intent = new Intent(getActivity(), VersionInfoActivity.class);
+            startActivity(intent);
+        }
+        if (view.getId() == R.id.rl_about) {
+            Intent intent = new Intent(getActivity(), AboutActivity.class);
             startActivity(intent);
         }
     }
