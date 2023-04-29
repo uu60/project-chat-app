@@ -27,6 +27,7 @@ import com.ph.chatapplication.utils.net.Requests;
 import com.ph.chatapplication.utils.net.Resp;
 import com.ph.chatapplication.utils.net.TokenUtils;
 import com.ph.chatapplication.utils.source.Instances;
+import com.ph.chatapplication.utils.source.StringUtils;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -164,26 +165,15 @@ public class OthersInfoActivity extends AppCompatActivity implements View.OnClic
             Map<String, Object> map = (Map) m.obj;
             txtNickName.setText((CharSequence) map.get("nickname"));
             txtUserName.setText((CharSequence) map.get("username"));
-            try {
-                txtPhone.setText((CharSequence) map.get("phone"));
-            } catch (Exception e) {
-                txtPhone.setText("null");
-            }
-            try {
-                txtEmail.setText((CharSequence) map.get("email"));
-            } catch (Exception e) {
-                txtEmail.setText("null");
-            }
-            try {
-                txtAddress.setText((CharSequence) map.get("address"));
-            } catch (Exception e) {
-                txtAddress.setText("null");
-            }
-            try {
-                txtRegister.setText((CharSequence) map.get("registerTime"));
-            } catch (Exception e) {
-                txtRegister.setText("null");
-            }
+            String notGiven = "Not given yet.";
+            String phone = (String) map.get("phone");
+            txtPhone.setText(StringUtils.isEmpty(phone) ? notGiven : phone);
+            String email = (String) map.get("email");
+            txtEmail.setText(StringUtils.isEmpty(email) ? notGiven : email);
+            String address = (String) map.get("address");
+            txtAddress.setText(StringUtils.isEmpty(address) ? notGiven : address);
+            String registerTime = (String) map.get("registerTime");
+            txtRegister.setText(StringUtils.isEmpty(registerTime) ? notGiven : registerTime);
 
             return true;
         });
