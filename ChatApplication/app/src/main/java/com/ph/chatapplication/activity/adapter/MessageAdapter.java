@@ -2,6 +2,7 @@ package com.ph.chatapplication.activity.adapter;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.ph.chatapplication.R;
 
 import java.util.List;
@@ -25,14 +26,16 @@ import java.util.List;
  */
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Holder> {
 
-    private Bitmap oppositePortrait;
-    private Bitmap myPortrait;
+    private Drawable oppositePortraitDrawable;
+    private Drawable myPortraitDrawable;
     private List<DataHolder> data;
     private final Activity activity;
 
     public MessageAdapter(List<DataHolder> data, Activity activity) {
         this.data = data;
         this.activity = activity;
+        oppositePortraitDrawable = ContextCompat.getDrawable(activity, R.drawable.ic_default_portrait);
+        myPortraitDrawable = ContextCompat.getDrawable(activity, R.drawable.ic_default_portrait);
     }
 
     public List<DataHolder> getData() {
@@ -43,12 +46,22 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Holder> 
         this.data = data;
     }
 
-    public void setOppositePortrait(Bitmap oppositePortrait) {
-        this.oppositePortrait = oppositePortrait;
+    public void setOppositePortraitDrawable(Bitmap oppositePortrait) {
+        if (oppositePortrait != null) {
+            oppositePortrait = Bitmap.createScaledBitmap(oppositePortrait, 60, 60, true);
+            this.oppositePortraitDrawable =
+                    RoundedBitmapDrawableFactory.create(activity.getResources(), oppositePortrait);
+            ((RoundedBitmapDrawable) this.oppositePortraitDrawable).setCircular(true);
+        }
     }
 
-    public void setMyPortrait(Bitmap myPortrait) {
-        this.myPortrait = myPortrait;
+    public void setMyPortraitDrawable(Bitmap myPortrait) {
+        if (myPortrait != null) {
+            myPortrait = Bitmap.createScaledBitmap(myPortrait, 60, 60, true);
+            this.myPortraitDrawable =
+                    RoundedBitmapDrawableFactory.create(activity.getResources(), myPortrait);
+            ((RoundedBitmapDrawable) this.myPortraitDrawable).setCircular(true);
+        }
     }
 
     @NonNull
@@ -62,22 +75,18 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Holder> 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         DataHolder dataHolder = data.get(position);
-        holder.tvTime.setText(dataHolder.time);
-        holder.tvContent.setText(dataHolder.text);
-        Glide.with(activity)
-                .load(dataHolder.me ? (myPortrait == null ? R.drawable.ic_default_portrait :
-                        myPortrait) :
-                        (oppositePortrait == null ? R.drawable.ic_default_portrait :
-                                oppositePortrait))
-                .apply(RequestOptions.circleCropTransform().diskCacheStrategy(DiskCacheStrategy.NONE)//不做磁盘缓存
-                        .skipMemoryCache(true)).into(holder.ivPortrait);
         holder.llItem.setLayoutDirection(dataHolder.me ? View.LAYOUT_DIRECTION_RTL :
                 View.LAYOUT_DIRECTION_LTR);
+        holder.tvTime.setText(dataHolder.time);
+        holder.tvContent.setText(dataHolder.text);
+        holder.ivPortrait.setImageDrawable(dataHolder.me ? myPortraitDrawable : oppositePortraitDrawable);
+
         if (!dataHolder.me) {
-            holder.tvContent.setBackground(activity.getDrawable(R.drawable.shape_message_oppo));
-            holder.tvContent.setTextColor(activity.getResources().getColor(R.color.white));
+            holder.tvContent.setBackground(ContextCompat.getDrawable(activity, R.drawable.shape_message_oppo));
+            holder.tvContent.setTextColor(ContextCompat.getColor(activity, R.color.white));
         } else {
-            holder.tvContent.setBackground(activity.getDrawable(R.drawable.shape_message_me));
+            holder.tvContent.setBackground(ContextCompat.getDrawable(activity, R.drawable.shape_message_me));
+            holder.tvContent.setTextColor(ContextCompat.getColor(activity, R.color.black));
         }
     }
 

@@ -215,8 +215,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         portraitHandler = new Handler(m -> {
             Bitmap[] bitmaps = (Bitmap[]) m.obj;
-            adapter.setMyPortrait(bitmaps[0]);
-            adapter.setOppositePortrait(bitmaps[1]);
+            adapter.setMyPortraitDrawable(bitmaps[0]);
+            adapter.setOppositePortraitDrawable(bitmaps[1]);
             allUpdateHandler.sendMessage(new Message());
             return true;
         });
