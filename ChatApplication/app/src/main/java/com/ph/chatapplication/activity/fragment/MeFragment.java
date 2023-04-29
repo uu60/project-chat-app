@@ -36,8 +36,6 @@ import com.ph.chatapplication.utils.source.Instances;
 import java.io.InputStream;
 
 public class MeFragment extends Fragment implements View.OnClickListener {
-
-    private TextView tvHead;
     private RelativeLayout rlLogout;
     private Activity activity;
     private ImageView myPortrait;
@@ -69,8 +67,6 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.fragment_me, container, false);
         activity = getActivity();
-        tvHead = activity.findViewById(R.id.tv_head);
-        tvHead.setText("Me");
 
         rlLogout = inflate.findViewById(R.id.rl_logout);
         myPortrait = inflate.findViewById(R.id.iv_my_portrait);

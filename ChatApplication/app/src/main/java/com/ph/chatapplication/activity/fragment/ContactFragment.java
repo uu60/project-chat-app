@@ -38,7 +38,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ContactFragment extends Fragment {
 
-    private TextView tvHead;
     private RecyclerView rvContactFrag;
     private TextView tvNoContact;
     private Handler recyclerHandler;
@@ -55,8 +54,6 @@ public class ContactFragment extends Fragment {
         Log.e("contactfragment", this.toString());
         View inflate = inflater.inflate(R.layout.fragment_contact, container, false);
         FragmentActivity activity = getActivity();
-        tvHead = activity.findViewById(R.id.tv_head);
-        tvHead.setText("Contact");
 
         rvContactFrag = inflate.findViewById(R.id.rv_contact_frag);
         rvContactFrag.setLayoutManager(new LinearLayoutManager(activity,

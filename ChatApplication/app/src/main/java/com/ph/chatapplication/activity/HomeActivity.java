@@ -1,6 +1,7 @@
 package com.ph.chatapplication.activity;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -19,6 +20,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private final List<Fragment> fragments = new ArrayList<>();
     private int currentPage = 0;
+    private TextView tvHead;
     private FragmentManager fragmentManager;
 
     @Override
@@ -27,6 +29,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         initFragments();
+        tvHead = findViewById(R.id.tv_head);
         // get navigation view
         BottomNavigationView navView = findViewById(R.id.nav_home);
 
@@ -34,10 +37,13 @@ public class HomeActivity extends AppCompatActivity {
         navView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_contact) {
                 switchFragment(0);
+                tvHead.setText("Contact");
             } else if (item.getItemId() == R.id.nav_add_contact) {
                 switchFragment(1);
+                tvHead.setText("Add Contact");
             } else {
                 switchFragment(2);
+                tvHead.setText("Me");
             }
             return true;
         });

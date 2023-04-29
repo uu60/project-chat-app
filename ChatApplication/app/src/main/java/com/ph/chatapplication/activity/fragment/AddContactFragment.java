@@ -43,7 +43,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class AddContactFragment extends Fragment {
 
-    private TextView tvHead;
     private RecyclerView rvContactReq;
     private TextView tvNoRequest;
     private Handler handler;
@@ -65,8 +64,6 @@ public class AddContactFragment extends Fragment {
                              Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.fragment_add_contact, container, false);
         activity = getActivity();
-        tvHead = activity.findViewById(R.id.tv_head);
-        tvHead.setText("Add Contact");
         rvContactReq = inflate.findViewById(R.id.rv_contact_req);
         rvContactReq.setLayoutManager(new LinearLayoutManager(activity,
                 LinearLayoutManager.VERTICAL, false));
