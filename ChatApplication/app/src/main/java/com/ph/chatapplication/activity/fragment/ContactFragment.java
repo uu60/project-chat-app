@@ -24,6 +24,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ph.chatapplication.R;
 import com.ph.chatapplication.activity.adapter.ContactFragmentAdapter;
+import com.ph.chatapplication.constant.RespCode;
+import com.ph.chatapplication.utils.handler.LogoutUtils;
 import com.ph.chatapplication.utils.net.Requests;
 import com.ph.chatapplication.utils.net.Resp;
 import com.ph.chatapplication.utils.source.Instances;
@@ -47,6 +49,8 @@ public class ContactFragment extends Fragment {
     private final Handler refreshHandler = new Handler((m) -> {
         return true;
     });
+
+    private Handler logoutHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,40 +98,44 @@ public class ContactFragment extends Fragment {
             head.put("JWT-Token", token.get());
             Instances.pool.execute(() -> {
                 Resp resp = Requests.get(Requests.SERVER_IP_PORT + "/contact", params, head);
-                List<Map<String, Object>> temp = null;
-                try {
-                    temp = (List) resp.getData();
-                } catch (Exception e) {
+                if (resp.getCode() == RespCode.SUCCESS) {
+                    List<Map<String, Object>> temp = null;
+                    try {
+                        temp = (List) resp.getData();
+                    } catch (Exception e) {
+                        Message msg = new Message();
+                        String s = "connect failed!";
+                        msg.obj = s;
+                        wrongFormatHandler.sendMessage(msg);
+                        Log.e("get contact", String.valueOf(e));
+                    }
+                    if (temp != null) {
+                        temp.forEach(map -> {
+                            int id;
+                            String nickname = null;
+                            Object nicknameObj = map.get("nickname");
+                            if (nicknameObj != null) {
+                                nickname = nicknameObj.toString();
+                            }
+                            try {
+                                Object idObj = map.get("id");
+                                id = (int) Double.parseDouble(idObj.toString());
+                            } catch (Exception e) {
+                                Log.e("ContactFragment", e.toString());
+                                return;
+                            }
+                            String portraitUrl = (String) map.get("portraitUrl");
+                            data.add(new ContactFragmentAdapter.DataHolder(id, portraitUrl, null,
+                                    nickname));
+                        });
+                        data.sort(Comparator.comparing(ContactFragmentAdapter.DataHolder::getNickName));
+                    }
                     Message msg = new Message();
-                    String s = "connect failed!";
-                    msg.obj = s;
-                    wrongFormatHandler.sendMessage(msg);
-                    Log.e("get contact", String.valueOf(e));
+                    msg.obj = data;
+                    recyclerHandler.sendMessage(msg);
+                } else if (resp.getCode() == RespCode.JWT_TOKEN_INVALID) {
+                    logoutHandler.sendMessage(new Message());
                 }
-                if (temp != null) {
-                    temp.forEach(map -> {
-                        int id;
-                        String nickname = null;
-                        Object nicknameObj = map.get("nickname");
-                        if (nicknameObj != null) {
-                            nickname = nicknameObj.toString();
-                        }
-                        try {
-                            Object idObj = map.get("id");
-                            id = (int) Double.parseDouble(idObj.toString());
-                        } catch (Exception e) {
-                            Log.e("ContactFragment", e.toString());
-                            return;
-                        }
-                        String portraitUrl = (String) map.get("portraitUrl");
-                        data.add(new ContactFragmentAdapter.DataHolder(id, portraitUrl, null,
-                                nickname));
-                    });
-                    data.sort(Comparator.comparing(ContactFragmentAdapter.DataHolder::getNickName));
-                }
-                Message msg = new Message();
-                msg.obj = data;
-                recyclerHandler.sendMessage(msg);
             });
         }
     }
@@ -187,5 +195,7 @@ public class ContactFragment extends Fragment {
             dialog.show();
             return true;
         });
+
+        logoutHandler = LogoutUtils.getLogoutHandler(getActivity());
     }
 }

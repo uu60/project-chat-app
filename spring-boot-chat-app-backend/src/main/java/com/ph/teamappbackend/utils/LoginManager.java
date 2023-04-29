@@ -18,13 +18,14 @@ public class LoginManager {
 
     public static boolean checkAndDealWithExistedLogin() {
         Integer currentUserId = getCurrentUserId();
+        String currentUserDeviceId = getCurrentUserDeviceId();
         lock(currentUserId);
         try {
             // 没登录过直接放行
             if (!LOGIN_USER_DEVICE_MAP.containsKey(currentUserId)) {
+                LOGIN_USER_DEVICE_MAP.put(currentUserId, new DeviceInfo(currentUserDeviceId, System.currentTimeMillis()));
                 return true;
             }
-            String currentUserDeviceId = getCurrentUserDeviceId();
             // 旧token直接拒绝
             if (currentUserDeviceId == null) {
                 return false;
