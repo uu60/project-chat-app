@@ -3,14 +3,14 @@
 ### 1 Set Up Database
 
 1. Install and run MySQL on the server device. (Or you can change the jdbc url in application.yaml).
-2. For convenience, install navicat first. Then open navicat and create a new MySQL Connection.
+2. For convenience, install navicat first. Then open navicat and create a new MySQL Connection to your MySQL.
 3. Use navicat to create a database called team_app in MySQL.
 4. Use navicat to run the team_app.sql in this database.
 
 ### 2 Run Backend
 
 1. Open spring-boot-chat-app-backend in IDEA.
-2. Modify the JDBC configurations in application.yaml first, including url, username and password.
+2. Modify the JDBC configurations in src/main/resources/application.yaml first, including url, username and password.
 3. Run `ChatAppBackendApplication.main`.
 4. Check your server's IP and remember that.
 
