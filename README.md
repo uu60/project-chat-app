@@ -10,8 +10,9 @@
 ### 2 Run Backend
 
 1. Open spring-boot-chat-app-backend in IDEA.
-2. Run `ChatAppBackendApplication.main`. (If MySQL is not on the same device, modify the JDBC url in application.yaml first)
-3. Check your server's IP and remember that.
+2. Modify the JDBC configurations in application.yaml first, including url, username and password.
+3. Run `ChatAppBackendApplication.main`.
+4. Check your server's IP and remember that.
 
 ### 3 Run Android
 
