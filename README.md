@@ -1,13 +1,20 @@
 # project-android-app-team
 
-后端响应格式
-{
-	"code": 0,
-	"msg": "mmmm",
-	"data": {
-		"key1": "value1",
-		"key2": "value2"
-	}
-}
+### 1 Set Up Database
 
-错误码对应关系在后端工程src/main/java/com/ph/teamappbackend/constant/ErrorCodeConst类中
+1. Install MySQL on the server device. (Or you can change the jdbc url in application.yaml).
+2. Create a database called team_app in MySQL.
+3. Run the team_app.sql in this database.
+
+### 2 Run Backend
+
+1. Open spring-boot-chat-app-backend in IDEA.
+2. Run `ChatAppBackendApplication.main`. (If MySQL is not on the same device, modify the JDBC url in application.yaml)
+
+3. Check your server's IP and remember that.
+
+### 3 Run Android
+
+1. Open ChatApplication directory in Android Studio.
+2. Open the `com.ph.chatapplication.utils.net.Requests` class and modify the `SERVER_IP` according to your server device.
+3. Run the application and use it.
